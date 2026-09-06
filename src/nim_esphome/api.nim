@@ -9,6 +9,10 @@ when defined(esphome):
   proc millis*(): uint32 {.importc: "nim_esp_millis", cdecl.}
   proc micros*(): uint32 {.importc: "nim_esp_micros", cdecl.}
   proc delayMs*(ms: uint32) {.importc: "nim_esp_delay", cdecl.}
+  proc yieldToScheduler*() {.importc: "nim_esp_yield", cdecl.}
+  proc feedWatchdog*() {.importc: "nim_esp_feed_wdt", cdecl.}
+  proc getFreeHeap*(): uint32 {.importc: "nim_esp_get_free_heap", cdecl.}
+  proc reboot*() {.importc: "nim_esp_reboot", cdecl.}
 else:
   import std/times
   import std/os
@@ -33,6 +37,18 @@ else:
 
   proc delayMs*(ms: uint32) =
     os.sleep(int(ms))
+
+  proc yieldToScheduler*() =
+    discard
+
+  proc feedWatchdog*() =
+    discard
+
+  proc getFreeHeap*(): uint32 =
+    1024'u32 * 1024'u32 # 1MB mock heap
+
+  proc reboot*() =
+    echo "[SYSTEM] Reboot requested"
 
 template info*(tag: string, msg: string) =
   nim_esp_log_i(cstring(tag), cstring(msg))

@@ -23,6 +23,13 @@ suite "nim-esphome core":
     check t1 >= t0
     check u1 >= u0
 
+  test "system and hardware APIs":
+    check getFreeHeap() > 0
+    feedWatchdog()
+    yieldToScheduler()
+    reboot()
+    check true
+
   test "logging templates":
     info("TestTag", "Info message")
     warn("TestTag", "Warning message")
