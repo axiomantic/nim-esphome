@@ -20,6 +20,7 @@ nav = [
       { "DSP & Closed-Loop Control" = "guides/dsp-control.md" },
       { "C++ Interoperability" = "guides/interop.md" },
       { "Verified Voice Satellite (Case Study)" = "guides/esphome-satellite.md" },
+      { "Project Templating & 1-Click Distribution" = "guides/distribution.md" },
   ]},
   { "API Reference" = [
       { "Overview" = "api/index.md" },

@@ -29,6 +29,7 @@
   - [Embedded Control & DSP Utilities](#embedded-control--dsp-utilities)
   - [Calling Nim Procs from ESPHome C++](#calling-nim-procs-from-esphome-c)
 - [Projects Using nim-esphome](#projects-using-nim-esphome)
+- [Project Templating & 1-Click Distribution](#project-templating--1-click-distribution)
 - [Testing & CI](#testing--ci)
 - [Project Structure](#project-structure)
 - [Changelog](#changelog)
@@ -195,6 +196,7 @@ Comprehensive guides and API references are available in the [`docs/`](docs/inde
 - 📈 [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
 - 🔗 [**C++ Interoperability**](docs/guides/interop.md): Exporting Nim procs to YAML lambdas and calling C++ libraries.
 - 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world 14-state verified typestate FSM for ESPHome.
+- 🌐 [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md): ESP-Web-Tools browser flashing, My Home Assistant import, and CI factory binary releases.
 - 📚 [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
 
 ---
@@ -495,6 +497,18 @@ nim:
   requires:
     - https://github.com/elijahr/nim-typestates
 ```
+
+---
+
+## Project Templating & 1-Click Distribution
+
+`nim-esphome` establishes a production-grade distribution template for any embedded Nim project, enabling end-users to flash hardware without compiling code or editing YAML:
+
+1. **In-Browser Web Flashing (ESP-Web-Tools)**: Host a zero-install WebSerial installer on GitHub Pages. Users plug in their ESP32 via USB and flash factory binaries directly from Chrome or Edge.
+2. **One-Click Home Assistant Import**: Provide "My Home Assistant" dashboard import badges in your repository. Users click the badge to automatically adopt remote packages into their local ESPHome Dashboard.
+3. **Automated Factory Binary Builds in CI**: GitHub Actions workflows merge bootloaders, partition tables, and firmware into flashable `firmware-factory.bin` bundles attached to releases.
+
+> 📖 **Full Guide**: Read [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md) for the complete directory layout, ESP-Web-Tools HTML templates, and CI packaging scripts.
 
 ---
 
