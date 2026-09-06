@@ -314,6 +314,19 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
       installer.description = "Flash verified voice satellite firmware with custom sound assets"
       installer.chipFamily = "ESP32-S3"
 
+      installer.addTarget(
+        name = "Seeed ReSpeaker XVF3800",
+        binPath = "firmware-respeaker.bin",
+        chipFamily = "ESP32-S3",
+        description = "4-mic array with hardware acoustic echo cancellation"
+      )
+      installer.addTarget(
+        name = "Home Assistant Voice PE",
+        binPath = "firmware-voice-pe.bin",
+        chipFamily = "ESP32-S3",
+        description = "Official Nabu Casa smart speaker satellite"
+      )
+
       installer.addFileField(
         name = "custom_audio",
         label = "Custom Audio (.wav)",
@@ -338,11 +351,23 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
           optionDetail("Tick", "500ms cadence", "Mechanical clockwork tick"),
           optionDetail("Silent", "No sound", "Completely silent processing"),
           optionDetail("Custom", "User audio", "Loops custom audio from flash partition sound_data")
-        ]
+        ],
+        hasAudioPreview = true
+      )
+
+      installer.addTextField(
+        name = "custom_wake_word",
+        label = "Phonetic Wake Word",
+        placeholder = "okay see three pee oh",
+        calloutHtml = "Spell words phonetically (e.g., <code>ok c3p0</code> &rarr; <strong>okay see three pee oh</strong>).",
+        description = "Custom trained wake word phrase",
+        dependsOnField = "feedback_style",
+        dependsOnValue = "Custom"
       )
 
     check myInstaller.name == "voice-satellite"
-    check myInstaller.fields.len == 2
+    check myInstaller.fields.len == 3
+    check myInstaller.targets.len == 2
     check myInstaller.customPartitions.len == 1
 
     # 1. Partition Table CSV verification
@@ -373,5 +398,11 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "URL.createObjectURL" in html
     check "custom-slot" in html
     check "presetView_feedback_style" in html
+    check "field_hardware_target" in html
+    check "TARGET_MAP" in html
+    check "Seeed ReSpeaker XVF3800" in html
+    check "Home Assistant Voice PE" in html
+    check "phonetic-callout" in html
+    check "okay see three pee oh" in html
 
 

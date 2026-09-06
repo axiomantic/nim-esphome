@@ -85,9 +85,19 @@ type
     minVal*: float
     maxVal*: float
     stepVal*: float
+    placeholder*: string
+    calloutHtml*: string
+    hasAudioPreview*: bool
     # Reactive / conditional dependency
     dependsOnField*: string
     dependsOnValue*: string
+
+  InstallerTarget* = object
+    ## Definition of a specific hardware board / chip variant target.
+    name*: string
+    binPath*: string
+    chipFamily*: string
+    description*: string
 
   InstallerDefinition* = ref object
     ## Complete definition of an ESP-Web-Tools web installer.
@@ -100,6 +110,7 @@ type
     fundingUrl*: string
     factoryBinPath*: string
     fields*: seq[InstallerField]
+    targets*: seq[InstallerTarget]
     customPartitions*: seq[FlashPartition]
 
 proc optionDetail*(value: string, cadence: string = "", description: string = ""): OptionDetail =
@@ -123,6 +134,7 @@ proc newInstallerDefinition*(
     fundingUrl: "",
     factoryBinPath: "firmware-factory.bin",
     fields: @[],
+    targets: @[],
     customPartitions: @[]
   )
 
@@ -168,6 +180,21 @@ proc addFileField*(
       size: uint32(maxSize)
     ))
 
+proc addTarget*(
+    installer: InstallerDefinition,
+    name: string,
+    binPath: string,
+    chipFamily: string = "ESP32-S3",
+    description: string = ""
+) =
+  ## Registers a hardware board target with its corresponding factory binary.
+  installer.targets.add(InstallerTarget(
+    name: name,
+    binPath: binPath,
+    chipFamily: chipFamily,
+    description: description
+  ))
+
 proc addSelectField*(
     installer: InstallerDefinition,
     name: string,
@@ -175,7 +202,8 @@ proc addSelectField*(
     options: seq[string],
     defaultVal: string = "",
     description: string = "",
-    optionDetails: seq[OptionDetail] = @[]
+    optionDetails: seq[OptionDetail] = @[],
+    hasAudioPreview: bool = false
 ) =
   ## Adds a dropdown selector to the installer with optional rich preset metadata.
   installer.fields.add(InstallerField(
@@ -185,7 +213,8 @@ proc addSelectField*(
     options: options,
     optionDetails: optionDetails,
     defaultVal: defaultVal,
-    description: description
+    description: description,
+    hasAudioPreview: hasAudioPreview
   ))
 
 proc addTextField*(
@@ -193,7 +222,11 @@ proc addTextField*(
     name: string,
     label: string,
     defaultVal: string = "",
-    description: string = ""
+    placeholder: string = "",
+    calloutHtml: string = "",
+    description: string = "",
+    dependsOnField: string = "",
+    dependsOnValue: string = ""
 ) =
   ## Adds a text input to the installer.
   installer.fields.add(InstallerField(
@@ -201,7 +234,11 @@ proc addTextField*(
     kind: ifkText,
     label: label,
     defaultVal: defaultVal,
-    description: description
+    placeholder: placeholder,
+    calloutHtml: calloutHtml,
+    description: description,
+    dependsOnField: dependsOnField,
+    dependsOnValue: dependsOnValue
   ))
 
 proc addNumberField*(
@@ -346,12 +383,16 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
           else:
             html.renderFieldBody(child, installer)
           html.add("          </div>")
-      html.add("          <div class=\"preview-actions\">")
-      html.add("            <button type=\"button\" class=\"preview-btn\" id=\"previewBtn_" & field.name & "\">▶ Preview Sound</button>")
-      html.add("          </div>")
+      if field.hasAudioPreview:
+        html.add("          <div class=\"preview-actions\">")
+        html.add("            <button type=\"button\" class=\"preview-btn\" id=\"previewBtn_" & field.name & "\">▶ Preview Sound</button>")
+        html.add("          </div>")
       html.add("        </div>")
   of ifkText:
-    html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\"" & disabledAttr & ">")
+    let placeholderAttr = if field.placeholder.len > 0: " placeholder=\"" & field.placeholder & "\"" else: ""
+    html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\"" & placeholderAttr & disabledAttr & ">")
+    if field.calloutHtml.len > 0:
+      html.add("        <div class=\"phonetic-callout\">" & field.calloutHtml & "</div>")
   of ifkNumber:
     html.add("        <input type=\"number\" id=\"field_" & field.name & "\" min=\"" & $field.minVal & "\" max=\"" & $field.maxVal & "\" step=\"" & $field.stepVal & "\" value=\"" & field.defaultVal & "\"" & disabledAttr & ">")
   of ifkCheckbox:
@@ -396,6 +437,9 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    .preview-btn:hover { background: #334155; color: #7dd3fc; }")
   html.add("    .preview-btn.playing { background: #0284c7; color: #ffffff; border-color: #0284c7; }")
   html.add("    .format-callout { margin-top: 8px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 8px 12px; border-radius: 4px; font-size: 0.8rem; color: #93c5fd; line-height: 1.4; }")
+  html.add("    .phonetic-callout { margin-top: 8px; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 4px; font-size: 0.82rem; color: #fde68a; line-height: 1.45; }")
+  html.add("    .phonetic-callout strong { color: #fbbf24; }")
+  html.add("    .phonetic-callout code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; color: #cbd5e1; }")
   html.add("    .file-status { margin-top: 8px; font-size: 0.85rem; color: #34d399; display: none; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.2); }")
   html.add("    .actions { margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; }")
   html.add("    button.install-btn { background: var(--primary); color: white; border: none; padding: 14px 28px; font-size: 1.05rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s; width: 100%; }")
@@ -410,6 +454,18 @@ proc generateHtml*(installer: InstallerDefinition): string =
     html.add("    <p class=\"desc\">" & installer.description & "</p>")
 
   # Render Form Fields
+  if installer.targets.len > 0:
+    html.add("    <div class=\"form-group\" id=\"group_hardware_target\" data-field=\"hardware_target\">")
+    html.add("      <label for=\"field_hardware_target\">Hardware Target</label>")
+    html.add("      <select id=\"field_hardware_target\">")
+    for idx, t in installer.targets:
+      let selected = if idx == 0: " selected" else: ""
+      html.add("        <option value=\"" & t.name & "\"" & selected & ">" & t.name & "</option>")
+    html.add("      </select>")
+    if installer.targets[0].description.len > 0:
+      html.add("      <div class=\"hint\" id=\"target_desc\">" & installer.targets[0].description & "</div>")
+    html.add("    </div>")
+
   if installer.fields.len > 0:
     html.add("    <div class=\"fields-container\">")
     for field in installer.fields:
@@ -444,14 +500,36 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("  </div>")
 
   # Client-side JavaScript abstraction
+  let initialBin = if installer.targets.len > 0: installer.targets[0].binPath else: installer.factoryBinPath
+  let initialChip = if installer.targets.len > 0: installer.targets[0].chipFamily else: installer.chipFamily
   html.add("  <script>")
   html.add("    const BASE_MANIFEST = {")
   html.add("      name: " & escapeJson(installer.name) & ",")
   html.add("      version: " & escapeJson(installer.version) & ",")
   html.add("      home_assistant_domain: " & escapeJson(installer.homeAssistantDomain) & ",")
   html.add("      new_install_prompt_erase: true,")
-  html.add("      builds: [{ chipFamily: " & escapeJson(installer.chipFamily) & ", parts: [{ path: " & escapeJson(installer.factoryBinPath) & ", offset: 0 }] }]")
+  html.add("      builds: [{ chipFamily: " & escapeJson(initialChip) & ", parts: [{ path: " & escapeJson(initialBin) & ", offset: 0 }] }]")
   html.add("    };")
+  if installer.targets.len > 0:
+    var targetObj = newJObject()
+    for t in installer.targets:
+      var to = newJObject()
+      to["bin"] = %t.binPath
+      to["chip"] = %t.chipFamily
+      to["desc"] = %t.description
+      targetObj[t.name] = to
+    html.add("    const TARGET_MAP = " & $targetObj & ";")
+    html.add("    const targetSelect = document.getElementById('field_hardware_target');")
+    html.add("    const targetDesc = document.getElementById('target_desc');")
+    html.add("    if (targetSelect) {")
+    html.add("      targetSelect.addEventListener('change', () => {")
+    html.add("        const info = TARGET_MAP[targetSelect.value];")
+    html.add("        if (info) {")
+    html.add("          if (targetDesc && info.desc) targetDesc.textContent = info.desc;")
+    html.add("          updateDynamicManifest();")
+    html.add("        }")
+    html.add("      });")
+    html.add("    }")
   html.add("    const installBtn = document.getElementById('installBtn');")
   html.add("    const uploadedParts = new Map();")
   html.add("    let activeAudioCtx = null;")
@@ -530,6 +608,15 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("")
   html.add("    function updateDynamicManifest() {")
   html.add("      const manifest = JSON.parse(JSON.stringify(BASE_MANIFEST));")
+  if installer.targets.len > 0:
+    html.add("      const targetSelect = document.getElementById('field_hardware_target');")
+    html.add("      if (targetSelect && typeof TARGET_MAP !== 'undefined') {")
+    html.add("        const info = TARGET_MAP[targetSelect.value];")
+    html.add("        if (info) {")
+    html.add("          manifest.builds[0].parts[0].path = info.bin;")
+    html.add("          if (info.chip) manifest.builds[0].chipFamily = info.chip;")
+    html.add("        }")
+    html.add("      }")
   html.add("      for (const [name, part] of uploadedParts.entries()) {")
   html.add("        const group = document.getElementById('group_' + name);")
   html.add("        if (group) {")
@@ -582,9 +669,11 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("    const customSlot_" & field.name & " = document.querySelector('.custom-slot[data-depends-on=\"" & field.name & "\"]');")
       html.add("    const cadence_" & field.name & " = document.getElementById('presetCadence_" & field.name & "');")
       html.add("    const desc_" & field.name & " = document.getElementById('presetDesc_" & field.name & "');")
-      html.add("    const btn_" & field.name & " = document.getElementById('previewBtn_" & field.name & "');")
+      if field.hasAudioPreview:
+        html.add("    const btn_" & field.name & " = document.getElementById('previewBtn_" & field.name & "');")
       html.add("    function updatePreset_" & field.name & "() {")
-      html.add("      stopAudioPreview();")
+      if field.hasAudioPreview:
+        html.add("      stopAudioPreview();")
       html.add("      const val = select_" & field.name & ".value;")
       html.add("      const isCustom = (val === 'Custom');")
       html.add("      const isSilent = (val === 'Silent');")
@@ -594,10 +683,11 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("          customSlot_" & field.name & ".style.setProperty('display', 'block', 'important');")
       html.add("          customSlot_" & field.name & ".querySelectorAll('input, select, button, textarea').forEach(el => el.disabled = false);")
       html.add("        }")
-      html.add("        if (btn_" & field.name & ") {")
-      html.add("          btn_" & field.name & ".style.display = 'inline-flex';")
-      html.add("          btn_" & field.name & ".textContent = '▶ Preview Custom Audio';")
-      html.add("        }")
+      if field.hasAudioPreview:
+        html.add("        if (btn_" & field.name & ") {")
+        html.add("          btn_" & field.name & ".style.display = 'inline-flex';")
+        html.add("          btn_" & field.name & ".textContent = '▶ Preview Custom Audio';")
+        html.add("        }")
       html.add("      } else {")
       html.add("        if (customSlot_" & field.name & ") {")
       html.add("          customSlot_" & field.name & ".style.setProperty('display', 'none', 'important');")
@@ -607,15 +697,17 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("        if (isSilent) {")
       html.add("          if (cadence_" & field.name & ") cadence_" & field.name & ".textContent = 'Muted';")
       html.add("          if (desc_" & field.name & ") desc_" & field.name & ".textContent = 'Satellite operates silently while processing speech.';")
-      html.add("          if (btn_" & field.name & ") btn_" & field.name & ".style.display = 'none';")
+      if field.hasAudioPreview:
+        html.add("          if (btn_" & field.name & ") btn_" & field.name & ".style.display = 'none';")
       html.add("        } else {")
       html.add("          const info = OPTION_DETAILS_" & field.name & "[val] || { cadence: '', desc: '' };")
       html.add("          if (cadence_" & field.name & ") cadence_" & field.name & ".textContent = info.cadence;")
       html.add("          if (desc_" & field.name & ") desc_" & field.name & ".textContent = info.desc;")
-      html.add("          if (btn_" & field.name & ") {")
-      html.add("            btn_" & field.name & ".style.display = 'inline-flex';")
-      html.add("            btn_" & field.name & ".textContent = '▶ Preview Sound';")
-      html.add("          }")
+      if field.hasAudioPreview:
+        html.add("          if (btn_" & field.name & ") {")
+        html.add("            btn_" & field.name & ".style.display = 'inline-flex';")
+        html.add("            btn_" & field.name & ".textContent = '▶ Preview Sound';")
+        html.add("          }")
       html.add("        }")
       html.add("      }")
       html.add("      updateFieldDependencies();")
@@ -624,11 +716,12 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("      select_" & field.name & ".addEventListener('change', updatePreset_" & field.name & ");")
       html.add("      updatePreset_" & field.name & "();")
       html.add("    }")
-      html.add("    if (btn_" & field.name & ") {")
-      html.add("      btn_" & field.name & ".addEventListener('click', () => {")
-      html.add("        playPresetAudio(select_" & field.name & ".value, btn_" & field.name & ");")
-      html.add("      });")
-      html.add("    }")
+      if field.hasAudioPreview:
+        html.add("    if (btn_" & field.name & ") {")
+        html.add("      btn_" & field.name & ".addEventListener('click', () => {")
+        html.add("        playPresetAudio(select_" & field.name & ".value, btn_" & field.name & ");")
+        html.add("      });")
+        html.add("    }")
 
     if field.kind == ifkFile:
       html.add("    const fileInput_" & field.name & " = document.getElementById('field_" & field.name & "');")
