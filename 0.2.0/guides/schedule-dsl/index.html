@@ -800,6 +800,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cooperative-rtos-background-task-scheduler-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Cooperative RTOS Background Task Scheduler Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-haschedule-every-after-and-non-blocking-timers-in-the-esphome-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haSchedule</code>, <code>every</code>, <code>after</code>, and non-blocking timers in the ESPHome loop.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1394,6 +1427,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cooperative-rtos-background-task-scheduler-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Cooperative RTOS Background Task Scheduler Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-haschedule-every-after-and-non-blocking-timers-in-the-esphome-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haSchedule</code>, <code>every</code>, <code>after</code>, and non-blocking timers in the ESPHome loop.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1574,6 +1640,99 @@
 </span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">tickSchedules</span><span class="p">(</span><span class="mi">7200000</span><span class="p">,</span><span class="w"> </span><span class="n">reg</span><span class="p">)</span><span class="w">  </span><span class="c"># 120 mins (2 hrs): count increments to 2</span>
 </span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">assert</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span>
 </span></code></pre></div>
+<hr />
+<h2 id="complete-working-project">Complete Working Project<a class="headerlink" href="#complete-working-project" title="Permanent link">&para;</a></h2>
+<p>The following code is pulled directly from <a href="https://github.com/axiomantic/nim-esphome/tree/main/examples/cooperative_scheduler"><code>examples/cooperative_scheduler/</code></a>, which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Nim Source (<code>scheduler.nim</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```nim</p>
+</div>
+</div>
+</div>
+<h2 id="cooperative-rtos-background-task-scheduler-example">Cooperative RTOS Background Task Scheduler Example<a class="headerlink" href="#cooperative-rtos-background-task-scheduler-example" title="Permanent link">&para;</a></h2>
+<h2 id="demonstrates-haschedule-every-after-and-non-blocking-timers-in-the-esphome-loop">Demonstrates <code>haSchedule</code>, <code>every</code>, <code>after</code>, and non-blocking timers in the ESPHome loop.<a class="headerlink" href="#demonstrates-haschedule-every-after-and-non-blocking-timers-in-the-esphome-loop" title="Permanent link">&para;</a></h2>
+<p>import nim_esphome
+import nim_esphome/dsl/schedule</p>
+<p>var
+  audioTickCount: int = 0
+  sensorPollCount: int = 0
+  heartbeatCount: int = 0
+  watchdogTriggered: bool = false
+  sensorReading: float32 = 0.0'f32
+  activityLed = newSwitch("activity_led")
+  telemetrySensor = newSensor("telemetry_counter")</p>
+<h1 id="1-register-cooperative-non-blocking-tasks">1. Register cooperative non-blocking tasks<a class="headerlink" href="#1-register-cooperative-non-blocking-tasks" title="Permanent link">&para;</a></h1>
+<p>haSchedule:
+  every 50.ms:
+    # High-speed periodic DSP / audio tick
+    audioTickCount += 1
+    if audioTickCount mod 20 == 0:
+      # Toggle LED every 1 second
+      activityLed.publishState(audioTickCount mod 40 == 0)</p>
+<p>every 2.seconds:
+    # Periodic sensor polling
+    sensorPollCount += 1
+    sensorReading = float32(sensorPollCount * 10)
+    telemetrySensor.publishState(sensorReading)
+    info("Scheduler", "Sensor polled: count=" &amp; $sensorPollCount &amp; " val=" &amp; $sensorReading)</p>
+<p>every 30.seconds:
+    # System health heartbeat
+    heartbeatCount += 1
+    info("Scheduler", "Heartbeat #" &amp; $heartbeatCount &amp; " uptime=" &amp; $(millis() div 1000) &amp; "s")</p>
+<p>after 10.seconds:
+    # One-shot watchdog or initialization delay
+    watchdogTriggered = true
+    info("Scheduler", "One-shot 10-second warm-up phase complete!")</p>
+<p>esphomeSetup:
+  info("Scheduler", "Cooperative scheduler initialized with 4 background tasks")</p>
+<p>esphomeLoop:
+  tickSchedules(millis())</p>
+<div class="language-text highlight"><pre><span></span><code>```
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">ESPHome YAML (<code>scheduler.yaml</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```yaml</p>
+</div>
+</div>
+</div>
+<p>esphome:
+  name: nim-scheduler-demo
+  friendly_name: "Nim Cooperative Scheduler Demo"</p>
+<p>esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf</p>
+<p>logger:
+  level: INFO</p>
+<p>api:</p>
+<p>wifi:
+  ap:
+    ssid: "Scheduler-Fallback"</p>
+<p>external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]</p>
+<p>nim:
+  source: scheduler.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"</p>
+<p>switch:
+  - platform: template
+    id: activity_led
+    name: "Activity LED"
+    optimistic: true</p>
+<p>sensor:
+  - platform: template
+    id: telemetry_counter
+    name: "Telemetry Counter"
+    update_interval: 60s</p>
+<div class="language-text highlight"><pre><span></span><code>```
+</code></pre></div>
 
 
 
