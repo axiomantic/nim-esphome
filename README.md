@@ -260,6 +260,27 @@ let t: uint32 = millis()
 delay(100) # milliseconds
 ```
 
+### First-Class Entity Bindings
+
+Publish state directly to ESPHome entities (`sensor`, `binary_sensor`, `switch`, `text_sensor`) from Nim using type-safe handles:
+
+```nim
+import nim_esphome
+
+let tempSensor = newSensor("living_room_temperature")
+let motionSensor = newBinarySensor("hallway_motion")
+let relaySwitch = newSwitch("main_relay")
+let statusMsg = newTextSensor("device_status")
+
+# Publish numerical, boolean, or string state
+tempSensor.publishState(21.5'f32)
+motionSensor.publishState(true)
+relaySwitch.publishState(false)
+statusMsg.publishState("Running")
+```
+
+When compiled for embedded firmware, `publishState` looks up registered entities dynamically in the ESPHome `Application` registry and executes `publish_state(...)`. In local unit tests on host machines, a mock registry is maintained for headless verification.
+
 ### Calling Nim Procs from ESPHome C++
 
 Define your procedure in Nim with `{.exportEsphome.}`:

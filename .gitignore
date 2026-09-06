@@ -6,6 +6,7 @@ nimcache/
 *.o
 *.obj
 *.cpp
+!components/**/*.cpp
 *.json
 !examples/**/*.json
 tests/test_basic

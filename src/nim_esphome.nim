@@ -1,7 +1,9 @@
 import std/macros
 import nim_esphome/api
+import nim_esphome/entities
 
 export api
+export entities
 
 template esphomeSetup*(body: untyped) =
   proc nim_on_setup() {.exportc: "nim_on_setup", cdecl.} =

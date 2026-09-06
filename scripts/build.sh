@@ -4,6 +4,8 @@ set -euo pipefail
 echo "=== Running nim-esphome unit tests ==="
 nim c -r --path:src tests/test_basic.nim
 rm -f tests/test_basic
+nim c -r --path:src tests/test_entities.nim
+rm -f tests/test_entities
 
 echo "=== Testing embedded C++ code generation (Xtensa ESP32 target) ==="
 nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim

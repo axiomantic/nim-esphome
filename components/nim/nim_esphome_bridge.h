@@ -20,6 +20,11 @@ void nim_esp_feed_wdt(void);
 uint32_t nim_esp_get_free_heap(void);
 void nim_esp_reboot(void);
 
+bool esphome_nim_publish_sensor(const char *entity_id, float value);
+bool esphome_nim_publish_binary_sensor(const char *entity_id, bool value);
+bool esphome_nim_publish_switch(const char *entity_id, bool value);
+bool esphome_nim_publish_text_sensor(const char *entity_id, const char *value);
+
 #ifdef __cplusplus
 }
 #endif
