@@ -1,12 +1,15 @@
 import nim_esphome
 
 var lastToggle: uint32 = 0
+var bootCount: int32 = 0
 let tempSensor = newSensor("temperature")
 let statusLed = newSwitch("status_led")
 let i2cDev = newI2CDevice(0x68)
 
 esphomeSetup:
   info("BlinkNim", "Hello from Nim running on ESPHome!")
+  bootCount = loadPreference("boot_count", 0'i32) + 1
+  discard savePreference("boot_count", bootCount)
   statusLed.publishState(true)
   pinMode(2, Output)
   digitalWrite(2, High)

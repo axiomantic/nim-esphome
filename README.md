@@ -318,6 +318,24 @@ let chipId: uint8 = accelerometer.readByte(0x75)
 let rawData: seq[uint8] = accelerometer.readRegister(0x3B, 6)
 ```
 
+### Flash Preferences / Non-Volatile Storage (NVS)
+
+Persist calibration constants, runtime counters, and configurations across power cycles and reboots via ESPHome's NVS storage backend:
+
+```nim
+import nim_esphome
+
+# Load with type inference and fallback defaults
+var bootCount = loadPreference("boot_count", 0'i32) + 1
+discard savePreference("boot_count", bootCount)
+
+var targetTemp = loadPreference("target_temp", 21.0'f32)
+discard savePreference("target_temp", 22.5'f32)
+
+var wifiSsid = loadPreference("wifi_ssid", "DefaultSSID")
+discard savePreference("wifi_ssid", "HomeIoT")
+```
+
 ### Calling Nim Procs from ESPHome C++
 
 Define your procedure in Nim with `{.exportEsphome.}`:

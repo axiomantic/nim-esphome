@@ -34,6 +34,9 @@ bool nim_i2c_write(uint8_t address, const uint8_t *data, size_t len);
 bool nim_i2c_read(uint8_t address, uint8_t *data, size_t len);
 bool nim_i2c_write_read(uint8_t address, const uint8_t *write_data, size_t write_len, uint8_t *read_data, size_t read_len);
 
+bool nim_esp_save_preference(uint32_t key, const void *data, size_t len);
+bool nim_esp_load_preference(uint32_t key, void *data, size_t len);
+
 #ifdef __cplusplus
 }
 #endif

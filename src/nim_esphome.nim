@@ -3,11 +3,13 @@ import nim_esphome/api
 import nim_esphome/entities
 import nim_esphome/gpio
 import nim_esphome/i2c
+import nim_esphome/preferences
 
 export api
 export entities
 export gpio
 export i2c
+export preferences
 
 template esphomeSetup*(body: untyped) =
   proc nim_on_setup() {.exportc: "nim_on_setup", cdecl.} =

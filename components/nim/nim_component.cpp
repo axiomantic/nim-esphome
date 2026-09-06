@@ -204,6 +204,37 @@ extern "C" {
   #endif
     return false;
   }
+
+  class NimPrefProxy : public esphome::ESPPreferenceObject {
+   public:
+    NimPrefProxy(const esphome::ESPPreferenceObject &base) : esphome::ESPPreferenceObject(base) {}
+    bool raw_save(const uint8_t *data, size_t len) {
+      if (this->backend_ == nullptr) return false;
+      return this->backend_->save(data, len);
+    }
+    bool raw_load(uint8_t *data, size_t len) {
+      if (this->backend_ == nullptr) return false;
+      return this->backend_->load(data, len);
+    }
+  };
+
+  bool nim_esp_save_preference(uint32_t key, const void *data, size_t len) {
+    if (esphome::global_preferences == nullptr || data == nullptr || len == 0) return false;
+    auto pref = esphome::global_preferences->make_preference(len, key, true);
+    NimPrefProxy proxy(pref);
+    bool ok = proxy.raw_save(static_cast<const uint8_t *>(data), len);
+    if (ok) {
+      esphome::global_preferences->sync();
+    }
+    return ok;
+  }
+
+  bool nim_esp_load_preference(uint32_t key, void *data, size_t len) {
+    if (esphome::global_preferences == nullptr || data == nullptr || len == 0) return false;
+    auto pref = esphome::global_preferences->make_preference(len, key, true);
+    NimPrefProxy proxy(pref);
+    return proxy.raw_load(static_cast<uint8_t *>(data), len);
+  }
 }
 
 namespace esphome {
