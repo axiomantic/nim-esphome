@@ -185,3 +185,13 @@ When `persist = true` is specified:
 2. If no setting exists in flash yet, it initializes to `default`.
 3. Whenever the user modifies the setting in Home Assistant, the new value is automatically persisted across reboots via `preferences.nim`.
 
+---
+
+## Related DSL Guides
+
+- [**Lovelace Dashboard Surfaces DSL**](dashboard-dsl.md): Declaratively generate matched Home Assistant dashboard cards.
+- [**Custom Actions & Services DSL**](actions-dsl.md): Expose type-safe actions callable from Home Assistant automations.
+- [**RTOS Task & Schedule DSL**](schedule-dsl.md): Run cooperative background timers and delays in the ESPHome loop.
+- [**Composite Hardware Surfaces DSL**](surface-dsl.md): Group controls, telemetry, and metadata into unified device surfaces.
+
+

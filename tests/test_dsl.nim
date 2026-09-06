@@ -1,4 +1,5 @@
 import std/unittest
+import std/[options, json, strutils]
 import nim_esphome
 
 suite "nim-esphome DSL and Satellite Voice Architecture":
@@ -133,3 +134,177 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check ssListening in stateTransitions
     check ssProcessing in stateTransitions
     check ssSpeaking in stateTransitions
+
+  test "haDashboard and haCard DSL for Lovelace surfaces":
+    let myCard = haCard(ctEntities, "Voice Satellite Controls", "mdi:microphone"):
+      card.addEntity("select.processing_sound", name = "Audio Feedback", icon = "mdi:progress-clock")
+      card.addEntity("number.processing_sound_volume", name = "Processing Volume")
+      card.addEntity("switch.wake_chime", name = "Wake Chime", icon = "mdi:bell-ring")
+
+    check myCard.title.get() == "Voice Satellite Controls"
+    check myCard.cardType == ctEntities
+    check myCard.entities.len == 3
+    check myCard.entities[0].entityId == "select.processing_sound"
+
+    let jsonCard = myCard.toJson()
+    check jsonCard["type"].getStr() == "entities"
+    check jsonCard["title"].getStr() == "Voice Satellite Controls"
+    check jsonCard["entities"].len == 3
+
+    let yamlCard = myCard.toYaml()
+    check "type: entities" in yamlCard
+    check "title: \"Voice Satellite Controls\"" in yamlCard
+    check "select.processing_sound" in yamlCard
+
+    # Full Dashboard
+    let myDash = haDashboard("Smart Home Dashboard"):
+      var view1 = newLovelaceView("Satellite", path = "satellite", icon = "mdi:speaker")
+      view1.addCard(myCard)
+      dash.addView(view1)
+
+    check myDash.views.len == 1
+    check myDash.views[0].title == "Satellite"
+    check myDash.views[0].cards.len == 1
+    let dashYaml = myDash.toYaml()
+    check "title: \"Smart Home Dashboard\"" in dashYaml
+    check "path: satellite" in dashYaml
+
+  test "haService and haAction DSL with type-safe arguments":
+    var tonePlayedFreq = 0
+    var toneDuration = 0
+    var toneStyle = ""
+    var toneSuccess = false
+
+    haService("play_custom_tone"):
+      param "frequency", pkInt, min = 100.0, max = 10000.0, defaultVal = "440"
+      param "duration_ms", pkInt, min = 10.0, max = 5000.0, defaultVal = "200"
+      param "style", pkString, defaultVal = "sine"
+      param "active", pkBool, defaultVal = "true"
+      onExecute(ctx):
+        tonePlayedFreq = ctx.getInt("frequency")
+        toneDuration = ctx.getInt("duration_ms")
+        toneStyle = ctx.getString("style")
+        toneSuccess = ctx.getBool("active")
+
+    let serviceDef = getService("play_custom_tone")
+    check serviceDef.isSome
+    check serviceDef.get().name == "play_custom_tone"
+    check serviceDef.get().params.len == 4
+
+    let esphomeYaml = serviceDef.get().toEsphomeYaml()
+    check "- service: play_custom_tone" in esphomeYaml
+    check "frequency: int" in esphomeYaml
+
+    # Trigger with explicit params
+    let res1 = triggerServiceCall("play_custom_tone", [
+      ("frequency", newParamValue(880)),
+      ("duration_ms", newParamValue(350)),
+      ("style", newParamValue("pulse")),
+      ("active", newParamValue(true))
+    ])
+    check res1 == true
+    check tonePlayedFreq == 880
+    check toneDuration == 350
+    check toneStyle == "pulse"
+    check toneSuccess == true
+
+    # Trigger relying on default fallback values
+    let res2 = triggerServiceCall("play_custom_tone", [
+      ("frequency", newParamValue(1000))
+    ])
+    check res2 == true
+    check tonePlayedFreq == 1000
+    check toneDuration == 200 # default
+    check toneStyle == "sine" # default
+
+  test "haSchedule and non-blocking background task timers":
+    let reg = ScheduleRegistry(tasks: @[])
+    var stepCount = 0
+    var heartbeatCount = 0
+    var timeoutFired = false
+
+    haSchedule(reg):
+      every 50.ms:
+        stepCount += 1
+
+      every 2.seconds:
+        heartbeatCount += 1
+
+      after 5.seconds:
+        timeoutFired = true
+
+    check reg.tasks.len == 3
+
+    # Tick 0ms -> initial timestamps recorded
+    tickSchedules(0, reg)
+    check stepCount == 0
+    check heartbeatCount == 0
+    check timeoutFired == false
+
+    # Tick 40ms -> nothing triggered yet
+    tickSchedules(40, reg)
+    check stepCount == 0
+
+    # Tick 50ms -> 50ms periodic task triggers
+    tickSchedules(50, reg)
+    check stepCount == 1
+
+    # Tick 100ms -> 50ms task triggers second time
+    tickSchedules(100, reg)
+    check stepCount == 2
+    check heartbeatCount == 0
+
+    # Tick 2000ms (2s) -> heartbeat fires
+    tickSchedules(2000, reg)
+    check stepCount == 3
+    check heartbeatCount == 1
+    check timeoutFired == false
+
+    # Tick 5000ms (5s) -> one-shot timeout fires
+    tickSchedules(5000, reg)
+    check timeoutFired == true
+
+    # Tick again -> one-shot task must NOT fire again
+    tickSchedules(6000, reg)
+    check reg.tasks[2].active == false
+
+    # Test cancel
+    reg.tasks[0].cancel()
+    check stepCount == 5
+    tickSchedules(7000, reg)
+    check stepCount == 5
+    tickSchedules(7050, reg)
+    check stepCount == 5
+
+  test "haSurface composite device DSL":
+    let mySurface = haSurface("living_room_satellite"):
+      surface.name = "Living Room Voice Satellite"
+      surface.model = "ReSpeaker XVF3800"
+      surface.manufacturer = "Seeed Studio"
+      surface.area = "Living Room"
+
+      surface.addControl(sekSelect, "processing_sound", name = "Processing Sound", icon = "mdi:progress-clock")
+      surface.addControl(sekNumber, "volume", name = "Volume", icon = "mdi:volume-high")
+      surface.addControl(sekSwitch, "wake_chime", name = "Wake Chime", icon = "mdi:bell-ring")
+      surface.addTelemetry(sekSensor, "wifi_signal", name = "Wi-Fi Signal", unit = "dBm")
+
+    check mySurface.id == "living_room_satellite"
+    check mySurface.entities.len == 4
+
+    let generatedCard = mySurface.generateDashboardCard()
+    check generatedCard.title.get() == "Living Room Voice Satellite"
+    check generatedCard.entities.len == 4
+    check generatedCard.entities[0].entityId == "select.processing_sound"
+
+    let lovelaceYaml = mySurface.generateLovelaceYaml()
+    check "title: \"Living Room Voice Satellite\"" in lovelaceYaml
+    check "select.processing_sound" in lovelaceYaml
+
+    let esphomeYaml = mySurface.generateEsphomeYaml()
+    check "Generated Hardware Surface: Living Room Voice Satellite" in esphomeYaml
+    check "select:" in esphomeYaml
+    check "number:" in esphomeYaml
+    check "switch:" in esphomeYaml
+    check "sensor:" in esphomeYaml
+    check "id: processing_sound" in esphomeYaml
+

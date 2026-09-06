@@ -191,7 +191,11 @@ Comprehensive guides and API references are available in the [`docs/`](docs/inde
 - ⚙️ [**YAML Configuration**](docs/guides/configuration.md): Complete schema options, flags, and architecture overrides.
 - 📦 [**Nimble Dependencies**](docs/guides/dependencies.md): Automated package downloads, Git repository URLs, and caching.
 - ⚡ [**Target Architectures & Cross-Compilation**](docs/guides/architectures.md): Multi-CPU alignment (Xtensa, RISC-V, ARM), pointer widths, and ARC memory.
-- 🎛️ [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, and text sensors.
+- 🎛️ [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, select, number, and button controls.
+- 📊 [**Lovelace Dashboard Surfaces DSL**](docs/guides/dashboard-dsl.md): Declaratively define and export Home Assistant Lovelace cards directly from firmware.
+- ⚡ [**Custom Actions & Services DSL**](docs/guides/actions-dsl.md): Compile-time validated, type-safe Home Assistant actions and service handlers.
+- ⏱️ [**RTOS Task & Schedule DSL**](docs/guides/schedule-dsl.md): Cooperative, non-blocking periodic task scheduling and one-shot delays.
+- 🖥️ [**Composite Hardware Surfaces DSL**](docs/guides/surface-dsl.md): Unified domain models combining controls, telemetry, and matched dashboard cards.
 - 🔌 [**Hardware Buses (GPIO & I2C)**](docs/guides/hardware.md): Microcontroller pin modes and I2C peripheral register transfers.
 - 💾 [**Flash Preferences (NVS)**](docs/guides/storage.md): Non-volatile parameter storage across power cycles.
 - 📈 [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
@@ -326,6 +330,86 @@ statusMsg.publishState("Running")
 When compiled for embedded firmware, `publishState` looks up registered entities dynamically in the ESPHome `Application` registry and executes `publish_state(...)`. In local unit tests on host machines, a mock registry is maintained for headless verification.
 
 > 📖 **Full Guide & API**: See [Entities & Home Assistant Guide](docs/guides/entities.md) and [`nim_esphome/entities`](docs/api/entities.md).
+
+### Domain-Specific Languages (DSLs) for Home Assistant Surfaces
+
+`nim-esphome` includes a suite of compile-time verified DSLs (`nim_esphome/dsl`) that bridge low-level microcontroller silicon to high-level Home Assistant surfaces:
+
+#### 1. Declarative Controls DSL (`esphomeControls`)
+Declare `select`, `number`, `switch`, and `button` controls with automatic flash NVS persistence:
+
+```nim
+esphomeControls:
+  select[AudioStyle]("sound_style"):
+    name = "Sound Style"
+    default = asSpinner
+    persist = true
+    onSelect(style): setStyle(style)
+
+  number("volume"):
+    name = "Volume"
+    min = 0.0; max = 100.0; step = 5.0; default = 75.0
+    persist = true
+    onChange(vol): setVolume(vol)
+```
+> 📖 See [Entities & Controls Guide](docs/guides/entities.md) and [`nim_esphome/dsl/entities`](docs/api/dsl.md#home-assistant-controls-dsl).
+
+#### 2. Lovelace Dashboard Surface DSL (`haDashboard` / `haCard`)
+Generate production-ready Home Assistant dashboard cards and multi-view configurations directly from firmware code:
+
+```nim
+let satelliteCard = haCard(ctEntities, "Voice Satellite", "mdi:microphone"):
+  card.addEntity "select.sound_style", name = "Audio Feedback"
+  card.addEntity "number.volume", name = "Volume"
+  card.addEntity "switch.mute", name = "Muted"
+
+echo satelliteCard.toYaml()
+```
+> 📖 See [Lovelace Dashboard Surfaces Guide](docs/guides/dashboard-dsl.md) and [`nim_esphome/dsl/dashboard`](docs/api/dsl.md#lovelace-dashboard-surface-dsl).
+
+#### 3. Custom Actions & Services DSL (`haService` / `haAction`)
+Expose type-safe actions callable from Home Assistant automations and scripts:
+
+```nim
+haService("play_tone"):
+  description = "Plays an audio tone on the satellite speaker"
+  param "frequency", pkInt, min = 100.0, max = 10000.0, defaultVal = "440"
+  param "duration_ms", pkInt, min = 10.0, max = 5000.0, defaultVal = "200"
+  onExecute(ctx):
+    playTone(ctx.getInt("frequency"), ctx.getInt("duration_ms"))
+```
+> 📖 See [Custom Actions & Services Guide](docs/guides/actions-dsl.md) and [`nim_esphome/dsl/actions`](docs/api/dsl.md#custom-actions--service-calls-dsl).
+
+#### 4. RTOS Task & Schedule DSL (`haSchedule`)
+Cooperative, non-blocking periodic task scheduling and one-shot delays inside ESPHome's main loop without thread overhead:
+
+```nim
+haSchedule:
+  every 50.ms:
+    stepAudioPipeline()
+  every 5.seconds:
+    publishTelemetry()
+  after 30.seconds:
+    finalizeCalibration()
+```
+> 📖 See [RTOS Task & Schedule Guide](docs/guides/schedule-dsl.md) and [`nim_esphome/dsl/schedule`](docs/api/dsl.md#rtos-background-task--schedule-dsl).
+
+#### 5. Composite Hardware Surfaces DSL (`haSurface`)
+Unify hardware metadata, controls, telemetry sensors, and matched dashboard cards into a single cohesive domain model:
+
+```nim
+let satellite = haSurface("voice_satellite"):
+  surface.name = "Living Room Voice Satellite"
+  surface.model = "ReSpeaker XVF3800"
+  surface.manufacturer = "Seeed Studio"
+  surface.addControl(sekSelect, "sound_style", name = "Sound Style")
+  surface.addControl(sekNumber, "volume", name = "Volume")
+  surface.addTelemetry(sekSensor, "wifi_rssi", name = "Signal", unit = "dBm")
+
+echo satellite.generateLovelaceYaml()
+echo satellite.generateEsphomeYaml()
+```
+> 📖 See [Composite Hardware Surfaces Guide](docs/guides/surface-dsl.md) and [`nim_esphome/dsl/surface`](docs/api/dsl.md#composite-hardware-device-dsl).
 
 ### Hardware Bus & Peripheral Abstractions (GPIO & I2C)
 
