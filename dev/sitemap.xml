@@ -60,4 +60,7 @@
       <url>
         <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsp/</loc>
       </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsl/</loc>
+      </url>
 </urlset>
