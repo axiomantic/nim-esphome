@@ -12,13 +12,13 @@
         <meta name="author" content="Axiomantic">
       
       
-        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/dependencies/">
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/actions-dsl/">
       
       
-        <link rel="prev" href="../configuration/">
+        <link rel="prev" href="../dashboard-dsl/">
       
       
-        <link rel="next" href="../architectures/">
+        <link rel="next" href="../schedule-dsl/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Nimble Dependencies - nim-esphome</title>
+        <title>Custom Actions & Services DSL - nim-esphome</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#automated-nimble-dependencies" class="md-skip">
+        <a href="#custom-actions-service-calls-dsl" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Nimble Dependencies
+              Custom Actions & Services DSL
             
           </span>
         </div>
@@ -547,38 +547,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Nimble Dependencies
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dependencies/" class="md-nav__link">
         
   
   
@@ -593,77 +565,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-requires-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The <code>requires:</code> Schema
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#isolated-build-cache-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Isolated Build Cache Architecture
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Isolated Build Cache Architecture">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Key Advantages:
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#local-package-paths-nimble_paths" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Local Package Paths (<code>nimble_paths:</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -754,10 +655,38 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../actions-dsl/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Custom Actions & Services DSL
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -772,6 +701,88 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core Features
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#declaring-an-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Declaring an Action
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-esphome-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generating ESPHome YAML
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating ESPHome YAML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generated-esphome-yaml-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generated ESPHome YAML Output
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-testing-on-host-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Unit Testing on Host Machines
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1335,10 +1346,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-requires-schema" class="md-nav__link">
+  <a href="#core-features" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The <code>requires:</code> Schema
+        Core Features
       </span>
     </span>
   </a>
@@ -1346,22 +1357,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#isolated-build-cache-architecture" class="md-nav__link">
+  <a href="#declaring-an-action" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Isolated Build Cache Architecture
+        Declaring an Action
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Isolated Build Cache Architecture">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-esphome-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generating ESPHome YAML
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating ESPHome YAML">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-advantages" class="md-nav__link">
+  <a href="#generated-esphome-yaml-output" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Key Advantages:
+        Generated ESPHome YAML Output
       </span>
     </span>
   </a>
@@ -1374,10 +1396,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#local-package-paths-nimble_paths" class="md-nav__link">
+  <a href="#unit-testing-on-host-machines" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Local Package Paths (<code>nimble_paths:</code>)
+        Unit Testing on Host Machines
       </span>
     </span>
   </a>
@@ -1487,52 +1509,73 @@
   
 
 
-<h1 id="automated-nimble-dependencies">Automated Nimble Dependencies<a class="headerlink" href="#automated-nimble-dependencies" title="Permanent link">&para;</a></h1>
-<p>This guide explains how <code>nim-esphome</code> manages external Nim packages, libraries, and Git dependencies during ESPHome compilation.</p>
+<h1 id="custom-actions-service-calls-dsl">Custom Actions &amp; Service Calls DSL<a class="headerlink" href="#custom-actions-service-calls-dsl" title="Permanent link">&para;</a></h1>
+<p>In Home Assistant, <strong>Actions</strong> (historically called <strong>Services</strong>) allow users, automations, and scripts to trigger device-specific routines with custom arguments (e.g. <code>satellite.play_custom_tone(frequency=880, duration_ms=500)</code>).</p>
+<p>Implementing custom services in native ESPHome C++ requires managing untyped argument maps, manual string parsing, and verbose lambda bindings.</p>
+<p>The <strong>Custom Actions DSL</strong> (<code>nim_esphome/dsl/actions</code>) enables firmware authors to declare compile-time and runtime type-safe Home Assistant actions directly in Nim.</p>
 <hr />
-<h2 id="the-requires-schema">The <code>requires:</code> Schema<a class="headerlink" href="#the-requires-schema" title="Permanent link">&para;</a></h2>
-<p>In traditional embedded workflows, managing third-party libraries across diverse development machines requires manual installation steps or messy submodules.</p>
-<p><code>nim-esphome</code> introduces first-class automated dependency resolution via the <code>requires:</code> key in your ESPHome YAML:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">nim</span><span class="p">:</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/main.nim</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">requires</span><span class="p">:</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1"># 1. Package name from official Nimble package directory</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chroma</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="c1"># 2. Direct Git repository URL</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/elijahr/nim-typestates</span>
+<h2 id="core-features">Core Features<a class="headerlink" href="#core-features" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Type-Safe Argument Parsing</strong>: Supports <code>string</code>, <code>int</code>, <code>float</code>, and <code>bool</code> parameters.</li>
+<li><strong>Automatic Fallback Defaults</strong>: If an automation omits an optional argument, default values are automatically supplied.</li>
+<li><strong>Bounds Checking</strong>: Define optional <code>min</code> and <code>max</code> constraints for numerical arguments.</li>
+<li><strong>ESPHome YAML Generation</strong>: Automatically generates the corresponding <code>api.services</code> YAML declaration via <code>toEsphomeYaml()</code>.</li>
+<li><strong>Host Testability</strong>: Validate service invocations on your development machine using <code>triggerServiceCall()</code> without flashing microcontrollers.</li>
+</ul>
+<hr />
+<h2 id="declaring-an-action">Declaring an Action<a class="headerlink" href="#declaring-an-action" title="Permanent link">&para;</a></h2>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span><span class="o">/</span><span class="n">dsl</span><span class="o">/</span><span class="n">actions</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">haService</span><span class="p">(</span><span class="s">"play_custom_tone"</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Plays an audio tone on the satellite speaker"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">param</span><span class="w"> </span><span class="s">"frequency"</span><span class="p">,</span><span class="w"> </span><span class="n">pkInt</span><span class="p">,</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10000.0</span><span class="p">,</span><span class="w"> </span><span class="n">defaultVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"440"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Tone frequency in Hertz"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">param</span><span class="w"> </span><span class="s">"duration_ms"</span><span class="p">,</span><span class="w"> </span><span class="n">pkInt</span><span class="p">,</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5000.0</span><span class="p">,</span><span class="w"> </span><span class="n">defaultVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Tone duration in milliseconds"</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">param</span><span class="w"> </span><span class="s">"style"</span><span class="p">,</span><span class="w"> </span><span class="n">pkString</span><span class="p">,</span><span class="w"> </span><span class="n">defaultVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sine"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Waveform shape (sine, square, triangle)"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="n">param</span><span class="w"> </span><span class="s">"alert"</span><span class="p">,</span><span class="w"> </span><span class="n">pkBool</span><span class="p">,</span><span class="w"> </span><span class="n">defaultVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"false"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Override active media playback"</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="c1"># 3. Specific branch, tag, or commit hash</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/nim-lang/zip#v0.3.1</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">onExecute</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"frequency"</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">dur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"duration_ms"</span><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"style"</span><span class="p">)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">isAlert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">"alert"</span><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="n">echo</span><span class="w"> </span><span class="s">"Executing tone: "</span><span class="p">,</span><span class="w"> </span><span class="n">freq</span><span class="p">,</span><span class="w"> </span><span class="s">" Hz, "</span><span class="p">,</span><span class="w"> </span><span class="n">dur</span><span class="p">,</span><span class="w"> </span><span class="s">" ms, style="</span><span class="p">,</span><span class="w"> </span><span class="n">style</span><span class="p">,</span><span class="w"> </span><span class="s">" alert="</span><span class="p">,</span><span class="w"> </span><span class="n">isAlert</span>
 </span></code></pre></div>
 <hr />
-<h2 id="isolated-build-cache-architecture">Isolated Build Cache Architecture<a class="headerlink" href="#isolated-build-cache-architecture" title="Permanent link">&para;</a></h2>
-<p>To prevent polluting your global host environment and avoid permission conflicts during automated Home Assistant builds, <code>nim-esphome</code> maintains an isolated Nimble cache:</p>
-<pre class="mermaid"><code>flowchart TD
-    YAML["ESPHome YAML&lt;br/&gt;requires: [typestates, chroma]"] --&gt; Resolver["nim-esphome Dependency Resolver"]
-    Resolver --&gt; Check{"Already cached in&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble?"}
-    Check --&gt;|No| Install["nimble install -y --nimbleDir:&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble"]
-    Check --&gt;|Yes| Skip["Skip network download&lt;br/&gt;(instant build)"]
-    Install --&gt; Paths["Extract package search paths"]
-    Skip --&gt; Paths
-    Paths --&gt; Transpile["nim cpp --nimblePath:..."]</code></pre>
-<h3 id="key-advantages">Key Advantages:<a class="headerlink" href="#key-advantages" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Zero Host Contamination</strong>: Packages are installed strictly inside the <code>.esphome/build/&lt;node&gt;/.nimble</code> directory of the target device.</li>
-<li><strong>Deterministic Builds</strong>: Each ESPHome node maintains its own independent package versions.</li>
-<li><strong>Offline Caching</strong>: Once downloaded, subsequent builds reuse the cached packages without requiring internet connectivity.</li>
-<li><strong>Clean Builds</strong>: Running <code>esphome clean &lt;device&gt;.yaml</code> purges the node's local cache if you need a fresh rebuild.</li>
-</ol>
-<hr />
-<h2 id="local-package-paths-nimble_paths">Local Package Paths (<code>nimble_paths:</code>)<a class="headerlink" href="#local-package-paths-nimble_paths" title="Permanent link">&para;</a></h2>
-<p>If you are developing custom Nim libraries locally alongside your firmware, you can specify them using <code>nimble_paths:</code>:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">nim</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/main.nim</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">nimble_paths</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../shared_firmware_libs/src</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/Users/username/Development/my_dsp_filters/src</span>
+<h2 id="generating-esphome-yaml">Generating ESPHome YAML<a class="headerlink" href="#generating-esphome-yaml" title="Permanent link">&para;</a></h2>
+<p>You can inspect the exact ESPHome <code>api.services</code> definition by calling <code>toEsphomeYaml()</code>:</p>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">let</span><span class="w"> </span><span class="n">serviceDef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getService</span><span class="p">(</span><span class="s">"play_custom_tone"</span><span class="p">).</span><span class="n">get</span><span class="p">()</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">echo</span><span class="w"> </span><span class="n">serviceDef</span><span class="p">.</span><span class="n">toEsphomeYaml</span><span class="p">()</span>
 </span></code></pre></div>
-<p>These paths are passed directly to <code>nim cpp</code> as <code>--path:...</code> search flags, allowing you to <code>import</code> your modules seamlessly.</p>
+<h3 id="generated-esphome-yaml-output">Generated ESPHome YAML Output<a class="headerlink" href="#generated-esphome-yaml-output" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">play_custom_tone</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">variables</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">      </span><span class="nt">frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">duration_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">then</span><span class="p">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lambda</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">          </span><span class="no">// Dispatch play_custom_tone into Nim runtime</span>
+</span></code></pre></div>
+<hr />
+<h2 id="unit-testing-on-host-machines">Unit Testing on Host Machines<a class="headerlink" href="#unit-testing-on-host-machines" title="Permanent link">&para;</a></h2>
+<p>You can verify that your action logic handles parameters and default fallbacks correctly without connecting hardware:</p>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># Call with full arguments</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">let</span><span class="w"> </span><span class="n">success1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">triggerServiceCall</span><span class="p">(</span><span class="s">"play_custom_tone"</span><span class="p">,</span><span class="w"> </span><span class="o">[</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">(</span><span class="s">"frequency"</span><span class="p">,</span><span class="w"> </span><span class="n">newParamValue</span><span class="p">(</span><span class="mi">880</span><span class="p">)),</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">(</span><span class="s">"duration_ms"</span><span class="p">,</span><span class="w"> </span><span class="n">newParamValue</span><span class="p">(</span><span class="mi">500</span><span class="p">)),</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="p">(</span><span class="s">"style"</span><span class="p">,</span><span class="w"> </span><span class="n">newParamValue</span><span class="p">(</span><span class="s">"square"</span><span class="p">)),</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="p">(</span><span class="s">"alert"</span><span class="p">,</span><span class="w"> </span><span class="n">newParamValue</span><span class="p">(</span><span class="kp">true</span><span class="p">))</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="o">]</span><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">assert</span><span class="w"> </span><span class="n">success1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kp">true</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c"># Call with missing optional arguments (uses configured defaults)</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">let</span><span class="w"> </span><span class="n">success2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">triggerServiceCall</span><span class="p">(</span><span class="s">"play_custom_tone"</span><span class="p">,</span><span class="w"> </span><span class="o">[</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="p">(</span><span class="s">"frequency"</span><span class="p">,</span><span class="w"> </span><span class="n">newParamValue</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="o">]</span><span class="p">)</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">assert</span><span class="w"> </span><span class="n">success2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kp">true</span>
+</span></code></pre></div>
 
 
 
@@ -1572,7 +1615,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: YAML Configuration">
+          <a href="../dashboard-dsl/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Lovelace Dashboard Surfaces DSL">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1582,20 +1625,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                YAML Configuration
+                Lovelace Dashboard Surfaces DSL
               </div>
             </div>
           </a>
         
         
           
-          <a href="../architectures/" class="md-footer__link md-footer__link--next" aria-label="Next: Target Architectures &amp; Cross-Compilation">
+          <a href="../schedule-dsl/" class="md-footer__link md-footer__link--next" aria-label="Next: RTOS Task &amp; Schedule DSL">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Target Architectures & Cross-Compilation
+                RTOS Task & Schedule DSL
               </div>
             </div>
             <div class="md-footer__button md-icon">

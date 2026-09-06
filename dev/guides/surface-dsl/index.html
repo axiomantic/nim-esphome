@@ -12,13 +12,13 @@
         <meta name="author" content="Axiomantic">
       
       
-        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/esphome-satellite/">
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/surface-dsl/">
       
       
-        <link rel="prev" href="../interop/">
+        <link rel="prev" href="../schedule-dsl/">
       
       
-        <link rel="next" href="../distribution/">
+        <link rel="next" href="../hardware/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Verified Voice Satellite (Case Study) - nim-esphome</title>
+        <title>Composite Hardware Surfaces DSL - nim-esphome</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#case-study-verified-voice-satellites-esphome-satellite" class="md-skip">
+        <a href="#composite-hardware-device-surface-dsl" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Verified Voice Satellite (Case Study)
+              Composite Hardware Surfaces DSL
             
           </span>
         </div>
@@ -709,10 +709,38 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../surface-dsl/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Composite Hardware Surfaces DSL
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -727,6 +755,88 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core Capabilities
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quickstart Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-dashboard-ui-esphome-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generating Dashboard UI &amp; ESPHome Configuration
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Dashboard UI &amp; ESPHome Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-generating-lovelace-dashboard-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        1. Generating Lovelace Dashboard YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generating-esphome-component-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2. Generating ESPHome Component YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -844,38 +954,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Verified Voice Satellite (Case Study)
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../esphome-satellite/" class="md-nav__link">
         
   
   
@@ -890,99 +972,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-problem-with-traditional-voice-satellites" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The Problem with Traditional Voice Satellites
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-typestate-solution" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The Typestate Solution
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-14-verified-lifecycle-states" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The 14 Verified Lifecycle States
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#complete-verification-via-host-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Complete Verification via Host Tests
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audio-feedback-the-processing-sound-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Audio Feedback &amp; The Processing Sound Loop
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Audio Feedback &amp; The Processing Sound Loop">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-processing_sound-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The <code>processing_sound</code> Architecture
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1357,10 +1346,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-problem-with-traditional-voice-satellites" class="md-nav__link">
+  <a href="#core-capabilities" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The Problem with Traditional Voice Satellites
+        Core Capabilities
       </span>
     </span>
   </a>
@@ -1368,10 +1357,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-typestate-solution" class="md-nav__link">
+  <a href="#quickstart-example" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The Typestate Solution
+        Quickstart Example
       </span>
     </span>
   </a>
@@ -1379,44 +1368,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-14-verified-lifecycle-states" class="md-nav__link">
+  <a href="#generating-dashboard-ui-esphome-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The 14 Verified Lifecycle States
+        Generating Dashboard UI &amp; ESPHome Configuration
       </span>
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#complete-verification-via-host-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Complete Verification via Host Tests
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audio-feedback-the-processing-sound-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Audio Feedback &amp; The Processing Sound Loop
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Audio Feedback &amp; The Processing Sound Loop">
+    <nav class="md-nav" aria-label="Generating Dashboard UI &amp; ESPHome Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-processing_sound-architecture" class="md-nav__link">
+  <a href="#1-generating-lovelace-dashboard-yaml" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The <code>processing_sound</code> Architecture
+        1. Generating Lovelace Dashboard YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generating-esphome-component-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2. Generating ESPHome Component YAML
       </span>
     </span>
   </a>
@@ -1531,92 +1509,101 @@
   
 
 
-<h1 id="case-study-verified-voice-satellites-esphome-satellite">Case Study: Verified Voice Satellites (esphome-satellite)<a class="headerlink" href="#case-study-verified-voice-satellites-esphome-satellite" title="Permanent link">&para;</a></h1>
-<p>This case study demonstrates how <code>nim-esphome</code> powers <strong><a href="https://github.com/axiomantic/esphome-satellite"><code>esphome-satellite</code></a></strong>—a compile-time verified voice satellite state machine for ESPHome and Home Assistant.</p>
+<h1 id="composite-hardware-device-surface-dsl">Composite Hardware Device Surface DSL<a class="headerlink" href="#composite-hardware-device-surface-dsl" title="Permanent link">&para;</a></h1>
+<p>In conventional firmware development, hardware devices are expressed as disjointed collections of independent sensors, switches, and numbers. In Home Assistant, however, users interact with <strong>cohesive physical surfaces</strong>—such as a smart speaker, climate thermostat, air quality station, or multi-zone light controller.</p>
+<p>The <strong>Composite Hardware Device Surface DSL</strong> (<code>nim_esphome/dsl/surface</code>) provides a unified domain model representing an entire physical device surface.</p>
 <hr />
-<h2 id="the-problem-with-traditional-voice-satellites">The Problem with Traditional Voice Satellites<a class="headerlink" href="#the-problem-with-traditional-voice-satellites" title="Permanent link">&para;</a></h2>
-<p>In conventional smart home voice satellites, firmware state is typically distributed across asynchronous network events, Home Assistant websocket callbacks, and ad-hoc C++ variables in YAML lambdas.</p>
-<p>This loose architecture leads to well-known race conditions:</p>
-<ol>
-<li><strong>Premature Chime Clipping</strong>: Audio playback starts before hardware I2S amplifiers or DACs wake up.</li>
-<li><strong>Stop Word Race Conditions</strong>: Saying <em>"Stop"</em> while the assistant is replying can get clobbered by an in-flight TTS chunk.</li>
-<li><strong>Audio Ducking Failures</strong>: Background music fails to duck or un-duck properly when wake words trigger.</li>
-<li><strong>Offline &amp; OTA Phantom Triggers</strong>: Microphones continue capturing audio and triggering pipelines even during firmware OTA updates or when Home Assistant is disconnected.</li>
-</ol>
+<h2 id="core-capabilities">Core Capabilities<a class="headerlink" href="#core-capabilities" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Unified Surface Definition</strong>: Combine hardware metadata (model, manufacturer, suggested area), controls, and telemetry into a single object.</li>
+<li><strong>Automatic Lovelace Card Synthesis</strong>: Call <code>surface.generateDashboardCard()</code> to instantly generate a matching Home Assistant dashboard card.</li>
+<li><strong>Automatic ESPHome YAML Generation</strong>: Call <code>surface.generateEsphomeYaml()</code> to generate complete ESPHome template entity declarations.</li>
+<li><strong>Home Assistant Device Registry Cohesion</strong>: Ensures all exposed entities share device metadata and appear grouped in the Home Assistant Devices list.</li>
+</ul>
 <hr />
-<h2 id="the-typestate-solution">The Typestate Solution<a class="headerlink" href="#the-typestate-solution" title="Permanent link">&para;</a></h2>
-<p><code>esphome-satellite</code> eliminates these bugs entirely by implementing a formal <strong>14-state typestate Finite State Machine (FSM)</strong> in Nim using <code>nim-esphome</code> and the <code>typestates</code> package.</p>
-<p>With typestates, states are represented as unique compile-time types. State transitions are defined as type transformations. If code attempts an illegal transition (such as triggering a wake word while in the <code>Muted</code> or <code>Updating</code> state), the Nim compiler rejects the build at compile time!</p>
-<pre class="mermaid"><code>stateDiagram-v2
-    [*] --&gt; IDLE
-    IDLE --&gt; WOKEN: Wake Word Detected
-    WOKEN --&gt; LISTENING: Wake Chime Complete
-    LISTENING --&gt; THINKING: VAD Speech Finished
-    THINKING --&gt; REPLYING: TTS Stream Begins
-    REPLYING --&gt; IDLE: TTS Stream Complete
-
-    REPLYING --&gt; FOLLOW_UP: Follow-up Prompt
-    FOLLOW_UP --&gt; LISTENING: Mic Active
-
-    LISTENING --&gt; SILENT_DISMISS: Silence / Timeout
-    SILENT_DISMISS --&gt; IDLE: Recover
-
-    LISTENING --&gt; PIPELINE_ERROR: STT / Intent Failure
-    THINKING --&gt; PIPELINE_ERROR: Timeout / Network Error
-    PIPELINE_ERROR --&gt; IDLE: Error Chime &amp; Recover
-
-    IDLE --&gt; MUTED: Hardware Privacy Switch
-    MUTED --&gt; IDLE: Unmute Switch
-
-    IDLE --&gt; PLAYING_MEDIA: Music Playback
-    PLAYING_MEDIA --&gt; WOKEN: Duck Audio &amp; Wake
-    PLAYING_MEDIA --&gt; IDLE: Stop Music
-
-    IDLE --&gt; ALERTING: Timer / Alarm Ringing
-    ALERTING --&gt; IDLE: Dismiss
-
-    IDLE --&gt; ANNOUNCING: Server Push Broadcast
-    ANNOUNCING --&gt; IDLE: Broadcast Done
-
-    IDLE --&gt; UPDATING: OTA Firmware Flash
-    UPDATING --&gt; IDLE: Flash Complete &amp; Reboot</code></pre>
-<hr />
-<h2 id="the-14-verified-lifecycle-states">The 14 Verified Lifecycle States<a class="headerlink" href="#the-14-verified-lifecycle-states" title="Permanent link">&para;</a></h2>
-<ol>
-<li><strong><code>IDLE</code></strong>: Ready and waiting for wake words or server commands.</li>
-<li><strong><code>WOKEN</code></strong>: Wake word recognized; playing acknowledgement chime and ducking background media.</li>
-<li><strong><code>LISTENING</code></strong>: Microphone streaming audio to Home Assistant voice pipeline.</li>
-<li><strong><code>THINKING</code></strong>: Speech capture finished; waiting for speech-to-text (STT) and LLM intent execution.</li>
-<li><strong><code>REPLYING</code></strong>: Streaming and playing text-to-speech (TTS) audio response.</li>
-<li><strong><code>FOLLOW_UP</code></strong>: Interactive multi-turn dialogue; keeping the session open for immediate follow-up commands.</li>
-<li><strong><code>SILENT_DISMISS</code></strong>: Graceful, silent exit when wake word was triggered by accident with no subsequent speech.</li>
-<li><strong><code>PIPELINE_ERROR</code></strong>: Deterministic error handling for network timeouts or intent recognition failures.</li>
-<li><strong><code>CONNECTION_ERROR</code></strong>: Safe degraded mode when Home Assistant is unreachable; blocks wake words to prevent dead ends.</li>
-<li><strong><code>MUTED</code></strong>: Hardware privacy mode; microphone capture is completely inhibited.</li>
-<li><strong><code>PLAYING_MEDIA</code></strong>: Streaming background music or podcasts; automatically ducks audio on wake word.</li>
-<li><strong><code>ALERTING</code></strong>: Active timer or alarm alert sounding; can be silenced with a quick stop word.</li>
-<li><strong><code>ANNOUNCING</code></strong>: Server-initiated announcement broadcast (e.g. doorbell chime or security alert).</li>
-<li><strong><code>UPDATING</code></strong>: Over-The-Air (OTA) firmware flashing in progress; all audio, sensors, and wake words are strictly locked.</li>
-</ol>
-<hr />
-<h2 id="complete-verification-via-host-tests">Complete Verification via Host Tests<a class="headerlink" href="#complete-verification-via-host-tests" title="Permanent link">&para;</a></h2>
-<p>Because <code>esphome-satellite</code> is written in Nim using <code>nim-esphome</code>, its entire 14-state lifecycle is covered by comprehensive unit tests that run instantly on macOS and Linux host machines:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>esphome-satellite
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/build.sh
+<h2 id="quickstart-example">Quickstart Example<a class="headerlink" href="#quickstart-example" title="Permanent link">&para;</a></h2>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span><span class="o">/</span><span class="n">dsl</span><span class="o">/</span><span class="n">surface</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">let</span><span class="w"> </span><span class="n">satellite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">haSurface</span><span class="p">(</span><span class="s">"living_room_satellite"</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Living Room Voice Satellite"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ReSpeaker XVF3800"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">manufacturer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Seeed Studio"</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Living Room"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="c"># Interactive Controls</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekSelect</span><span class="p">,</span><span class="w"> </span><span class="s">"processing_sound"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Processing Sound"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekNumber</span><span class="p">,</span><span class="w"> </span><span class="s">"volume"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Volume"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:volume-high"</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekSwitch</span><span class="p">,</span><span class="w"> </span><span class="s">"wake_chime"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wake Chime"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="c"># Read-only Telemetry</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addTelemetry</span><span class="p">(</span><span class="n">sekSensor</span><span class="p">,</span><span class="w"> </span><span class="s">"wifi_rssi"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wi-Fi Signal"</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dBm"</span><span class="p">,</span><span class="w"> </span><span class="n">deviceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"signal_strength"</span><span class="p">)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addTelemetry</span><span class="p">(</span><span class="n">sekBinarySensor</span><span class="p">,</span><span class="w"> </span><span class="s">"voice_active"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Voice Active"</span><span class="p">,</span><span class="w"> </span><span class="n">deviceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sound"</span><span class="p">)</span>
 </span></code></pre></div>
-<p>All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware!</p>
 <hr />
-<h2 id="audio-feedback-the-processing-sound-loop">Audio Feedback &amp; The Processing Sound Loop<a class="headerlink" href="#audio-feedback-the-processing-sound-loop" title="Permanent link">&para;</a></h2>
-<p>During voice interactions, user experience depends heavily on clear, low-latency audio feedback across transitions:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[IDLE] ──(wake word)──&gt; [LISTENING] ──(speech ended)──&gt; [PROCESSING] ──(tts start)──&gt; [SPEAKING] ──&gt; [IDLE]
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>   │                         │                              │
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>   └──(wake_sound)           └──(speech_end_sound)          └──(processing_sound loop)
+<h2 id="generating-dashboard-ui-esphome-configuration">Generating Dashboard UI &amp; ESPHome Configuration<a class="headerlink" href="#generating-dashboard-ui-esphome-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="1-generating-lovelace-dashboard-yaml">1. Generating Lovelace Dashboard YAML<a class="headerlink" href="#1-generating-lovelace-dashboard-yaml" title="Permanent link">&para;</a></h3>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">echo</span><span class="w"> </span><span class="n">satellite</span><span class="p">.</span><span class="n">generateLovelaceYaml</span><span class="p">()</span>
 </span></code></pre></div>
-<h3 id="the-processing_sound-architecture">The <code>processing_sound</code> Architecture<a class="headerlink" href="#the-processing_sound-architecture" title="Permanent link">&para;</a></h3>
-<p>While the cloud or local Large Language Model (LLM) generates response tokens, <code>nim-esphome</code> runs an asynchronous <strong>processing sound loop</strong> (<code>startProcessingLoop</code> / <code>stopProcessingLoop</code>):
-- <strong>Decoupled Sound Styles</strong>: The architecture separates the interaction state (<code>Processing</code>) from the sound asset. Users can choose between <code>Silent</code>, <code>Spinner</code>, <code>Pulse</code>, <code>Sonar</code>, or <code>Tick</code> directly in the Home Assistant UI.
-- <strong>Instant Cutoff</strong>: As soon as the first chunk of Text-to-Speech audio arrives (<code>onTtsStart</code>), <code>stopProcessingLoop()</code> halts the loop immediately, preventing audio collisions.
-- <strong>Type-Safe Home Assistant Mapping</strong>: Exposed to Home Assistant as a native <code>select</code> entity using <code>esphomeControls</code>, saved across reboots via Flash NVS.</p>
+<p>Output:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">entities</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">"Living</span><span class="nv"> </span><span class="s">Room</span><span class="nv"> </span><span class="s">Voice</span><span class="nv"> </span><span class="s">Satellite"</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">entities</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select.processing_sound</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Processing</span><span class="nv"> </span><span class="s">Sound"</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number.volume</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Volume"</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:volume-high"</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switch.wake_chime</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wake</span><span class="nv"> </span><span class="s">Chime"</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sensor.wifi_rssi</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wi-Fi</span><span class="nv"> </span><span class="s">Signal"</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binary_sensor.voice_active</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Active"</span>
+</span></code></pre></div>
+<h3 id="2-generating-esphome-component-yaml">2. Generating ESPHome Component YAML<a class="headerlink" href="#2-generating-esphome-component-yaml" title="Permanent link">&para;</a></h3>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">echo</span><span class="w"> </span><span class="n">satellite</span><span class="p">.</span><span class="n">generateEsphomeYaml</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># =============================================================================</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Generated Hardware Surface: Living Room Voice Satellite (ReSpeaker XVF3800)</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># =============================================================================</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">select</span><span class="p">:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">processing_sound</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Processing</span><span class="nv"> </span><span class="s">Sound"</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="nt">number</span><span class="p">:</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Volume"</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:volume-high"</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="nt">switch</span><span class="p">:</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wake_chime</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wake</span><span class="nv"> </span><span class="s">Chime"</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="nt">sensor</span><span class="p">:</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wifi_rssi</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wi-Fi</span><span class="nv"> </span><span class="s">Signal"</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">    </span><span class="nt">unit_of_measurement</span><span class="p">:</span><span class="w"> </span><span class="s">"dBm"</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">    </span><span class="nt">device_class</span><span class="p">:</span><span class="w"> </span><span class="s">"signal_strength"</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="nt">binary_sensor</span><span class="p">:</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">voice_active</span>
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Active"</span>
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">    </span><span class="nt">device_class</span><span class="p">:</span><span class="w"> </span><span class="s">"sound"</span>
+</span></code></pre></div>
 
 
 
@@ -1656,7 +1643,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../interop/" class="md-footer__link md-footer__link--prev" aria-label="Previous: C++ Interoperability">
+          <a href="../schedule-dsl/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RTOS Task &amp; Schedule DSL">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1666,20 +1653,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                C++ Interoperability
+                RTOS Task & Schedule DSL
               </div>
             </div>
           </a>
         
         
           
-          <a href="../distribution/" class="md-footer__link md-footer__link--next" aria-label="Next: Project Templating &amp; 1-Click Distribution">
+          <a href="../hardware/" class="md-footer__link md-footer__link--next" aria-label="Next: Hardware Buses (GPIO &amp; I2C)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Project Templating & 1-Click Distribution
+                Hardware Buses (GPIO & I2C)
               </div>
             </div>
             <div class="md-footer__button md-icon">

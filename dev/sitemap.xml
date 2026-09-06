@@ -19,6 +19,18 @@
         <loc>https://axiomantic.github.io/nim-esphome/dev/guides/entities/</loc>
       </url>
       <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dashboard-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/actions-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/schedule-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/surface-dsl/</loc>
+      </url>
+      <url>
         <loc>https://axiomantic.github.io/nim-esphome/dev/guides/hardware/</loc>
       </url>
       <url>

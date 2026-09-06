@@ -12,13 +12,13 @@
         <meta name="author" content="Axiomantic">
       
       
-        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/dependencies/">
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/dashboard-dsl/">
       
       
-        <link rel="prev" href="../configuration/">
+        <link rel="prev" href="../entities/">
       
       
-        <link rel="next" href="../architectures/">
+        <link rel="next" href="../actions-dsl/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Nimble Dependencies - nim-esphome</title>
+        <title>Lovelace Dashboard Surfaces DSL - nim-esphome</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#automated-nimble-dependencies" class="md-skip">
+        <a href="#lovelace-dashboard-surface-dsl" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Nimble Dependencies
+              Lovelace Dashboard Surfaces DSL
             
           </span>
         </div>
@@ -547,38 +547,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Nimble Dependencies
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dependencies/" class="md-nav__link">
         
   
   
@@ -593,77 +565,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-requires-schema" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        The <code>requires:</code> Schema
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#isolated-build-cache-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Isolated Build Cache Architecture
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Isolated Build Cache Architecture">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-advantages" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Key Advantages:
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#local-package-paths-nimble_paths" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Local Package Paths (<code>nimble_paths:</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -727,10 +628,38 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../dashboard-dsl/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Lovelace Dashboard Surfaces DSL
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -745,6 +674,116 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core Concepts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quickstart Example
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quickstart Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generated-lovelace-yaml-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generated Lovelace YAML Output
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-card-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Supported Card Types
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported Card Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-column-glance-card-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Multi-Column Glance Card Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#defining-complete-multi-view-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Defining Complete Multi-View Dashboards
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-configurations-to-home-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Deploying Configurations to Home Assistant
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1335,10 +1374,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-requires-schema" class="md-nav__link">
+  <a href="#core-concepts" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The <code>requires:</code> Schema
+        Core Concepts
       </span>
     </span>
   </a>
@@ -1346,22 +1385,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#isolated-build-cache-architecture" class="md-nav__link">
+  <a href="#quickstart-example" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Isolated Build Cache Architecture
+        Quickstart Example
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Isolated Build Cache Architecture">
+    <nav class="md-nav" aria-label="Quickstart Example">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-advantages" class="md-nav__link">
+  <a href="#generated-lovelace-yaml-output" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Key Advantages:
+        Generated Lovelace YAML Output
       </span>
     </span>
   </a>
@@ -1374,10 +1413,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#local-package-paths-nimble_paths" class="md-nav__link">
+  <a href="#supported-card-types" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Local Package Paths (<code>nimble_paths:</code>)
+        Supported Card Types
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported Card Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-column-glance-card-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Multi-Column Glance Card Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#defining-complete-multi-view-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Defining Complete Multi-View Dashboards
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploying-configurations-to-home-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Deploying Configurations to Home Assistant
       </span>
     </span>
   </a>
@@ -1487,52 +1565,121 @@
   
 
 
-<h1 id="automated-nimble-dependencies">Automated Nimble Dependencies<a class="headerlink" href="#automated-nimble-dependencies" title="Permanent link">&para;</a></h1>
-<p>This guide explains how <code>nim-esphome</code> manages external Nim packages, libraries, and Git dependencies during ESPHome compilation.</p>
+<h1 id="lovelace-dashboard-surface-dsl">Lovelace Dashboard Surface DSL<a class="headerlink" href="#lovelace-dashboard-surface-dsl" title="Permanent link">&para;</a></h1>
+<p>Firmware developers frequently face a disconnect between embedded hardware capabilities and user interfaces in Home Assistant. When a device exposes multiple controls—such as volume sliders, mode selectors, switches, or status sensors—users typically have to construct custom Lovelace dashboard cards manually.</p>
+<p>The <strong>Lovelace Dashboard Surface DSL</strong> (<code>nim_esphome/dsl/dashboard</code>) allows you to define, style, and generate production-ready Home Assistant dashboard cards directly alongside your firmware code.</p>
 <hr />
-<h2 id="the-requires-schema">The <code>requires:</code> Schema<a class="headerlink" href="#the-requires-schema" title="Permanent link">&para;</a></h2>
-<p>In traditional embedded workflows, managing third-party libraries across diverse development machines requires manual installation steps or messy submodules.</p>
-<p><code>nim-esphome</code> introduces first-class automated dependency resolution via the <code>requires:</code> key in your ESPHome YAML:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">nim</span><span class="p">:</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/main.nim</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">requires</span><span class="p">:</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1"># 1. Package name from official Nimble package directory</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chroma</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="c1"># 2. Direct Git repository URL</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/elijahr/nim-typestates</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="c1"># 3. Specific branch, tag, or commit hash</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/nim-lang/zip#v0.3.1</span>
+<h2 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<p>The dashboard DSL operates at compile time to construct structured representations of Lovelace card components:</p>
+<ul>
+<li><strong><a href="../../api/dsl/"><code>DashboardCard</code></a></strong>: Encapsulates card types (<code>entities</code>, <code>tile</code>, <code>glance</code>, <code>grid</code>, <code>button</code>, <code>custom</code>), card headers, icons, column counts, and entity rows.</li>
+<li><strong><a href="../../api/dsl/"><code>DashboardEntity</code></a></strong>: Represents an individual entity row, supporting custom display names, icons, and secondary info (<code>last-changed</code>, <code>last-updated</code>).</li>
+<li><strong><a href="../../api/dsl/"><code>LovelaceDashboard</code></a></strong>: A complete multi-view dashboard specification.</li>
+<li><strong>Serialization</strong>: Instant compilation to <strong>JSON</strong> (<code>toJson()</code>) and <strong>YAML</strong> (<code>toYaml()</code>) matching Home Assistant's dashboard schema.</li>
+</ul>
+<hr />
+<h2 id="quickstart-example">Quickstart Example<a class="headerlink" href="#quickstart-example" title="Permanent link">&para;</a></h2>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span><span class="o">/</span><span class="n">dsl</span><span class="o">/</span><span class="n">dashboard</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">let</span><span class="w"> </span><span class="n">satelliteCard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">haCard</span><span class="p">(</span><span class="n">ctEntities</span><span class="p">,</span><span class="w"> </span><span class="s">"Voice Satellite Controls"</span><span class="p">,</span><span class="w"> </span><span class="s">"mdi:microphone"</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"select.processing_sound"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Audio Feedback"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"number.processing_sound_volume"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Processing Volume"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"switch.wake_chime"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wake Chime"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"sensor.satellite_status"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Status"</span><span class="p">,</span><span class="w"> </span><span class="n">secondaryInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"last-changed"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">echo</span><span class="w"> </span><span class="n">satelliteCard</span><span class="p">.</span><span class="n">toYaml</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="generated-lovelace-yaml-output">Generated Lovelace YAML Output<a class="headerlink" href="#generated-lovelace-yaml-output" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">entities</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Satellite</span><span class="nv"> </span><span class="s">Controls"</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:microphone"</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">entities</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select.processing_sound</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Audio</span><span class="nv"> </span><span class="s">Feedback"</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number.processing_sound_volume</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Processing</span><span class="nv"> </span><span class="s">Volume"</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switch.wake_chime</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wake</span><span class="nv"> </span><span class="s">Chime"</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sensor.satellite_status</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Status"</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="nt">secondary_info</span><span class="p">:</span><span class="w"> </span><span class="s">"last-changed"</span>
 </span></code></pre></div>
 <hr />
-<h2 id="isolated-build-cache-architecture">Isolated Build Cache Architecture<a class="headerlink" href="#isolated-build-cache-architecture" title="Permanent link">&para;</a></h2>
-<p>To prevent polluting your global host environment and avoid permission conflicts during automated Home Assistant builds, <code>nim-esphome</code> maintains an isolated Nimble cache:</p>
-<pre class="mermaid"><code>flowchart TD
-    YAML["ESPHome YAML&lt;br/&gt;requires: [typestates, chroma]"] --&gt; Resolver["nim-esphome Dependency Resolver"]
-    Resolver --&gt; Check{"Already cached in&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble?"}
-    Check --&gt;|No| Install["nimble install -y --nimbleDir:&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble"]
-    Check --&gt;|Yes| Skip["Skip network download&lt;br/&gt;(instant build)"]
-    Install --&gt; Paths["Extract package search paths"]
-    Skip --&gt; Paths
-    Paths --&gt; Transpile["nim cpp --nimblePath:..."]</code></pre>
-<h3 id="key-advantages">Key Advantages:<a class="headerlink" href="#key-advantages" title="Permanent link">&para;</a></h3>
+<h2 id="supported-card-types">Supported Card Types<a class="headerlink" href="#supported-card-types" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card Type</th>
+<th>DSL Identifier</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entities</strong></td>
+<td><code>ctEntities</code></td>
+<td>The standard vertical list of entities with interactive controls.</td>
+</tr>
+<tr>
+<td><strong>Tile</strong></td>
+<td><code>ctTile</code></td>
+<td>Modern Home Assistant rounded card with primary and secondary states.</td>
+</tr>
+<tr>
+<td><strong>Glance</strong></td>
+<td><code>ctGlance</code></td>
+<td>Horizontal multi-column overview showing icons and current states.</td>
+</tr>
+<tr>
+<td><strong>Grid</strong></td>
+<td><code>ctGrid</code></td>
+<td>Multi-card grid container with configurable column counts.</td>
+</tr>
+<tr>
+<td><strong>Button</strong></td>
+<td><code>ctButton</code></td>
+<td>Large action button for triggering scripts, scenes, or services.</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td><code>ctCustom</code></td>
+<td>Community Lovelace cards (e.g. <code>custom:mushroom-entity-card</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multi-column-glance-card-example">Multi-Column Glance Card Example<a class="headerlink" href="#multi-column-glance-card-example" title="Permanent link">&para;</a></h3>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">let</span><span class="w"> </span><span class="n">glanceCard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">haCard</span><span class="p">(</span><span class="n">ctGlance</span><span class="p">,</span><span class="w"> </span><span class="s">"Quick Status"</span><span class="p">):</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">setColumns</span><span class="w"> </span><span class="mi">3</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"binary_sensor.wifi_status"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wi-Fi"</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"sensor.voice_state"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"State"</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">card</span><span class="p">.</span><span class="n">addEntity</span><span class="w"> </span><span class="s">"switch.mic_mute"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Muted"</span>
+</span></code></pre></div>
+<hr />
+<h2 id="defining-complete-multi-view-dashboards">Defining Complete Multi-View Dashboards<a class="headerlink" href="#defining-complete-multi-view-dashboards" title="Permanent link">&para;</a></h2>
+<p>Use <code>haDashboard</code> and <code>newLovelaceView</code> to author full dashboards:</p>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">let</span><span class="w"> </span><span class="n">homeDashboard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">haDashboard</span><span class="w"> </span><span class="s">"Smart Satellite Dashboard"</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="n">voiceTab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newLovelaceView</span><span class="p">(</span><span class="s">"Voice Controls"</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"voice"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:microphone"</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="n">voiceTab</span><span class="p">.</span><span class="n">addCard</span><span class="p">(</span><span class="n">satelliteCard</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="n">dash</span><span class="p">.</span><span class="n">addView</span><span class="p">(</span><span class="n">voiceTab</span><span class="p">)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="n">diagnosticTab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newLovelaceView</span><span class="p">(</span><span class="s">"Diagnostics"</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"diagnostics"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:wrench"</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="n">diagnosticTab</span><span class="p">.</span><span class="n">addCard</span><span class="p">(</span><span class="n">glanceCard</span><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="n">dash</span><span class="p">.</span><span class="n">addView</span><span class="p">(</span><span class="n">diagnosticTab</span><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">echo</span><span class="w"> </span><span class="n">homeDashboard</span><span class="p">.</span><span class="n">toYaml</span><span class="p">()</span>
+</span></code></pre></div>
+<hr />
+<h2 id="deploying-configurations-to-home-assistant">Deploying Configurations to Home Assistant<a class="headerlink" href="#deploying-configurations-to-home-assistant" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Zero Host Contamination</strong>: Packages are installed strictly inside the <code>.esphome/build/&lt;node&gt;/.nimble</code> directory of the target device.</li>
-<li><strong>Deterministic Builds</strong>: Each ESPHome node maintains its own independent package versions.</li>
-<li><strong>Offline Caching</strong>: Once downloaded, subsequent builds reuse the cached packages without requiring internet connectivity.</li>
-<li><strong>Clean Builds</strong>: Running <code>esphome clean &lt;device&gt;.yaml</code> purges the node's local cache if you need a fresh rebuild.</li>
+<li><strong>Dashboard Raw Configuration</strong>:
+   Copy the output of <code>card.toYaml()</code> and paste it into Home Assistant via <strong>Edit Dashboard</strong> -&gt; <strong>Raw configuration editor</strong> or add an <strong>Entities</strong> card via manual code view.</li>
+<li><strong>ESPHome Embedded Web Server</strong>:
+   Host the JSON output directly on the device using ESPHome's <code>web_server</code>, enabling Home Assistant dashboard integrations to dynamically fetch the card schema.</li>
+<li><strong>Diagnostic Sensor</strong>:
+   Publish <code>card.toYaml()</code> as the attribute of an ESPHome <code>text_sensor</code> for zero-touch auto-discovery.</li>
 </ol>
-<hr />
-<h2 id="local-package-paths-nimble_paths">Local Package Paths (<code>nimble_paths:</code>)<a class="headerlink" href="#local-package-paths-nimble_paths" title="Permanent link">&para;</a></h2>
-<p>If you are developing custom Nim libraries locally alongside your firmware, you can specify them using <code>nimble_paths:</code>:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">nim</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/main.nim</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">nimble_paths</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../shared_firmware_libs/src</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/Users/username/Development/my_dsp_filters/src</span>
-</span></code></pre></div>
-<p>These paths are passed directly to <code>nim cpp</code> as <code>--path:...</code> search flags, allowing you to <code>import</code> your modules seamlessly.</p>
 
 
 
@@ -1572,7 +1719,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: YAML Configuration">
+          <a href="../entities/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Entities &amp; Home Assistant">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1582,20 +1729,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                YAML Configuration
+                Entities & Home Assistant
               </div>
             </div>
           </a>
         
         
           
-          <a href="../architectures/" class="md-footer__link md-footer__link--next" aria-label="Next: Target Architectures &amp; Cross-Compilation">
+          <a href="../actions-dsl/" class="md-footer__link md-footer__link--next" aria-label="Next: Custom Actions &amp; Services DSL">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Target Architectures & Cross-Compilation
+                Custom Actions & Services DSL
               </div>
             </div>
             <div class="md-footer__button md-icon">
