@@ -75,6 +75,11 @@ accent = "amber"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
 
+[project.extra.version]
+provider = "mike"
+default = "latest"
+
+
 
 [project.markdown_extensions]
 abbr = {}

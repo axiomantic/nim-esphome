@@ -24,7 +24,9 @@ nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --c
 
 echo "=== Running Python component tests ==="
 PYTHON_BIN="python3"
-if [ -x "/Users/eek/Development/voicesolate/.venv/bin/python" ]; then
+if [ -n "${VIRTUAL_ENV:-}" ] && [ -x "${VIRTUAL_ENV}/bin/python" ]; then
+    PYTHON_BIN="${VIRTUAL_ENV}/bin/python"
+elif [ -x "/Users/eek/Development/voicesolate/.venv/bin/python" ]; then
     PYTHON_BIN="/Users/eek/Development/voicesolate/.venv/bin/python"
 fi
 $PYTHON_BIN -m unittest discover -s tests -p "test_*.py"
@@ -33,6 +35,8 @@ echo "=== Building documentation site with Zensical ==="
 ZENSICAL_BIN="zensical"
 if command -v zensical >/dev/null 2>&1; then
     ZENSICAL_BIN="zensical"
+elif [ -n "${VIRTUAL_ENV:-}" ] && [ -x "${VIRTUAL_ENV}/bin/zensical" ]; then
+    ZENSICAL_BIN="${VIRTUAL_ENV}/bin/zensical"
 elif [ -x "/Users/eek/Development/voicesolate/.venv/bin/zensical" ]; then
     ZENSICAL_BIN="/Users/eek/Development/voicesolate/.venv/bin/zensical"
 fi
