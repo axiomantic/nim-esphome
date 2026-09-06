@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Embedded Nim runtime, hardware abstractions, and typestate DSL for ESPHome">
+        <meta name="description" content="Embedded Nim runtime, hardware abstractions, and Home Assistant DSLs for ESPHome">
       
       
         <meta name="author" content="Axiomantic">
@@ -1458,7 +1458,7 @@
 <li>⚡ <strong>Zero-Overhead Embedded C++ Transpilation</strong>: Nim compiles to clean, standard C++ without an interpreter or heavy runtime.</li>
 <li>🧠 <strong>ARC Deterministic Memory</strong>: Memory is managed deterministically via ARC (<code>--mm:arc</code>) and FreeRTOS heap (<code>-d:useMalloc</code>) with zero GC pause times.</li>
 <li>🧪 <strong>Hardware-Free Host Unit Testing</strong>: Run automated test suites instantly on macOS and Linux (<code>nim c -r</code>) without needing physical hardware attached.</li>
-<li>🛡️ <strong>Compile-Time Typestates (with <a href="https://github.com/elijahr/nim-typestates"><code>nim-typestates</code></a>)</strong>: Model complex state machines where illegal transitions (e.g. triggering wake words during OTA updates) are rejected at compile time. See the <a href="guides/esphome-satellite/">Verified Voice Satellite Case Study</a> for an in-depth implementation.</li>
+<li>🛠️ <strong>Declarative Home Assistant DSLs</strong>: Build Lovelace dashboards, custom actions/services, non-blocking background schedules, and web installers directly in Nim.</li>
 </ul>
 <hr />
 <h2 id="documentation-roadmap">Documentation Roadmap<a class="headerlink" href="#documentation-roadmap" title="Permanent link">&para;</a></h2>
@@ -1474,7 +1474,7 @@
 <li><a href="guides/storage/"><strong>Flash Preferences (NVS)</strong></a>: Persist calibration values, counters, and configurations across power cycles.</li>
 <li><a href="guides/dsp-control/"><strong>DSP &amp; Closed-Loop Control</strong></a>: Use stack-allocated PID controllers, moving average/median filters, and switch debouncers.</li>
 <li><a href="guides/interop/"><strong>C++ Interoperability</strong></a>: Export Nim procedures to ESPHome YAML lambdas using <code>{.exportEsphome.}</code>.</li>
-<li><a href="guides/esphome-satellite/"><strong>Verified Voice Satellite (Case Study)</strong></a>: Explore <code>esphome-satellite</code>, a real-world 14-state verified typestate voice assistant.</li>
+<li><a href="guides/esphome-satellite/"><strong>Verified Voice Satellite (Case Study)</strong></a>: Explore <code>esphome-satellite</code>, a real-world on-device state supervisor for ESPHome voice satellites.</li>
 <li><a href="guides/distribution/"><strong>Project Templating &amp; 1-Click Distribution</strong></a>: Set up ESP-Web-Tools browser flashing, My Home Assistant dashboard import, and automated CI factory binary releases.</li>
 </ul>
 <h3 id="api-reference">📚 API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h3>
