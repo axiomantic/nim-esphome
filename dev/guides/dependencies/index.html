@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Embedded Nim runtime, hardware abstractions, and typestate DSL for ESPHome">
+        <meta name="description" content="Embedded Nim runtime, hardware abstractions, and Home Assistant DSLs for ESPHome">
       
       
         <meta name="author" content="Axiomantic">
@@ -1533,7 +1533,7 @@
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chroma</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="c1"># 2. Direct Git repository URL</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/elijahr/nim-typestates</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/treeform/jsony</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="c1"># 3. Specific branch, tag, or commit hash</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/nim-lang/zip#v0.3.1</span>
@@ -1542,7 +1542,7 @@
 <h2 id="isolated-build-cache-architecture">Isolated Build Cache Architecture<a class="headerlink" href="#isolated-build-cache-architecture" title="Permanent link">&para;</a></h2>
 <p>To prevent polluting your global host environment and avoid permission conflicts during automated Home Assistant builds, <code>nim-esphome</code> maintains an isolated Nimble cache:</p>
 <pre class="mermaid"><code>flowchart TD
-    YAML["ESPHome YAML&lt;br/&gt;requires: [typestates, chroma]"] --&gt; Resolver["nim-esphome Dependency Resolver"]
+    YAML["ESPHome YAML&lt;br/&gt;requires: [jsony, chroma]"] --&gt; Resolver["nim-esphome Dependency Resolver"]
     Resolver --&gt; Check{"Already cached in&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble?"}
     Check --&gt;|No| Install["nimble install -y --nimbleDir:&lt;br/&gt;.esphome/build/&lt;node&gt;/.nimble"]
     Check --&gt;|Yes| Skip["Skip network download&lt;br/&gt;(instant build)"]
