@@ -312,14 +312,15 @@ proc generateManifest*(installer: InstallerDefinition): string =
   result = pretty(root, 2)
 
 proc renderFieldBody(html: var seq[string], field: InstallerField, installer: InstallerDefinition) =
+  let disabledAttr = if field.dependsOnField.len > 0: " disabled" else: ""
   case field.kind
   of ifkFile:
-    html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\">")
+    html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\"" & disabledAttr & ">")
     if field.accept.contains(".wav") or field.partition == "sound_data":
       html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max 256 KB.<br>Flashed to safe dedicated partition at 0x370000, 100% safe from OTA firmware updates.</div>")
     html.add("        <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
   of ifkSelect:
-    html.add("        <select id=\"field_" & field.name & "\">")
+    html.add("        <select id=\"field_" & field.name & "\"" & disabledAttr & ">")
     for opt in field.options:
       let selected = if opt == field.defaultVal: " selected" else: ""
       html.add("          <option value=\"" & opt & "\"" & selected & ">" & opt & "</option>")
@@ -333,7 +334,7 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
       html.add("          <p class=\"preset-desc\" id=\"presetDesc_" & field.name & "\"></p>")
       for child in installer.fields:
         if child.dependsOnField == field.name:
-          let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\""
+          let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\" style=\"display: none;\""
           html.add("          <div class=\"nested-field\" id=\"group_" & child.name & "\" data-field=\"" & child.name & "\"" & extraAttrs & ">")
           html.add("            <label for=\"field_" & child.name & "\">" & child.label & "</label>")
           html.renderFieldBody(child, installer)
@@ -345,12 +346,12 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
       html.add("          </div>")
       html.add("        </div>")
   of ifkText:
-    html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\">")
+    html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\"" & disabledAttr & ">")
   of ifkNumber:
-    html.add("        <input type=\"number\" id=\"field_" & field.name & "\" min=\"" & $field.minVal & "\" max=\"" & $field.maxVal & "\" step=\"" & $field.stepVal & "\" value=\"" & field.defaultVal & "\">")
+    html.add("        <input type=\"number\" id=\"field_" & field.name & "\" min=\"" & $field.minVal & "\" max=\"" & $field.maxVal & "\" step=\"" & $field.stepVal & "\" value=\"" & field.defaultVal & "\"" & disabledAttr & ">")
   of ifkCheckbox:
     let checked = if field.defaultVal == "true": " checked" else: ""
-    html.add("        <input type=\"checkbox\" id=\"field_" & field.name & "\"" & checked & ">")
+    html.add("        <input type=\"checkbox\" id=\"field_" & field.name & "\"" & checked & disabledAttr & ">")
 
 proc generateHtml*(installer: InstallerDefinition): string =
   ## Generates the complete HTML page with embedded reactive WebSerial flashing logic,
@@ -361,6 +362,9 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("<head>")
   html.add("  <meta charset=\"utf-8\">")
   html.add("  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">")
+  html.add("  <meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\">")
+  html.add("  <meta http-equiv=\"Pragma\" content=\"no-cache\">")
+  html.add("  <meta http-equiv=\"Expires\" content=\"0\">")
   html.add("  <title>" & installer.title & "</title>")
   html.add("  <script type=\"module\" src=\"https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module\"></script>")
   html.add("  <style>")
@@ -370,9 +374,8 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    h1 { margin-top: 0; font-size: 1.75rem; color: #60a5fa; }")
   html.add("    p.desc { color: var(--muted); line-height: 1.5; margin-bottom: 24px; font-size: 0.95rem; }")
   html.add("    .form-group { text-align: left; margin-bottom: 20px; background: var(--card-inner); padding: 18px; border-radius: 10px; border: 1px solid var(--border); transition: all 0.2s ease; }")
-  html.add("    .form-group[data-depends-on] { display: none; }")
+  html.add("    .form-group[data-depends-on] { display: none !important; }")
   html.add("    .form-group.highlight { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }")
-  html.add("    .form-group.subtle { opacity: 0.65; }")
   html.add("    label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; color: #e2e8f0; }")
   html.add("    .hint { font-size: 0.82rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }")
   html.add("    input[type='file'], select, input[type='text'], input[type='number'] { width: 100%; box-sizing: border-box; padding: 10px 12px; background: #080d1a; border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.95rem; }")
@@ -383,7 +386,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    .preset-badge { font-size: 0.75rem; background: var(--accent-badge); color: var(--accent-badge-text); padding: 2px 8px; border-radius: 12px; font-weight: 500; font-family: monospace; }")
   html.add("    .preset-desc { font-size: 0.85rem; color: #cbd5e1; margin: 4px 0 10px 0; line-height: 1.4; }")
   html.add("    .nested-field { margin: 12px 0; background: rgba(15, 23, 42, 0.6); border: 1px dashed #3b82f6; border-radius: 8px; padding: 14px; text-align: left; }")
-  html.add("    .nested-field[data-depends-on] { display: none; }")
+  html.add("    .nested-field[data-depends-on] { display: none !important; }")
   html.add("    .nested-field.highlight { border-color: var(--primary); box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3); }")
   html.add("    .preview-btn { background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease; }")
   html.add("    .preview-btn:hover { background: #334155; color: #7dd3fc; }")
@@ -416,7 +419,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
       if field.kind != ifkSelect or field.optionDetails.len == 0:
         for child in installer.fields:
           if child.dependsOnField == field.name:
-            let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\""
+            let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\" style=\"display: none;\""
             html.add("        <div class=\"nested-field\" id=\"group_" & child.name & "\" data-field=\"" & child.name & "\"" & extraAttrs & ">")
             html.add("          <label for=\"field_" & child.name & "\">" & child.label & "</label>")
             html.renderFieldBody(child, installer)
@@ -547,11 +550,13 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("        if (parentEl) {")
   html.add("          const match = (parentEl.value === expectedVal);")
   html.add("          if (match) {")
-  html.add("            group.style.display = 'block';")
+  html.add("            group.style.setProperty('display', 'block', 'important');")
   html.add("            group.classList.add('highlight');")
+  html.add("            group.querySelectorAll('input, select, button, textarea').forEach(el => { el.disabled = false; });")
   html.add("          } else {")
-  html.add("            group.style.display = 'none';")
+  html.add("            group.style.setProperty('display', 'none', 'important');")
   html.add("            group.classList.remove('highlight');")
+  html.add("            group.querySelectorAll('input, select, button, textarea').forEach(el => { el.disabled = true; });")
   html.add("          }")
   html.add("        }")
   html.add("      });")
