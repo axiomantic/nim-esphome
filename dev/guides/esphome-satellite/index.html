@@ -1482,7 +1482,7 @@
 </span></code></pre></div>
 <h3 id="the-processing_sound-architecture">The <code>processing_sound</code> Architecture<a class="headerlink" href="#the-processing_sound-architecture" title="Permanent link">&para;</a></h3>
 <p>While the cloud or local Large Language Model (LLM) generates response tokens, <code>nim-esphome</code> runs an asynchronous <strong>processing sound loop</strong> (<code>startProcessingLoop</code> / <code>stopProcessingLoop</code>):
-- <strong>Decoupled Sound Styles</strong>: The architecture separates the interaction state (<code>Processing</code>) from the sound asset. Users can choose between <code>Silent</code>, <code>Typewriter</code>, <code>Pulse</code>, <code>Sonar</code>, or <code>Tick</code> directly in the Home Assistant UI.
+- <strong>Decoupled Sound Styles</strong>: The architecture separates the interaction state (<code>Processing</code>) from the sound asset. Users can choose between <code>Silent</code>, <code>Spinner</code>, <code>Pulse</code>, <code>Sonar</code>, or <code>Tick</code> directly in the Home Assistant UI.
 - <strong>Instant Cutoff</strong>: As soon as the first chunk of Text-to-Speech audio arrives (<code>onTtsStart</code>), <code>stopProcessingLoop()</code> halts the loop immediately, preventing audio collisions.
 - <strong>Type-Safe Home Assistant Mapping</strong>: Exposed to Home Assistant as a native <code>select</code> entity using <code>esphomeControls</code>, saved across reboots via Flash NVS.</p>
 
