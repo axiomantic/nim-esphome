@@ -304,6 +304,8 @@
       
         
       
+        
+      
     
     
     
@@ -730,6 +732,33 @@
     
   
   Verified Voice Satellite (Case Study)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project Templating & 1-Click Distribution
 
     
   </span>
@@ -1206,6 +1235,8 @@
       
         
       
+        
+      
     
     
     
@@ -1290,27 +1321,35 @@
 <h2 id="32-bit-microcontroller-pointer-width">32-bit Microcontroller Pointer Width<a class="headerlink" href="#32-bit-microcontroller-pointer-width" title="Permanent link">&para;</a></h2>
 <p>On standard desktop platforms (x86_64, Apple Silicon ARM64), pointers and Nim integers (<code>int</code>) are 64 bits wide (<code>sizeof(NI) == 8</code>).</p>
 <p>On microcontrollers (ESP32, RP2040), pointers are 32 bits wide (<code>sizeof(NI) == 4</code>). If a compiler transpiles C++ assuming 64-bit word alignment, struct layouts, offsets, and buffer sizing will fail or corrupt memory.</p>
-<p><code>nim-esphome</code> guarantees correct 32-bit target pointer widths by passing <code>--cpu:esp</code>, <code>--cpu:riscv32</code>, or <code>--cpu:arm</code> to <code>nim cpp</code>. This ensures:
-- <code>int</code> and <code>uint</code> compile to 32-bit integers matching the MCU register width.
-- Struct memory padding and ABI alignments match the GCC/Clang embedded cross-compilers used by ESP-IDF and PlatformIO.</p>
+<p><code>nim-esphome</code> guarantees correct 32-bit target pointer widths by passing <code>--cpu:esp</code>, <code>--cpu:riscv32</code>, or <code>--cpu:arm</code> to <code>nim cpp</code>. This ensures:</p>
+<ul>
+<li><code>int</code> and <code>uint</code> compile to 32-bit integers matching the MCU register width.</li>
+<li>Struct memory padding and ABI alignments match the GCC/Clang embedded cross-compilers used by ESP-IDF and PlatformIO.</li>
+</ul>
 <hr />
 <h2 id="deterministic-memory-management-mmarc">Deterministic Memory Management (<code>--mm:arc</code>)<a class="headerlink" href="#deterministic-memory-management-mmarc" title="Permanent link">&para;</a></h2>
-<p>Standard desktop runtimes often rely on tracing garbage collectors that pause threads to inspect stacks and heaps. In hard real-time and embedded systems, GC pauses can cause:
-- Audio stuttering and buffer underruns during I2S playback.
-- Missed GPIO interrupts or sensor bus timing violations.
-- Unpredictable memory spikes leading to heap exhaustion.</p>
+<p>Standard desktop runtimes often rely on tracing garbage collectors that pause threads to inspect stacks and heaps. In hard real-time and embedded systems, GC pauses can cause:</p>
+<ul>
+<li>Audio stuttering and buffer underruns during I2S playback.</li>
+<li>Missed GPIO interrupts or sensor bus timing violations.</li>
+<li>Unpredictable memory spikes leading to heap exhaustion.</li>
+</ul>
 <h3 id="why-arc">Why ARC?<a class="headerlink" href="#why-arc" title="Permanent link">&para;</a></h3>
-<p><code>nim-esphome</code> configures Nim's deterministic Automatic Reference Counting memory model (<code>--mm:arc</code>):
-1. <strong>Zero Stop-the-World Pauses</strong>: Memory is freed immediately at the exact instant a variable goes out of scope.
-2. <strong>Minimal Footprint</strong>: No background GC threads or scanning routines are compiled into your binary.
-3. <strong>FreeRTOS Heap Integration</strong>: By setting <code>-d:useMalloc</code>, all dynamic allocations (<code>seq</code>, <code>string</code>) use standard C <code>malloc</code> and <code>free</code>, which ESP-IDF routes directly to FreeRTOS's heap allocator.</p>
+<p><code>nim-esphome</code> configures Nim's deterministic Automatic Reference Counting memory model (<code>--mm:arc</code>):</p>
+<ol>
+<li><strong>Zero Stop-the-World Pauses</strong>: Memory is freed immediately at the exact instant a variable goes out of scope.</li>
+<li><strong>Minimal Footprint</strong>: No background GC threads or scanning routines are compiled into your binary.</li>
+<li><strong>FreeRTOS Heap Integration</strong>: By setting <code>-d:useMalloc</code>, all dynamic allocations (<code>seq</code>, <code>string</code>) use standard C <code>malloc</code> and <code>free</code>, which ESP-IDF routes directly to FreeRTOS's heap allocator.</li>
+</ol>
 <hr />
 <h2 id="exception-handling-without-c-rtti">Exception Handling Without C++ RTTI<a class="headerlink" href="#exception-handling-without-c-rtti" title="Permanent link">&para;</a></h2>
 <p>By default, ESP-IDF and PlatformIO compile embedded firmware with <code>-fno-exceptions</code> and <code>-fno-rtti</code> to conserve flash space and RAM.</p>
 <p>Standard C++ exception handling (<code>try/catch/throw</code>) pulls in <code>libsupc++</code>, adding tens of kilobytes of bloat to firmware binaries.</p>
-<p><code>nim-esphome</code> configures:
-- <code>--exceptions:goto</code>: Nim transpiles exception handling into lightweight C jump tables and <code>goto</code> statements, completely eliminating the need for C++ exception runtime support.
-- <code>--panics:on</code>: Fatal errors (such as out-of-bounds array access) abort execution immediately rather than constructing complex stack trace objects.</p>
+<p><code>nim-esphome</code> configures:</p>
+<ul>
+<li><code>--exceptions:goto</code>: Nim transpiles exception handling into lightweight C jump tables and <code>goto</code> statements, completely eliminating the need for C++ exception runtime support.</li>
+<li><code>--panics:on</code>: Fatal errors (such as out-of-bounds array access) abort execution immediately rather than constructing complex stack trace objects.</li>
+</ul>
 
 
 

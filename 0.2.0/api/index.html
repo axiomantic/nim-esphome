@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/0.2.0/api/">
       
       
-        <link rel="prev" href="../guides/esphome-satellite/">
+        <link rel="prev" href="../guides/distribution/">
       
       
         <link rel="next" href="./core/">
@@ -281,6 +281,8 @@
   
     
     
+      
+        
       
         
       
@@ -603,6 +605,33 @@
     
   
   Verified Voice Satellite (Case Study)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project Templating & 1-Click Distribution
 
     
   </span>
@@ -1104,11 +1133,13 @@
 </table>
 <hr />
 <h2 id="zero-cost-abstraction-guarantees">Zero-Cost Abstraction Guarantees<a class="headerlink" href="#zero-cost-abstraction-guarantees" title="Permanent link">&para;</a></h2>
-<p>All public procedures, templates, and macros in <code>nim-esphome</code> follow strict embedded design principles:
-- <strong>Zero Heap Overhead</strong>: Operations default to stack allocation or direct hardware registers.
-- <strong>Zero GC Pauses</strong>: Fully compatible with Nim's ARC deterministic memory management (<code>--mm:arc</code>).
-- <strong>Zero C++ Exception Bloat</strong>: Compiles cleanly with <code>--exceptions:goto</code> and <code>--panics:on</code>.
-- <strong>Zero Flash Docstring Overhead</strong>: Nim compiler docstrings (<code>##</code>) are stripped completely during transpilation to C++, ensuring that comprehensive API documentation consumes 0 bytes of microcontroller flash memory.</p>
+<p>All public procedures, templates, and macros in <code>nim-esphome</code> follow strict embedded design principles:</p>
+<ul>
+<li><strong>Zero Heap Overhead</strong>: Operations default to stack allocation or direct hardware registers.</li>
+<li><strong>Zero GC Pauses</strong>: Fully compatible with Nim's ARC deterministic memory management (<code>--mm:arc</code>).</li>
+<li><strong>Zero C++ Exception Bloat</strong>: Compiles cleanly with <code>--exceptions:goto</code> and <code>--panics:on</code>.</li>
+<li><strong>Zero Flash Docstring Overhead</strong>: Nim compiler docstrings (<code>##</code>) are stripped completely during transpilation to C++, ensuring that comprehensive API documentation consumes 0 bytes of microcontroller flash memory.</li>
+</ul>
 
 
 
@@ -1148,7 +1179,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../guides/esphome-satellite/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Verified Voice Satellite (Case Study)">
+          <a href="../guides/distribution/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Project Templating &amp; 1-Click Distribution">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1158,7 +1189,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Verified Voice Satellite (Case Study)
+                Project Templating & 1-Click Distribution
               </div>
             </div>
           </a>
