@@ -1444,7 +1444,7 @@
 <p>ESPHome is an exceptional declarative platform for IoT hardware configuration. However, when complex embedded logic is required—such as multi-state voice pipelines, sensor fusion, closed-loop PID control, or custom peripheral protocols—developers are often forced to write raw C++ inside multi-line YAML lambdas.</p>
 <p>Writing C++ in YAML lambdas presents serious drawbacks:</p>
 <ul>
-<li>❌ <strong>No compile-time state guarantees</strong>: Asynchronous network events and callbacks easily cause race conditions and invalid state transitions.</li>
+<li>❌ <strong>Fragile YAML lambdas</strong>: Multi-line C++ strings embedded in YAML without IDE assistance, refactoring tools, or proper syntax highlighting.</li>
 <li>❌ <strong>Difficult host testing</strong>: Verifying logic requires repeatedly compiling PlatformIO firmware and flashing physical microcontrollers.</li>
 <li>❌ <strong>C++ verbosity &amp; memory hazards</strong>: Pointer arithmetic and unmanaged state introduce subtle memory corruptions.</li>
 </ul>
