@@ -12,13 +12,13 @@
         <meta name="author" content="Axiomantic">
       
       
-        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/hardware/">
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/dev/guides/installer-dsl/">
       
       
-        <link rel="prev" href="../surface-dsl/">
+        <link rel="prev" href="../distribution/">
       
       
-        <link rel="next" href="../storage/">
+        <link rel="next" href="../../api/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Hardware Buses (GPIO & I2C) - nim-esphome</title>
+        <title>Web Installer & Dynamic Flashing DSL - nim-esphome</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hardware-buses-gpio-i2c" class="md-skip">
+        <a href="#web-installer-dynamic-flashing-dsl" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Hardware Buses (GPIO & I2C)
+              Web Installer & Dynamic Flashing DSL
             
           </span>
         </div>
@@ -740,38 +740,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Hardware Buses (GPIO & I2C)
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
         
   
   
@@ -786,127 +758,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#gpio-pin-manipulation" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        GPIO Pin Manipulation
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GPIO Pin Manipulation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pin-modes" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Pin Modes
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#basic-gpio-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Basic GPIO Example
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#i2c-bus-transfers" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        I2C Bus Transfers
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="I2C Bus Transfers">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#instantiating-an-i2c-device" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Instantiating an I2C Device
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#writing-to-registers" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Writing to Registers
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reading-from-registers" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Reading from Registers
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#host-mocking-for-unit-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Host Mocking for Unit Tests
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1051,10 +902,38 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../installer-dsl/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web Installer & Dynamic Flashing DSL
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1069,6 +948,121 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-custom-assets-flash-collisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The Problem: Custom Assets &amp; Flash Collisions
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quick Start Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flash-partition-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Flash Partition Safety
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Flash Partition Safety">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4mb-flash-layout-flashsizemb-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        4MB Flash Layout (<code>flashSizeMb = 4</code>)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8mb-flash-layout-flashsizemb-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        8MB+ Flash Layout (<code>flashSizeMb = 8</code>)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-side-dynamic-manifest-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Client-Side Dynamic Manifest Architecture
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-form-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Supported Form Fields
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integrating-with-esphome-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Integrating with ESPHome YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1416,22 +1410,44 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gpio-pin-manipulation" class="md-nav__link">
+  <a href="#the-problem-custom-assets-flash-collisions" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        GPIO Pin Manipulation
+        The Problem: Custom Assets &amp; Flash Collisions
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="GPIO Pin Manipulation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quick Start Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flash-partition-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Flash Partition Safety
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Flash Partition Safety">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pin-modes" class="md-nav__link">
+  <a href="#4mb-flash-layout-flashsizemb-4" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Pin Modes
+        4MB Flash Layout (<code>flashSizeMb = 4</code>)
       </span>
     </span>
   </a>
@@ -1439,10 +1455,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#basic-gpio-example" class="md-nav__link">
+  <a href="#8mb-flash-layout-flashsizemb-8" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Basic GPIO Example
+        8MB+ Flash Layout (<code>flashSizeMb = 8</code>)
       </span>
     </span>
   </a>
@@ -1455,63 +1471,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#i2c-bus-transfers" class="md-nav__link">
+  <a href="#client-side-dynamic-manifest-architecture" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        I2C Bus Transfers
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="I2C Bus Transfers">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#instantiating-an-i2c-device" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Instantiating an I2C Device
+        Client-Side Dynamic Manifest Architecture
       </span>
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#writing-to-registers" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#supported-form-fields" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Writing to Registers
+        Supported Form Fields
       </span>
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#reading-from-registers" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#integrating-with-esphome-yaml" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Reading from Registers
+        Integrating with ESPHome YAML
       </span>
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#host-mocking-for-unit-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Host Mocking for Unit Tests
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1620,77 +1608,146 @@
   
 
 
-<h1 id="hardware-buses-gpio-i2c">Hardware Buses (GPIO &amp; I2C)<a class="headerlink" href="#hardware-buses-gpio-i2c" title="Permanent link">&para;</a></h1>
-<p>This guide covers direct microcontroller pin control and I2C peripheral bus communication using <code>nim-esphome</code>.</p>
+<h1 id="web-installer-dynamic-flashing-dsl">Web Installer &amp; Dynamic Flashing DSL<a class="headerlink" href="#web-installer-dynamic-flashing-dsl" title="Permanent link">&para;</a></h1>
+<p>The <code>nim-esphome/dsl/installer</code> module provides a declarative Nim DSL for generating interactive, single-page web installers with <a href="https://esphome.github.io/esp-web-tools/">ESP-Web-Tools</a> and dynamic WebSerial flashing.</p>
+<p>It enables developers to define user-customizable flashing forms (file uploads, dropdown selects, text inputs, checkboxes) and guarantees flash partition safety through automated ESP-IDF partition table calculation.</p>
 <hr />
-<h2 id="gpio-pin-manipulation">GPIO Pin Manipulation<a class="headerlink" href="#gpio-pin-manipulation" title="Permanent link">&para;</a></h2>
-<p>The <code>nim_esphome/gpio</code> module provides hardware pin control without needing external C++ libraries.</p>
-<h3 id="pin-modes">Pin Modes<a class="headerlink" href="#pin-modes" title="Permanent link">&para;</a></h3>
-<p>Microcontroller pins can be configured into four standard electrical modes:</p>
+<h2 id="the-problem-custom-assets-flash-collisions">The Problem: Custom Assets &amp; Flash Collisions<a class="headerlink" href="#the-problem-custom-assets-flash-collisions" title="Permanent link">&para;</a></h2>
+<p>When distributing embedded devices, end users often want to customize on-device assets at flash time—such as:</p>
 <ul>
-<li><code>Input</code>: High-impedance floating digital input.</li>
-<li><code>Output</code>: Low-impedance push-pull digital output.</li>
-<li><code>InputPullup</code>: Input with internal weak pull-up resistor connected to 3.3V.</li>
-<li><code>InputPulldown</code>: Input with internal weak pull-down resistor connected to GND.</li>
+<li>Custom voice assistant audio feedback loops (e.g., custom sound effects while waiting for LLM response).</li>
+<li>Device configuration blobs or pre-shared keys.</li>
+<li>Custom display bitmaps or splash screens.</li>
 </ul>
-<h3 id="basic-gpio-example">Basic GPIO Example<a class="headerlink" href="#basic-gpio-example" title="Permanent link">&para;</a></h3>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
+<p>However, naive web flashing presents two major technical hurdles:</p>
+<ol>
+<li><strong>Flash Partition Overlap Hazard</strong>: Standard ESP-IDF 4MB dual-OTA partition layouts define:</li>
+<li><code>app0</code>: <code>0x10000</code> – <code>0x1D0000</code> (~1.8 MB)</li>
+<li><code>app1</code>: <code>0x1E0000</code> – <code>0x3B0000</code> (~1.8 MB)
+   Flashing user assets at an arbitrary address (such as <code>0x380000</code>) directly corrupts <code>app1</code>! Any future wireless OTA update from Home Assistant will either overwrite the custom data or fail boot verification.</li>
+<li><strong>Dynamic Manifest Requirement</strong>: ESP-Web-Tools expects a static <code>manifest.json</code> describing firmware binary offsets. Flashing user-provided local files in the browser requires dynamically constructing partition manifests with in-memory <code>Blob</code> objects.</li>
+</ol>
+<p><code>nim-esphome</code> solves both problems declaratively.</p>
+<hr />
+<h2 id="quick-start-example">Quick Start Example<a class="headerlink" href="#quick-start-example" title="Permanent link">&para;</a></h2>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span><span class="o">/</span><span class="n">dsl</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">const</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">ButtonPin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="sc">'u8</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">RelayPin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="sc">'u8</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">esphomeSetup</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="c"># Configure button as input with pullup</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ButtonPin</span><span class="p">,</span><span class="w"> </span><span class="n">InputPullup</span><span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="c"># Configure relay as push-pull output</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">RelayPin</span><span class="p">,</span><span class="w"> </span><span class="n">Output</span><span class="p">)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">RelayPin</span><span class="p">,</span><span class="w"> </span><span class="n">Low</span><span class="p">)</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">esphomeLoop</span><span class="p">:</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">buttonVal</span><span class="p">:</span><span class="w"> </span><span class="n">PinState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">ButtonPin</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">buttonVal</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Low</span><span class="p">:</span><span class="w"> </span><span class="c"># Pressed (active-low)</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">RelayPin</span><span class="p">,</span><span class="w"> </span><span class="n">High</span><span class="p">)</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="k">else</span><span class="p">:</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">RelayPin</span><span class="p">,</span><span class="w"> </span><span class="n">Low</span><span class="p">)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">let</span><span class="w"> </span><span class="n">satelliteInstaller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">esphomeInstaller</span><span class="p">(</span><span class="s">"voice-satellite"</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Voice Satellite Web Installer"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">chipFamily</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ESP32-S3"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Flash verified voice satellite firmware and customize audio assets."</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">factoryBinPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"firmware-factory.bin"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="c"># Define custom file upload to a dedicated flash partition</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">addFileField</span><span class="p">(</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"custom_audio"</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Custom Audio Loop (.wav)"</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="n">accept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">".wav,audio/wav"</span><span class="p">,</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="n">partition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sound_data"</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">maxSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">262144</span><span class="p">,</span><span class="w"> </span><span class="c"># 256 KB</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Custom PCM WAV audio loop played during voice processing"</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="c"># Define firmware behavior configuration</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="n">installer</span><span class="p">.</span><span class="n">addSelectField</span><span class="p">(</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"default_style"</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Audio Feedback Style"</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">@[</span><span class="s">"Spinner"</span><span class="p">,</span><span class="w"> </span><span class="s">"Pulse"</span><span class="p">,</span><span class="w"> </span><span class="s">"Sonar"</span><span class="p">,</span><span class="w"> </span><span class="s">"Tick"</span><span class="p">,</span><span class="w"> </span><span class="s">"Silent"</span><span class="o">]</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="n">defaultVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Spinner"</span><span class="p">,</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Default acoustic style when custom audio is not active"</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">  </span><span class="p">)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="c"># 1. Output verified, collision-free partition table CSV for ESPHome</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="n">writeFile</span><span class="p">(</span><span class="s">"partitions.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">satelliteInstaller</span><span class="p">.</span><span class="n">generatePartitionsCsv</span><span class="p">(</span><span class="n">flashSizeMb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">))</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="c"># 2. Output baseline ESP-Web-Tools manifest</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="n">writeFile</span><span class="p">(</span><span class="s">"web/manifest.json"</span><span class="p">,</span><span class="w"> </span><span class="n">satelliteInstaller</span><span class="p">.</span><span class="n">generateManifest</span><span class="p">())</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="c"># 3. Output self-contained single-page web installer with dynamic WebSerial controller</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="n">writeFile</span><span class="p">(</span><span class="s">"web/index.html"</span><span class="p">,</span><span class="w"> </span><span class="n">satelliteInstaller</span><span class="p">.</span><span class="n">generateHtml</span><span class="p">())</span>
 </span></code></pre></div>
 <hr />
-<h2 id="i2c-bus-transfers">I2C Bus Transfers<a class="headerlink" href="#i2c-bus-transfers" title="Permanent link">&para;</a></h2>
-<p>The <code>nim_esphome/i2c</code> module provides communication with peripheral ICs over the microcontroller's I2C bus (accelerometers, barometers, DACs, displays, cryptographic chips).</p>
-<h3 id="instantiating-an-i2c-device">Instantiating an I2C Device<a class="headerlink" href="#instantiating-an-i2c-device" title="Permanent link">&para;</a></h3>
-<p>Create an <code>I2CDevice</code> handle by passing its 7-bit bus address:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c"># 0x68 is the standard I2C address for MPU6050 accelerometer</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">let</span><span class="w"> </span><span class="n">imu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newI2CDevice</span><span class="p">(</span><span class="mh">0x68</span><span class="sc">'u8)</span>
+<h2 id="flash-partition-safety">Flash Partition Safety<a class="headerlink" href="#flash-partition-safety" title="Permanent link">&para;</a></h2>
+<p>The <code>generatePartitionsCsv(flashSizeMb: int)</code> function calculates safe offsets for OTA slots (<code>app0</code> and <code>app1</code>) and dedicated user data partitions:</p>
+<h3 id="4mb-flash-layout-flashsizemb-4">4MB Flash Layout (<code>flashSizeMb = 4</code>)<a class="headerlink" href="#4mb-flash-layout-flashsizemb-4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Both <code>app0</code> and <code>app1</code> are sized to <strong>1.7MB</strong> (<code>0x1B0000</code>), ending at <code>0x370000</code>.</li>
+<li>Custom user data partitions start safely at offset <strong><code>0x370000</code></strong>, leaving up to <strong>576 KB</strong> of non-volatile asset storage before the 4MB flash limit (<code>0x400000</code>).</li>
+<li>Seamless over-the-air updates from Home Assistant are 100% preserved without risk of asset corruption.</li>
+</ul>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># ESP-IDF Partition Table generated by nim-esphome installer DSL
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a># Name,   Type, SubType, Offset,   Size, Flags
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>nvs,      data, nvs,     0x9000,   0x5000,
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>otadata,  data, ota,     0xe000,   0x2000,
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>app0,     app,  ota_0,   0x10000,  0x1B0000,
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>app1,     app,  ota_1,   0x1C0000, 0x1B0000,
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>sound_data, data, 0x82,  0x370000, 0x040000,
 </span></code></pre></div>
-<h3 id="writing-to-registers">Writing to Registers<a class="headerlink" href="#writing-to-registers" title="Permanent link">&para;</a></h3>
-<p>You can write single configuration bytes or multi-byte buffers:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c"># Wake up sensor by clearing SLEEP bit in power management register 0x6B</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">discard</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">writeByte</span><span class="p">(</span><span class="mh">0x6B</span><span class="sc">'u8, 0x00'</span><span class="n">u8</span><span class="p">)</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c"># Configure gyro range register 0x1B with a 2-byte sequence</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">discard</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">writeRegister</span><span class="p">(</span><span class="mh">0x1B</span><span class="sc">'u8, [0x08'</span><span class="n">u8</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="sc">'u8])</span>
+<h3 id="8mb-flash-layout-flashsizemb-8">8MB+ Flash Layout (<code>flashSizeMb = 8</code>)<a class="headerlink" href="#8mb-flash-layout-flashsizemb-8" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>app0</code> and <code>app1</code> are sized to <strong>3.0MB</strong> (<code>0x300000</code>), ending at <code>0x610000</code>.</li>
+<li>Custom user data partitions start at offset <strong><code>0x610000</code></strong>, providing almost 2MB of dedicated asset storage.</li>
+</ul>
+<hr />
+<h2 id="client-side-dynamic-manifest-architecture">Client-Side Dynamic Manifest Architecture<a class="headerlink" href="#client-side-dynamic-manifest-architecture" title="Permanent link">&para;</a></h2>
+<p>The generated <code>index.html</code> embeds a lightweight, reactive client-side JavaScript controller.</p>
+<p>When the user selects a file (such as a custom sound loop or bitmap):
+1. The client-side controller validates the file type and file size against <code>maxSize</code>.
+2. It generates a local in-memory object URL via <code>URL.createObjectURL(file)</code>.
+3. It constructs a new dynamic manifest combining the base factory firmware (offset <code>0x0</code>) and the uploaded file (at its partition offset, e.g. <code>0x370000</code>).
+4. It attaches the dynamic manifest <code>Blob</code> directly to <code>&lt;esp-web-install-button&gt;</code>:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">blob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Blob</span><span class="p">([</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">manifest</span><span class="p">)],</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">'application/json'</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nx">installBtn</span><span class="p">.</span><span class="nx">manifest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
 </span></code></pre></div>
-<h3 id="reading-from-registers">Reading from Registers<a class="headerlink" href="#reading-from-registers" title="Permanent link">&para;</a></h3>
-<p>Read raw bytes or register contents via combined write-read restart transactions:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">std</span><span class="o">/</span><span class="n">strutils</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c"># Read WHO_AM_I register (0x75)</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">let</span><span class="w"> </span><span class="n">whoAmI</span><span class="p">:</span><span class="w"> </span><span class="n">uint8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">readByte</span><span class="p">(</span><span class="mh">0x75</span><span class="sc">'u8)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">info</span><span class="p">(</span><span class="s">"IMU"</span><span class="p">,</span><span class="w"> </span><span class="s">"Device WHO_AM_I signature: 0x"</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">whoAmI</span><span class="p">.</span><span class="n">toHex</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c"># Read 6 consecutive bytes (X, Y, Z accelerometer registers starting at 0x3B)</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">let</span><span class="w"> </span><span class="n">rawBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">readRegister</span><span class="p">(</span><span class="mh">0x3B</span><span class="sc">'u8, 6)</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">if</span><span class="w"> </span><span class="n">rawBytes</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">6</span><span class="p">:</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">rawAccelX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="ow">shl</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">rawAccelY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="ow">shl</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span><span class="p">)</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">rawAccelZ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="ow">shl</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nb">int16</span><span class="p">(</span><span class="n">rawBytes</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="p">)</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="n">info</span><span class="p">(</span><span class="s">"IMU"</span><span class="p">,</span><span class="w"> </span><span class="s">"Accel X: "</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">$</span><span class="n">rawAccelX</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="s">" Y: "</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">$</span><span class="n">rawAccelY</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="s">" Z: "</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">$</span><span class="n">rawAccelZ</span><span class="p">)</span>
+<p>When the user clicks <strong>Install Firmware</strong>, ESP-Web-Tools connects to the ESP32 over WebSerial and flashes both the base firmware and custom asset partition in one single operation.</p>
+<hr />
+<h2 id="supported-form-fields">Supported Form Fields<a class="headerlink" href="#supported-form-fields" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field Kind</th>
+<th style="text-align: left;">Helper</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>File Upload</strong></td>
+<td style="text-align: left;"><code>addFileField</code></td>
+<td style="text-align: left;">Uploads local binary/audio assets and flashes to a partition offset.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dropdown Select</strong></td>
+<td style="text-align: left;"><code>addSelectField</code></td>
+<td style="text-align: left;">Select option list for user preferences or profiles.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Text Input</strong></td>
+<td style="text-align: left;"><code>addTextField</code></td>
+<td style="text-align: left;">Text field for custom identifiers or device names.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Numeric Input</strong></td>
+<td style="text-align: left;"><code>addNumberField</code></td>
+<td style="text-align: left;">Bounded numeric input with min, max, and step validation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Checkbox</strong></td>
+<td style="text-align: left;"><code>addCheckboxField</code></td>
+<td style="text-align: left;">Boolean toggle for enabling/disabling optional device features.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="integrating-with-esphome-yaml">Integrating with ESPHome YAML<a class="headerlink" href="#integrating-with-esphome-yaml" title="Permanent link">&para;</a></h2>
+<p>To instruct ESPHome to use the custom partition layout generated by <code>nim-esphome</code>, declare the partition table in your board package:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">esp32</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">board</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">esp32-s3-devkitc-1</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">framework</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">esp-idf</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">partitions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partitions.csv</span>
 </span></code></pre></div>
-<h3 id="host-mocking-for-unit-tests">Host Mocking for Unit Tests<a class="headerlink" href="#host-mocking-for-unit-tests" title="Permanent link">&para;</a></h3>
-<p>When running tests on your host development machine (<code>nim c -r tests/test_peripherals.nim</code>), <code>nim-esphome</code> routes all I2C calls to an in-memory hash table. You can simulate sensor register responses without attaching hardware.</p>
+<p>In your Nim firmware code, you can read from the dedicated partition using ESP-IDF partition APIs or standard flash memory mappers to access the uploaded user assets directly.</p>
 
 
 
@@ -1730,7 +1787,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../surface-dsl/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Composite Hardware Surfaces DSL">
+          <a href="../distribution/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Project Templating &amp; 1-Click Distribution">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1740,20 +1797,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Composite Hardware Surfaces DSL
+                Project Templating & 1-Click Distribution
               </div>
             </div>
           </a>
         
         
           
-          <a href="../storage/" class="md-footer__link md-footer__link--next" aria-label="Next: Flash Preferences (NVS)">
+          <a href="../../api/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Flash Preferences (NVS)
+                Overview
               </div>
             </div>
             <div class="md-footer__button md-icon">
