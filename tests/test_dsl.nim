@@ -371,6 +371,7 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "esp-web-install-button" in html
     check "updateDynamicManifest" in html
     check "URL.createObjectURL" in html
-    check "nested-field" in html
+    check "custom-slot" in html
+    check "presetView_feedback_style" in html
 
 
