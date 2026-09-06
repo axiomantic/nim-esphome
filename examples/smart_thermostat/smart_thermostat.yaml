@@ -1,0 +1,75 @@
+esphome:
+  name: nim-smart-thermostat
+  friendly_name: "Nim Smart Thermostat"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+api:
+
+wifi:
+  ap:
+    ssid: "Thermostat-Fallback"
+
+external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]
+
+nim:
+  source: smart_thermostat.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"
+
+number:
+  - platform: template
+    id: target_temperature
+    name: "Target Temperature"
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer"
+    min_value: 15.0
+    max_value: 30.0
+    step: 0.5
+    optimistic: true
+
+switch:
+  - platform: template
+    id: eco_mode
+    name: "Eco Mode"
+    icon: "mdi:leaf"
+    optimistic: true
+
+select:
+  - platform: template
+    id: hvac_mode
+    name: "HVAC Mode"
+    icon: "mdi:hvac"
+    optimistic: true
+    options:
+      - "Off"
+      - "Heat"
+      - "Cool"
+      - "Auto"
+
+sensor:
+  - platform: template
+    id: current_temperature
+    name: "Current Temperature"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    update_interval: 60s
+
+  - platform: template
+    id: heating_power
+    name: "Heating Output"
+    unit_of_measurement: "%"
+    device_class: "power_factor"
+    update_interval: 60s

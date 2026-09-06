@@ -278,15 +278,15 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
 
   test "haSurface composite device DSL":
     let mySurface = haSurface("living_room_satellite"):
-      surface.name = "Living Room Voice Satellite"
-      surface.model = "ReSpeaker XVF3800"
-      surface.manufacturer = "Seeed Studio"
-      surface.area = "Living Room"
+      surf.name = "Living Room Voice Satellite"
+      surf.model = "ReSpeaker XVF3800"
+      surf.manufacturer = "Seeed Studio"
+      surf.area = "Living Room"
 
-      surface.addControl(sekSelect, "processing_sound", name = "Processing Sound", icon = "mdi:progress-clock")
-      surface.addControl(sekNumber, "volume", name = "Volume", icon = "mdi:volume-high")
-      surface.addControl(sekSwitch, "wake_chime", name = "Wake Chime", icon = "mdi:bell-ring")
-      surface.addTelemetry(sekSensor, "wifi_signal", name = "Wi-Fi Signal", unit = "dBm")
+      surf.addControl(sekSelect, "processing_sound", name = "Processing Sound", icon = "mdi:progress-clock")
+      surf.addControl(sekNumber, "volume", name = "Volume", icon = "mdi:volume-high")
+      surf.addControl(sekSwitch, "wake_chime", name = "Wake Chime", icon = "mdi:bell-ring")
+      surf.addTelemetry(sekSensor, "wifi_signal", name = "Wi-Fi Signal", unit = "dBm")
 
     check mySurface.id == "living_room_satellite"
     check mySurface.entities.len == 4

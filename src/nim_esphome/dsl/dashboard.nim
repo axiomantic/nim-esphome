@@ -243,11 +243,26 @@ proc toYaml*(dashboard: LovelaceDashboard): string =
       lines.add(c.toYaml(6))
   result = lines.join("\n")
 
-template haCard*(cardKind: CardType, cardTitle: string = "", cardIcon: string = "", body: untyped): DashboardCard =
+template haCard*(cardKind: untyped, cardTitle: untyped, cardIcon: untyped, body: untyped): untyped =
+  ## Declarative builder template for a Lovelace dashboard card with title and icon.
+  block:
+    var card {.inject.} = newDashboardCard(cardKind, title = cardTitle, icon = cardIcon)
+    body
+    card
+
+template haCard*(cardKind: untyped, cardTitle: untyped, body: untyped): untyped =
+  ## Declarative builder template for a Lovelace dashboard card with title.
+  block:
+    var card {.inject.} = newDashboardCard(cardKind, title = cardTitle)
+    body
+    card
+
+template haCard*(cardKind: untyped, body: untyped): untyped =
   ## Declarative builder template for a Lovelace dashboard card.
-  var card {.inject.} = newDashboardCard(cardKind, title = cardTitle, icon = cardIcon)
-  body
-  card
+  block:
+    var card {.inject.} = newDashboardCard(cardKind)
+    body
+    card
 
 template haDashboard*(dashTitle: string, body: untyped): LovelaceDashboard =
   ## Declarative builder template for a Lovelace dashboard.

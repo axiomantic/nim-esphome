@@ -114,3 +114,20 @@ binary_sensor:
     name: "Voice Active"
     device_class: "sound"
 ```
+
+---
+
+## Complete Working Project
+
+The following code is pulled directly from [`examples/smart_thermostat/`](https://github.com/axiomantic/nim-esphome/tree/main/examples/smart_thermostat), which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:
+
+=== "Nim Source (`smart_thermostat.nim`)"
+    ```nim
+--8<-- "examples/smart_thermostat/smart_thermostat.nim"
+    ```
+
+=== "ESPHome YAML (`smart_thermostat.yaml`)"
+    ```yaml
+--8<-- "examples/smart_thermostat/smart_thermostat.yaml"
+    ```
+

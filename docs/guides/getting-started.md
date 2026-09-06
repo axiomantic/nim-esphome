@@ -75,33 +75,7 @@ Let's create a complete ESPHome project that blinks an LED and logs diagnostic d
 Create a file named `src/main.nim`:
 
 ```nim
-import nim_esphome
-
-const
-  LedPin = 2'u8
-  HeartbeatIntervalMs = 5000'u32
-
-var
-  lastHeartbeat: uint32 = 0
-  ledState: PinState = Low
-
-esphomeSetup:
-  info("BlinkApp", "Initializing microcontroller peripherals from Nim...")
-  pinMode(LedPin, Output)
-  digitalWrite(LedPin, ledState)
-  info("BlinkApp", "GPIO pin 2 configured as Output")
-
-esphomeLoop:
-  let now = millis()
-  if now - lastHeartbeat >= HeartbeatIntervalMs:
-    lastHeartbeat = now
-
-    # Toggle LED
-    ledState = if ledState == Low: High else: Low
-    digitalWrite(LedPin, ledState)
-
-    let freeHeap = getFreeHeap()
-    info("BlinkApp", "Heartbeat! LED state toggled. Free heap: " & $freeHeap & " bytes")
+--8<-- "examples/blink/blink.nim"
 ```
 
 ### Step 2: Configure ESPHome (`blink_device.yaml`)
@@ -109,25 +83,7 @@ esphomeLoop:
 Create `blink_device.yaml`:
 
 ```yaml
-esphome:
-  name: blink-demo
-
-esp32:
-  board: esp32dev
-  framework:
-    type: esp-idf
-
-logger:
-  level: INFO
-
-external_components:
-  - source:
-      type: local
-      path: /path/to/nim-esphome/components
-    components: [nim]
-
-nim:
-  source: src/main.nim
+--8<-- "examples/blink/blink.yaml"
 ```
 
 ### Step 3: Compile and Flash

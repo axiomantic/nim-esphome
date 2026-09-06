@@ -1,0 +1,53 @@
+esphome:
+  name: nim-dashboard-surface
+  friendly_name: "Nim Dashboard Surface Demo"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+api:
+
+wifi:
+  ap:
+    ssid: "Dashboard-Surface-Fallback"
+
+external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]
+
+nim:
+  source: dashboard_surface.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"
+
+text_sensor:
+  - platform: template
+    id: lovelace_card_yaml
+    name: "Lovelace Card YAML"
+
+sensor:
+  - platform: template
+    id: room_temp
+    name: "Room Temperature"
+    unit_of_measurement: "°C"
+    update_interval: 60s
+
+binary_sensor:
+  - platform: template
+    id: door_contact
+    name: "Door Contact"
+
+switch:
+  - platform: template
+    id: main_power
+    name: "Main Power"
+    optimistic: true

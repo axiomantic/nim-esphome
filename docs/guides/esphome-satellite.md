@@ -109,3 +109,21 @@ While the cloud or local Large Language Model (LLM) generates response tokens, `
 - **Instant Cutoff**: As soon as the first chunk of Text-to-Speech audio arrives (`onTtsStart`), `stopProcessingLoop()` halts the loop immediately, preventing audio collisions.
 - **Type-Safe Home Assistant Mapping**: Exposed to Home Assistant as a native `select` entity using `esphomeControls`, saved across reboots via Flash NVS.
 
+---
+
+## Complete Voice Satellite Implementation
+
+The following production example showcases the full voice satellite pipeline, controls, sound loop handling, and Home Assistant Lovelace card generation:
+
+=== "Nim Source (`voice_satellite.nim`)"
+
+    ```nim
+    --8<-- "examples/voice_satellite/voice_satellite.nim"
+    ```
+
+=== "ESPHome YAML (`voice_satellite.yaml`)"
+
+    ```yaml
+    --8<-- "examples/voice_satellite/voice_satellite.yaml"
+    ```
+

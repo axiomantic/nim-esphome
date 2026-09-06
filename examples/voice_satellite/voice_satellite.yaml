@@ -1,0 +1,93 @@
+esphome:
+  name: nim-voice-satellite
+  friendly_name: "Nim Voice Satellite"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+api:
+
+wifi:
+  ap:
+    ssid: "Voice-Satellite-Fallback"
+
+external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]
+
+nim:
+  source: voice_satellite.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"
+
+voice_assistant:
+  microphone: board_mic
+  on_stt_vad_end:
+    - lambda: |-
+        onSpeechEnded();
+  on_tts_start:
+    - lambda: |-
+        onTtsStarted();
+  on_tts_end:
+    - lambda: |-
+        onTtsFinished();
+  on_error:
+    - lambda: |-
+        onError(code.c_str());
+
+i2s_audio:
+  - id: i2s_in
+    i2s_lrclk_pin: GPIO7
+    i2s_bclk_pin: GPIO8
+
+microphone:
+  - platform: i2s_audio
+    id: board_mic
+    i2s_audio_id: i2s_in
+    i2s_din_pin: GPIO43
+    adc_type: external
+    pdm: false
+
+select:
+  - platform: template
+    id: processing_sound
+    name: "Processing Sound"
+    optimistic: true
+    options:
+      - "Silent"
+      - "Spinner"
+      - "Pulse"
+      - "Sonar"
+      - "Tick"
+
+number:
+  - platform: template
+    id: processing_sound_volume
+    name: "Processing Sound Volume"
+    min_value: 0
+    max_value: 100
+    step: 5
+    optimistic: true
+
+  - platform: template
+    id: wake_chime_volume
+    name: "Wake Chime Volume"
+    min_value: 0
+    max_value: 100
+    step: 5
+    optimistic: true
+
+switch:
+  - platform: template
+    id: wake_chime
+    name: "Wake Chime"
+    optimistic: true

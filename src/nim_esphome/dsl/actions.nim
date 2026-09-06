@@ -211,27 +211,32 @@ proc addParam*(
     defaultVal: if defaultVal.len > 0: some(defaultVal) else: none(string)
   ))
 
+proc `description=`*(def: ServiceDefinition, desc: string) =
+  ## Sets the description of the service.
+  def.description = desc
+
 template haService*(serviceName: string, body: untyped): untyped =
   ## Declarative builder template for a custom Home Assistant action/service.
-  var def {.inject.} = ServiceDefinition(
-    name: serviceName,
-    description: "",
-    params: @[],
-    handler: nil
-  )
+  block:
+    var def {.inject.} = ServiceDefinition(
+      name: serviceName,
+      description: "",
+      params: @[],
+      handler: nil
+    )
 
-  template param(pName: untyped, pKind: untyped, args: varargs[untyped]) {.used.} =
-    def.addParam(pName, pKind, args)
+    template param(pName: untyped, pKind: untyped, args: varargs[untyped]) {.used.} =
+      def.addParam(pName, pKind, args)
 
-  template onExecute(paramName, code: untyped): untyped =
-    def.handler = proc(paramName: ServiceCallContext) =
-      code
+    template onExecute(paramName, code: untyped): untyped =
+      def.handler = proc(paramName: ServiceCallContext) =
+        code
 
-  template onExecute(handlerProc: untyped): untyped =
-    def.handler = handlerProc
+    template onExecute(handlerProc: untyped): untyped =
+      def.handler = handlerProc
 
-  body
-  registerService(def)
+    body
+    registerService(def)
 
 template haAction*(actionName: string, body: untyped): untyped =
   ## Alias for `haService`.

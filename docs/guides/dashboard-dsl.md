@@ -103,3 +103,20 @@ echo homeDashboard.toYaml()
    Host the JSON output directly on the device using ESPHome's `web_server`, enabling Home Assistant dashboard integrations to dynamically fetch the card schema.
 3. **Diagnostic Sensor**:
    Publish `card.toYaml()` as the attribute of an ESPHome `text_sensor` for zero-touch auto-discovery.
+
+---
+
+## Complete Working Project
+
+The following code is pulled directly from [`examples/dashboard_surface/`](https://github.com/axiomantic/nim-esphome/tree/main/examples/dashboard_surface), which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:
+
+=== "Nim Source (`dashboard_surface.nim`)"
+    ```nim
+--8<-- "examples/dashboard_surface/dashboard_surface.nim"
+    ```
+
+=== "ESPHome YAML (`dashboard_surface.yaml`)"
+    ```yaml
+--8<-- "examples/dashboard_surface/dashboard_surface.yaml"
+    ```
+

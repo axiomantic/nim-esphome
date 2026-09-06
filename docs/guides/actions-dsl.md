@@ -86,3 +86,20 @@ let success2 = triggerServiceCall("play_custom_tone", [
 ])
 assert success2 == true
 ```
+
+---
+
+## Complete Working Project
+
+The following code is pulled directly from [`examples/custom_actions/`](https://github.com/axiomantic/nim-esphome/tree/main/examples/custom_actions), which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:
+
+=== "Nim Source (`custom_actions.nim`)"
+    ```nim
+--8<-- "examples/custom_actions/custom_actions.nim"
+    ```
+
+=== "ESPHome YAML (`custom_actions.yaml`)"
+    ```yaml
+--8<-- "examples/custom_actions/custom_actions.yaml"
+    ```
+

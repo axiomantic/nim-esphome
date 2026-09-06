@@ -1,0 +1,52 @@
+esphome:
+  name: nim-custom-actions
+  friendly_name: "Nim Custom Actions Demo"
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+api:
+  services:
+    - service: play_tone
+      variables:
+        frequency: int
+        duration_ms: int
+      then:
+        - lambda: |-
+            // Handled in Nim
+
+    - service: set_light_effect
+      variables:
+        pattern: string
+        brightness: float
+      then:
+        - lambda: |-
+            // Handled in Nim
+
+wifi:
+  ap:
+    ssid: "Custom-Actions-Fallback"
+
+external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]
+
+nim:
+  source: custom_actions.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"
+
+switch:
+  - platform: template
+    id: buzzer_relay
+    name: "Buzzer Relay"
+    optimistic: true

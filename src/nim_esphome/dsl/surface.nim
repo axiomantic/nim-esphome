@@ -171,6 +171,6 @@ proc generateEsphomeYaml*(surface: HardwareSurface): string =
 
 template haSurface*(surfaceId: string, body: untyped): HardwareSurface =
   ## Declarative builder template for a HardwareSurface.
-  var surface {.inject.} = newHardwareSurface(surfaceId)
+  var surf {.inject.} = newHardwareSurface(surfaceId)
   body
-  surface
+  surf

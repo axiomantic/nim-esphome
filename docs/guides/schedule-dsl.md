@@ -97,3 +97,20 @@ assert count == 1
 tickSchedules(7200000, reg)  # 120 mins (2 hrs): count increments to 2
 assert count == 2
 ```
+
+---
+
+## Complete Working Project
+
+The following code is pulled directly from [`examples/cooperative_scheduler/`](https://github.com/axiomantic/nim-esphome/tree/main/examples/cooperative_scheduler), which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:
+
+=== "Nim Source (`scheduler.nim`)"
+    ```nim
+--8<-- "examples/cooperative_scheduler/scheduler.nim"
+    ```
+
+=== "ESPHome YAML (`scheduler.yaml`)"
+    ```yaml
+--8<-- "examples/cooperative_scheduler/scheduler.yaml"
+    ```
+

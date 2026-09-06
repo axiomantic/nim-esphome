@@ -18,6 +18,7 @@
 - [Installation & Integration](#installation--integration)
 - [Quickstart: Blink / Heartbeat](#quickstart-blink--heartbeat)
 - [Documentation & Guides](#documentation--guides)
+- [Example Projects](#example-projects)
 - [Component Configuration](#component-configuration)
 - [Automated Nimble Dependency Management](#automated-nimble-dependency-management)
 - [Embedded Architecture & Multi-CPU Target Alignment](#embedded-architecture--multi-cpu-target-alignment)
@@ -203,6 +204,26 @@ Comprehensive guides and API references are available in the [`docs/`](docs/inde
 - 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world 14-state verified typestate FSM for ESPHome.
 - 🌐 [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md): ESP-Web-Tools browser flashing, My Home Assistant import, and CI factory binary releases.
 - 📚 [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
+
+---
+
+## Example Projects
+
+The [`examples/`](examples/README.md) directory contains complete, standalone, buildable ESPHome projects illustrating idiomatic Nim firmware architectures and all Home Assistant DSLs. Every example is tested in CI for embedded 32-bit compilation and ESPHome configuration validity:
+
+| Example | Domain / DSL | Description |
+|---|---|---|
+| [**Blink & Peripherals**](examples/blink/) | Core Runtime | GPIO toggling, I2C register transfers, Flash preferences, and low-pass filtering. |
+| [**Voice Satellite**](examples/voice_satellite/) | `esphomeControls` & Satellite | 14-state voice satellite pipeline with asynchronous audio loop (`psSpinner`) and Lovelace controls card. |
+| [**Smart Thermostat**](examples/smart_thermostat/) | `haSurface` & `haSchedule` | Composite HVAC surface combining temperature telemetry, target setpoints, boost action, and PID loop. |
+| [**Custom Actions**](examples/custom_actions/) | `haService` / `haAction` | Type-safe Home Assistant action definitions with automatic YAML schema generation and input validation. |
+| [**Cooperative Scheduler**](examples/cooperative_scheduler/) | `haSchedule` | Non-blocking periodic routines (`every 50.ms`, `every 2.seconds`) and delayed execution (`after 10.seconds`). |
+| [**Dashboard Surfaces**](examples/dashboard_surface/) | `haDashboard` & `haCard` | Multi-view Lovelace dashboard generation pushed directly to Home Assistant via an ESPHome `text_sensor`. |
+
+To run the automated embedded compilation and schema validation suite across all examples:
+```bash
+nimble test  # or ./scripts/test.sh
+```
 
 ---
 
