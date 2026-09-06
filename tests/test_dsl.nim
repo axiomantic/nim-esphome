@@ -5,7 +5,7 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
   test "esphomeControls declarative macro":
     type SoundProfile = enum
       spSilent = "Silent"
-      spTypewriter = "Typewriter"
+      spSpinner = "Spinner"
       spPulse = "Pulse"
 
     var selectedStyle = spSilent
@@ -16,7 +16,7 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     esphomeControls:
       select[SoundProfile]("processing_sound"):
         name = "Processing Sound Style"
-        default = spTypewriter
+        default = spSpinner
         persist = true
         onSelect(style):
           selectedStyle = style
@@ -44,7 +44,7 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
           buttonHit = true
 
     # Defaults should have initialized and fired callbacks
-    check selectedStyle == spTypewriter
+    check selectedStyle == spSpinner
     check chosenVolume == 80.0'f32
     check chimeActive == true
 

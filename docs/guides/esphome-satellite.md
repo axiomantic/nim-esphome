@@ -105,7 +105,7 @@ During voice interactions, user experience depends heavily on clear, low-latency
 
 ### The `processing_sound` Architecture
 While the cloud or local Large Language Model (LLM) generates response tokens, `nim-esphome` runs an asynchronous **processing sound loop** (`startProcessingLoop` / `stopProcessingLoop`):
-- **Decoupled Sound Styles**: The architecture separates the interaction state (`Processing`) from the sound asset. Users can choose between `Silent`, `Typewriter`, `Pulse`, `Sonar`, or `Tick` directly in the Home Assistant UI.
+- **Decoupled Sound Styles**: The architecture separates the interaction state (`Processing`) from the sound asset. Users can choose between `Silent`, `Spinner`, `Pulse`, `Sonar`, or `Tick` directly in the Home Assistant UI.
 - **Instant Cutoff**: As soon as the first chunk of Text-to-Speech audio arrives (`onTtsStart`), `stopProcessingLoop()` halts the loop immediately, preventing audio collisions.
 - **Type-Safe Home Assistant Mapping**: Exposed to Home Assistant as a native `select` entity using `esphomeControls`, saved across reboots via Flash NVS.
 

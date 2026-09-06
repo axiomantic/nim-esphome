@@ -110,7 +110,7 @@ select:
     optimistic: true
     options:
       - "Silent"
-      - "Typewriter"
+      - "Spinner"
       - "Pulse"
       - "Sonar"
 
@@ -140,7 +140,7 @@ import nim_esphome
 
 type ProcessingSoundStyle* = enum
   psSilent     = "Silent"
-  psTypewriter = "Typewriter"
+  psSpinner    = "Spinner"
   psPulse      = "Pulse"
   psSonar      = "Sonar"
 
@@ -148,7 +148,7 @@ esphomeControls:
   # 1. Type-safe Select with compile-time enum parsing
   select[ProcessingSoundStyle]("processing_sound"):
     name = "Processing Sound Style"
-    default = psTypewriter
+    default = psSpinner
     persist = true  # Automatically saved to Flash NVS
     onSelect(style):
       setProcessingAudioStyle(style)

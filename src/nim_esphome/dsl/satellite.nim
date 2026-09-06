@@ -16,7 +16,7 @@ type
 
   ProcessingSoundStyle* = enum
     psSilent = "Silent"
-    psTypewriter = "Typewriter"
+    psSpinner = "Spinner"
     psPulse = "Pulse"
     psSonar = "Sonar"
     psTick = "Tick"
@@ -54,7 +54,7 @@ type
 proc newProcessingLoop*(): ProcessingLoop =
   ProcessingLoop(
     active: false,
-    style: psTypewriter,
+    style: psSpinner,
     intervalMs: 120,
     lastTickMs: 0,
     volume: 0.75'f32,
@@ -87,7 +87,7 @@ proc setState*(pipeline: SatellitePipeline, newState: SatelliteState) =
     if pipeline.onStateChange != nil:
       pipeline.onStateChange(old, newState)
 
-proc startProcessingLoop*(pipeline: SatellitePipeline, style: ProcessingSoundStyle = psTypewriter, intervalMs: uint32 = 120) =
+proc startProcessingLoop*(pipeline: SatellitePipeline, style: ProcessingSoundStyle = psSpinner, intervalMs: uint32 = 120) =
   pipeline.processingLoop.style = style
   pipeline.processingLoop.intervalMs = intervalMs
   pipeline.processingLoop.active = (style != psSilent)

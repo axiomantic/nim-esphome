@@ -26,7 +26,7 @@ suite "nim-esphome entity bindings":
 
   test "select entity callback and state publishing":
     type SoundTheme = enum
-      stTypewriter = "Typewriter"
+      stSpinner = "Spinner"
       stChime = "Chime"
       stSilent = "Silent"
 
@@ -35,9 +35,9 @@ suite "nim-esphome entity bindings":
     sel.onState proc(theme: SoundTheme) =
       selectedTheme = theme
 
-    triggerSelectState("sound_profile", "Typewriter")
-    check selectedTheme == stTypewriter
-    check getSelectState("sound_profile") == "Typewriter"
+    triggerSelectState("sound_profile", "Spinner")
+    check selectedTheme == stSpinner
+    check getSelectState("sound_profile") == "Spinner"
 
     check sel.publishState(stChime)
     check getSelectState("sound_profile") == "Chime"
