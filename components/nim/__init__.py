@@ -11,6 +11,7 @@ CONF_NIM_FLAGS = "nim_flags"
 CONF_NIM_PATH = "nim_path"
 CONF_NIMBLE_PATHS = "nimble_paths"
 CONF_TARGET_CPU = "target_cpu"
+CONF_REQUIRES = "requires"
 
 DEPENDENCIES = []
 AUTO_LOAD = []
@@ -26,6 +27,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_NIM_PATH, default="nim"): cv.string,
         cv.Optional(CONF_NIMBLE_PATHS, default=[]): cv.ensure_list(cv.directory),
         cv.Optional(CONF_TARGET_CPU): cv.string,
+        cv.Optional(CONF_REQUIRES, default=[]): cv.ensure_list(cv.string),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -74,6 +76,29 @@ def find_nimbase_h(nim_bin: str) -> str:
     candidate = os.path.join(os.path.dirname(bin_dir), "lib", "nimbase.h")
     if os.path.isfile(candidate):
         return candidate
+
+
+def find_nimble_binary(nim_bin: str) -> str:
+    bin_dir = os.path.dirname(os.path.realpath(nim_bin))
+    candidate = os.path.join(bin_dir, "nimble")
+    if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+        return candidate
+    which_nimble = shutil.which("nimble")
+    if which_nimble:
+        return which_nimble
+    candidates = [
+        os.path.expanduser("~/.local/share/mise/shims/nimble"),
+        os.path.expanduser("~/.nimble/bin/nimble"),
+        "/opt/homebrew/bin/nimble",
+        "/usr/local/bin/nimble",
+        "/usr/bin/nimble",
+    ]
+    for c in candidates:
+        if os.path.isfile(c) and os.access(c, os.X_OK):
+            return c
+    raise EsphomeError(
+        "Nimble package manager executable not found. Please install nimble or ensure it is in your PATH."
+    )
 
 def detect_target_cpu(configured_cpu: str = None) -> str:
     if configured_cpu:
@@ -143,6 +168,37 @@ async def to_code(config):
 
     if not has_cpu_flag:
         cmd.append(f"--cpu:{target_cpu}")
+
+    requires = config.get(CONF_REQUIRES, [])
+    if requires:
+        nimble_bin = find_nimble_binary(nim_bin)
+        nimble_dir = CORE.relative_build_path(".nimble")
+        os.makedirs(nimble_dir, exist_ok=True)
+        for pkg in requires:
+            res = subprocess.run(
+                [nimble_bin, "install", "-y", f"--nimbleDir:{nimble_dir}", pkg],
+                cwd=nimble_dir,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=False,
+            )
+            if res.returncode != 0:
+                raise EsphomeError(
+                    f"Nimble package installation failed for '{pkg}' (exit code {res.returncode}):\n{res.stdout}"
+                )
+
+        for psub in ["pkgs2", "pkgs"]:
+            pdir = os.path.join(nimble_dir, psub)
+            if os.path.isdir(pdir):
+                cmd.append(f"--nimblePath:{pdir}")
+                for entry in sorted(os.listdir(pdir)):
+                    entry_path = os.path.join(pdir, entry)
+                    if os.path.isdir(entry_path):
+                        cmd.append(f"--path:{entry_path}")
+                        entry_src = os.path.join(entry_path, "src")
+                        if os.path.isdir(entry_src):
+                            cmd.append(f"--path:{entry_src}")
 
     for p in config[CONF_NIMBLE_PATHS]:
         cmd.append(f"--path:{p}")

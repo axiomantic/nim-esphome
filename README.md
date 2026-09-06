@@ -175,14 +175,22 @@ nim:
   # Path to the primary .nim source file (Required)
   source: src/my_logic.nim
 
-  # Additional include paths for external Nimble packages (Optional)
+  # Automated Nimble dependencies (installed into isolated build cache)
+  requires:
+    - https://github.com/elijahr/nim-typestates
+    - zippy
+
+  # Additional manual include paths for external packages (Optional)
   nimble_paths:
-    - /path/to/external/nim-typestates/src
+    - /path/to/external/pkg/src
 
   # Extra flags passed directly to `nim cpp` (Optional)
   nim_flags:
     - "-d:danger"
     - "--opt:size"
+
+  # Target CPU override: esp (Xtensa), riscv32, arm (Optional, auto-detected)
+  target_cpu: esp
 
   # Path to the nim executable (Default: "nim")
   nim_path: "/usr/local/bin/nim"
@@ -191,10 +199,30 @@ nim:
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `source` | `string` | **Required** | Absolute or relative path to the entrypoint `.nim` file |
+| `requires` | `list` | `[]` | Automated Nimble packages or Git repositories installed at build time |
 | `nim_flags` | `list` | `[]` | Extra arguments passed to `nim cpp` |
 | `nimble_paths` | `list` | `[]` | Additional search paths for Nim packages |
 | `nim_path` | `string` | `"nim"` | Path to the `nim` compiler executable |
 | `target_cpu` | `string` | Auto | Target CPU architecture (`esp`, `riscv32`, `arm`). Auto-detected from board. |
+
+---
+
+## Automated Nimble Dependency Management
+
+`nim-esphome` can automatically download, cache, and configure third-party Nimble packages during ESPHome compilation via the `requires:` key in your YAML configuration:
+
+```yaml
+nim:
+  source: src/main.nim
+  requires:
+    - https://github.com/elijahr/nim-typestates
+    - chroma
+```
+
+During build generation:
+1. `nim-esphome` invokes `nimble install -y` targeting an isolated node build cache (`.esphome/build/<node>/.nimble`).
+2. Packages and Git repositories are installed without polluting global environments or requiring host pre-installation.
+3. The component automatically configures `--nimblePath` and package module paths directly into the embedded Nim transpilation command.
 
 ---
 
