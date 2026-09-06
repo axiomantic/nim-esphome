@@ -1,11 +1,11 @@
-# Project Templating & 1-Click Distribution
+# Project Templating & Distribution
 
 Writing expressive, statically-typed embedded logic in Nim is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.
 
 `nim-esphome` establishes a standardized distribution architecture that enables:
 
-1. **1-Click Browser Flashing** via [ESP-Web-Tools](https://esphome.github.io/esp-web-tools/) (WebSerial in Chrome/Edge).
-2. **One-Click Home Assistant Dashboard Import** via [My Home Assistant](https://my.home-assistant.io/).
+1. **In-Browser Web Flashing** via [ESP-Web-Tools](https://esphome.github.io/esp-web-tools/) (WebSerial in Chrome/Edge).
+2. **Drop-in Remote Packages & Dashboard Adoption** via ESPHome `packages:` and `dashboard_import:`.
 3. **Automated CI Binary Builds** that bundle partition tables, bootloader, and firmware into flashable factory binaries on release.
 
 ---
@@ -95,9 +95,9 @@ Define the target chip family, binary locations, and Home Assistant auto-discove
 
 ---
 
-## 2. One-Click "My Home Assistant" Dashboard Import
+## 2. Drop-in Remote Packages & Dashboard Adoption
 
-For users who already manage an ESPHome Dashboard add-on inside Home Assistant, provide a one-click import badge in your README.
+For users who configure or compile devices through the ESPHome Dashboard or CLI, provide a standalone package YAML in your repository.
 
 ### Standalone Remote Package (`packages/my_board.yaml`)
 
@@ -119,6 +119,10 @@ esp32:
   board: esp32-s3-devkitc-1
   framework:
     type: esp-idf
+
+dashboard_import:
+  package_import_url: github://my-org/my-nim-device/packages/my_board.yaml
+  import_full_config: false
 
 external_components:
   - source:
@@ -144,18 +148,16 @@ ota:
   - platform: esphome
 ```
 
-### The Badge URL Pattern
+### Integration Methods
 
-In your repository `README.md`, add the official Home Assistant redirect badge:
+Users can adopt your firmware in two ways:
 
-```markdown
-[![Open your Home Assistant instance and open the ESPHome dashboard to import this node.](https://my.home-assistant.io/badges/dashboard_import.svg)](https://my.home-assistant.io/redirect/dashboard_import/?package=github://my-org/my-nim-device/packages/my_board.yaml)
-```
-
-When clicked:
-1. It opens the user's Home Assistant dashboard.
-2. ESPHome displays an import modal with your configuration.
-3. The user clicks **Adopt** -> **Install** to compile and flash wirelessly (OTA) or via USB.
+1. **Direct Package Inclusion**: Add your repository package to their existing ESPHome configuration:
+   ```yaml
+   packages:
+     my_device: github://my-org/my-nim-device/packages/my_board.yaml
+   ```
+2. **Dashboard Adoption**: When a user flashes the device via the web installer and connects it to their Wi-Fi, the ESPHome Dashboard discovers it on the local network. The `dashboard_import:` block causes ESPHome to display an **Adopt** button, pulling the remote configuration automatically.
 
 ---
 
@@ -184,4 +186,3 @@ On release tags (`v*`), your GitHub Actions workflow uploads `firmware-factory.b
 See **[`esphome-satellite`](https://github.com/axiomantic/esphome-satellite)** for a complete, live reference implementation of this architecture:
 - **In-Browser Flasher**: Live at [`axiomantic.github.io/esphome-satellite`](https://axiomantic.github.io/esphome-satellite/).
 - **Drop-in Packages**: [`packages/respeaker_xvf3800.yaml`](https://github.com/axiomantic/esphome-satellite/blob/main/packages/respeaker_xvf3800.yaml).
-- **One-Click Badges**: Displayed prominently on the [README](https://github.com/axiomantic/esphome-satellite#quick-install-one-click).

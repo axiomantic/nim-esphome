@@ -48,7 +48,7 @@ Explore the comprehensive guides and API references:
 - [**DSP & Closed-Loop Control**](guides/dsp-control.md): Use stack-allocated PID controllers, moving average/median filters, and switch debouncers.
 - [**C++ Interoperability**](guides/interop.md): Export Nim procedures to ESPHome YAML lambdas using `{.exportEsphome.}`.
 - [**Verified Voice Satellite (Case Study)**](guides/esphome-satellite.md): Explore `esphome-satellite`, a real-world on-device state supervisor for ESPHome voice satellites.
-- [**Project Templating & 1-Click Distribution**](guides/distribution.md): Set up ESP-Web-Tools browser flashing, My Home Assistant dashboard import, and automated CI factory binary releases.
+- [**Project Templating & Distribution**](guides/distribution.md): Set up ESP-Web-Tools browser flashing, modular ESPHome remote packages, and automated CI factory binary releases.
 
 ### 📚 API Reference
 - [**API Reference Index**](api/index.md): Module catalog and architecture overview.

@@ -30,7 +30,7 @@
   - [Embedded Control & DSP Utilities](#embedded-control--dsp-utilities)
   - [Calling Nim Procs from ESPHome C++](#calling-nim-procs-from-esphome-c)
 - [Projects Using nim-esphome](#projects-using-nim-esphome)
-- [Project Templating & 1-Click Distribution](#project-templating--1-click-distribution)
+- [Project Templating & Distribution](#project-templating--distribution)
 - [Testing & CI](#testing--ci)
 - [Project Structure](#project-structure)
 - [Changelog](#changelog)
@@ -615,15 +615,15 @@ packages:
 
 ---
 
-## Project Templating & 1-Click Distribution
+## Project Templating & Distribution
 
 `nim-esphome` establishes a standard distribution template for embedded Nim projects, enabling end-users to flash hardware without compiling code or editing YAML:
 
 1. **In-Browser Web Flashing (ESP-Web-Tools)**: Host a zero-install WebSerial installer on GitHub Pages. Users plug in their ESP32 via USB and flash factory binaries directly from Chrome or Edge.
-2. **One-Click Home Assistant Import**: Provide "My Home Assistant" dashboard import badges in your repository. Users click the badge to automatically adopt remote packages into their local ESPHome Dashboard.
+2. **Modular Remote Packages & Adoption**: Provide standalone device packages (`packages: github://...`) with `dashboard_import:` metadata for adoption into local ESPHome Dashboards.
 3. **Automated Factory Binary Builds in CI**: GitHub Actions workflows merge bootloaders, partition tables, and firmware into flashable `firmware-factory.bin` bundles attached to releases.
 
-> 📖 **Full Guide**: Read [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md) for the complete directory layout, ESP-Web-Tools HTML templates, and CI packaging scripts.
+> 📖 **Full Guide**: Read [**Project Templating & Distribution**](docs/guides/distribution.md) for the complete directory layout, ESP-Web-Tools HTML templates, and CI packaging scripts.
 
 ---
 
