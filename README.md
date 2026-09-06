@@ -281,6 +281,43 @@ statusMsg.publishState("Running")
 
 When compiled for embedded firmware, `publishState` looks up registered entities dynamically in the ESPHome `Application` registry and executes `publish_state(...)`. In local unit tests on host machines, a mock registry is maintained for headless verification.
 
+### Hardware Bus & Peripheral Abstractions (GPIO & I2C)
+
+Control microcontroller GPIO pins and communicate over I2C buses directly from Nim:
+
+#### GPIO Manipulation
+
+```nim
+import nim_esphome
+
+# Configure pin mode
+pinMode(2, Output)
+pinMode(4, InputPullup)
+
+# Digital write and read
+digitalWrite(2, High)
+let pinState: PinState = digitalRead(4)
+if pinState == Low:
+  info("Button", "Pressed!")
+```
+
+#### I2C Bus Transfers
+
+```nim
+import nim_esphome
+
+# Instantiate peripheral with target 7-bit I2C address
+let accelerometer = newI2CDevice(0x68)
+
+# Write to registers
+accelerometer.writeByte(0x6B, 0x00) # Wake device
+accelerometer.writeRegister(0x1C, [0x08'u8])
+
+# Read raw bytes or register contents
+let chipId: uint8 = accelerometer.readByte(0x75)
+let rawData: seq[uint8] = accelerometer.readRegister(0x3B, 6)
+```
+
 ### Calling Nim Procs from ESPHome C++
 
 Define your procedure in Nim with `{.exportEsphome.}`:

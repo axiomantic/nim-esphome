@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +25,14 @@ bool esphome_nim_publish_sensor(const char *entity_id, float value);
 bool esphome_nim_publish_binary_sensor(const char *entity_id, bool value);
 bool esphome_nim_publish_switch(const char *entity_id, bool value);
 bool esphome_nim_publish_text_sensor(const char *entity_id, const char *value);
+
+void nim_gpio_pin_mode(uint8_t pin, uint8_t mode);
+void nim_gpio_digital_write(uint8_t pin, bool val);
+bool nim_gpio_digital_read(uint8_t pin);
+
+bool nim_i2c_write(uint8_t address, const uint8_t *data, size_t len);
+bool nim_i2c_read(uint8_t address, uint8_t *data, size_t len);
+bool nim_i2c_write_read(uint8_t address, const uint8_t *write_data, size_t write_len, uint8_t *read_data, size_t read_len);
 
 #ifdef __cplusplus
 }

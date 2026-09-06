@@ -4,6 +4,7 @@
 
 #if defined(USE_ESP32) || defined(ESP32)
 #include <esp_system.h>
+#include <driver/gpio.h>
 #endif
 
 #ifdef USE_SENSOR
@@ -17,6 +18,9 @@
 #endif
 #ifdef USE_TEXT_SENSOR
 #include "esphome/components/text_sensor/text_sensor.h"
+#endif
+#ifdef USE_I2C
+#include "esphome/components/i2c/i2c_bus.h"
 #endif
 
 static const char *const TAG = "nim";
@@ -116,6 +120,85 @@ extern "C" {
       if (ts != nullptr && (ts->get_name() == entity_id || ts->get_object_id() == entity_id)) {
         ts->publish_state(value);
         return true;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  void nim_gpio_pin_mode(uint8_t pin, uint8_t mode) {
+  #if defined(USE_ESP32) || defined(ESP32)
+    gpio_num_t gpin = (gpio_num_t)pin;
+    if (mode == 1) {
+      gpio_set_direction(gpin, GPIO_MODE_OUTPUT);
+    } else {
+      gpio_set_direction(gpin, GPIO_MODE_INPUT);
+      if (mode == 2) {
+        gpio_set_pull_mode(gpin, GPIO_PULLUP_ONLY);
+      } else if (mode == 3) {
+        gpio_set_pull_mode(gpin, GPIO_PULLDOWN_ONLY);
+      } else {
+        gpio_set_pull_mode(gpin, GPIO_FLOATING);
+      }
+    }
+  #elif defined(USE_ARDUINO)
+    if (mode == 1) pinMode(pin, OUTPUT);
+    else if (mode == 2) pinMode(pin, INPUT_PULLUP);
+    #ifdef INPUT_PULLDOWN
+    else if (mode == 3) pinMode(pin, INPUT_PULLDOWN);
+    #endif
+    else pinMode(pin, INPUT);
+  #endif
+  }
+
+  void nim_gpio_digital_write(uint8_t pin, bool val) {
+  #if defined(USE_ESP32) || defined(ESP32)
+    gpio_set_level((gpio_num_t)pin, val ? 1 : 0);
+  #elif defined(USE_ARDUINO)
+    digitalWrite(pin, val ? HIGH : LOW);
+  #endif
+  }
+
+  bool nim_gpio_digital_read(uint8_t pin) {
+  #if defined(USE_ESP32) || defined(ESP32)
+    return gpio_get_level((gpio_num_t)pin) != 0;
+  #elif defined(USE_ARDUINO)
+    return digitalRead(pin) != LOW;
+  #else
+    return false;
+  #endif
+  }
+
+  bool nim_i2c_write(uint8_t address, const uint8_t *data, size_t len) {
+  #ifdef USE_I2C
+    for (auto *comp : esphome::App.get_components()) {
+      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
+      if (bus != nullptr) {
+        return bus->write(address, data, len) == esphome::i2c::ERROR_OK;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  bool nim_i2c_read(uint8_t address, uint8_t *data, size_t len) {
+  #ifdef USE_I2C
+    for (auto *comp : esphome::App.get_components()) {
+      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
+      if (bus != nullptr) {
+        return bus->read(address, data, len) == esphome::i2c::ERROR_OK;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  bool nim_i2c_write_read(uint8_t address, const uint8_t *write_data, size_t write_len, uint8_t *read_data, size_t read_len) {
+  #ifdef USE_I2C
+    for (auto *comp : esphome::App.get_components()) {
+      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
+      if (bus != nullptr) {
+        return bus->write_readv(address, write_data, write_len, read_data, read_len) == esphome::i2c::ERROR_OK;
       }
     }
   #endif

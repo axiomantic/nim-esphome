@@ -3,10 +3,13 @@ import nim_esphome
 var lastToggle: uint32 = 0
 let tempSensor = newSensor("temperature")
 let statusLed = newSwitch("status_led")
+let i2cDev = newI2CDevice(0x68)
 
 esphomeSetup:
   info("BlinkNim", "Hello from Nim running on ESPHome!")
   statusLed.publishState(true)
+  pinMode(2, Output)
+  digitalWrite(2, High)
 
 esphomeLoop:
   let now = millis()
@@ -14,3 +17,5 @@ esphomeLoop:
     lastToggle = now
     info("BlinkNim", "Heartbeat tick from Nim loop!")
     tempSensor.publishState(24.2'f32)
+    digitalWrite(2, Low)
+    discard i2cDev.writeByte(0x6B, 0x00)
