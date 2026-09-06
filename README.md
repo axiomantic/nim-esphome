@@ -336,6 +336,51 @@ var wifiSsid = loadPreference("wifi_ssid", "DefaultSSID")
 discard savePreference("wifi_ssid", "HomeIoT")
 ```
 
+### Embedded Control & DSP Utilities
+
+Deterministic, zero-heap-allocation control algorithms and signal filtering utilities tailored for microcontrollers:
+
+#### PID Closed-Loop Controller
+```nim
+import nim_esphome
+
+var pid = newPIDController(kp = 2.0'f32, ki = 0.5'f32, kd = 0.1'f32, minOutput = 0.0'f32, maxOutput = 100.0'f32)
+
+# Compute control effort with anti-windup clamping
+let controlEffort = pid.update(setpoint = 25.0'f32, measured = currentTemp, dt = 1.0'f32)
+```
+
+#### Moving Average & Moving Median
+```nim
+import nim_esphome
+
+# Fixed-size stack-allocated circular buffer of 5 samples
+var avg = newMovingAverage[5]()
+let smoothed = avg.update(rawAdcSample)
+
+# Moving median filter to reject sensor noise spikes and outliers
+var med = newMovingMedian[5]()
+let filteredVal = med.update(noisySensorReading)
+```
+
+#### Low-Pass Exponential Filter
+```nim
+import nim_esphome
+
+var lpf = newLowPassFilter(alpha = 0.15'f32)
+let smoothedSignal = lpf.update(noisyInput)
+```
+
+#### Input Debouncer & Edge Detection
+```nim
+import nim_esphome
+
+var buttonDebouncer = newDebouncer(debounceTimeMs = 50'u32)
+if buttonDebouncer.update(digitalRead(4) == Low, millis()):
+  if buttonDebouncer.rose:
+    info("Button", "Clean button press event!")
+```
+
 ### Calling Nim Procs from ESPHome C++
 
 Define your procedure in Nim with `{.exportEsphome.}`:

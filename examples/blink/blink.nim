@@ -2,6 +2,8 @@ import nim_esphome
 
 var lastToggle: uint32 = 0
 var bootCount: int32 = 0
+var tempFilter = newLowPassFilter(0.2'f32, 20.0'f32)
+var tempPid = newPIDController(2.0'f32, 0.1'f32, 0.05'f32, 0.0'f32, 100.0'f32)
 let tempSensor = newSensor("temperature")
 let statusLed = newSwitch("status_led")
 let i2cDev = newI2CDevice(0x68)
@@ -19,6 +21,8 @@ esphomeLoop:
   if now - lastToggle >= 2000:
     lastToggle = now
     info("BlinkNim", "Heartbeat tick from Nim loop!")
-    tempSensor.publishState(24.2'f32)
+    let filtered = tempFilter.update(24.2'f32)
+    discard tempPid.update(25.0'f32, filtered, 2.0'f32)
+    tempSensor.publishState(filtered)
     digitalWrite(2, Low)
     discard i2cDev.writeByte(0x6B, 0x00)

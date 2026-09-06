@@ -10,6 +10,8 @@ nim c -r --path:src tests/test_peripherals.nim
 rm -f tests/test_peripherals
 nim c -r --path:src tests/test_preferences.nim
 rm -f tests/test_preferences
+nim c -r --path:src tests/test_dsp.nim
+rm -f tests/test_dsp
 
 echo "=== Testing embedded C++ code generation (Xtensa ESP32 target) ==="
 nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim
