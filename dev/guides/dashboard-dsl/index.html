@@ -780,6 +780,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lovelace-dashboard-surface-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Lovelace Dashboard Surface Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-hadashboard-hacard-and-publishing-lovelace-yaml-to-an-esphome-text-sensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haDashboard</code>, <code>haCard</code>, and publishing Lovelace YAML to an ESPHome text sensor.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1462,6 +1495,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lovelace-dashboard-surface-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Lovelace Dashboard Surface Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-hadashboard-hacard-and-publishing-lovelace-yaml-to-an-esphome-text-sensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haDashboard</code>, <code>haCard</code>, and publishing Lovelace YAML to an ESPHome text sensor.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1680,6 +1746,108 @@
 <li><strong>Diagnostic Sensor</strong>:
    Publish <code>card.toYaml()</code> as the attribute of an ESPHome <code>text_sensor</code> for zero-touch auto-discovery.</li>
 </ol>
+<hr />
+<h2 id="complete-working-project">Complete Working Project<a class="headerlink" href="#complete-working-project" title="Permanent link">&para;</a></h2>
+<p>The following code is pulled directly from <a href="https://github.com/axiomantic/nim-esphome/tree/main/examples/dashboard_surface"><code>examples/dashboard_surface/</code></a>, which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Nim Source (<code>dashboard_surface.nim</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```nim</p>
+</div>
+</div>
+</div>
+<h2 id="lovelace-dashboard-surface-example">Lovelace Dashboard Surface Example<a class="headerlink" href="#lovelace-dashboard-surface-example" title="Permanent link">&para;</a></h2>
+<h2 id="demonstrates-hadashboard-hacard-and-publishing-lovelace-yaml-to-an-esphome-text-sensor">Demonstrates <code>haDashboard</code>, <code>haCard</code>, and publishing Lovelace YAML to an ESPHome text sensor.<a class="headerlink" href="#demonstrates-hadashboard-hacard-and-publishing-lovelace-yaml-to-an-esphome-text-sensor" title="Permanent link">&para;</a></h2>
+<p>import nim_esphome
+import nim_esphome/dsl/dashboard</p>
+<p>var
+  dashboardConfigSensor = newTextSensor("lovelace_card_yaml")
+  roomTempSensor = newSensor("room_temp")
+  doorBinary = newBinarySensor("door_contact")
+  powerRelay = newSwitch("main_power")</p>
+<p>proc buildLovelaceDashboard*(): string =
+  let myDashboard = haDashboard("Smart Home Room Panel"):
+    # 1. Main Controls View
+    var controlsView = newLovelaceView("Controls", path = "controls", icon = "mdi:view-dashboard")</p>
+<div class="language-text highlight"><pre><span></span><code>let controlsCard = haCard(ctEntities, "Room Controls", "mdi:home"):
+  card.addEntity "switch.main_power", name = "Main Power Relay", icon = "mdi:power"
+  card.addEntity "sensor.room_temp", name = "Room Temperature"
+  card.addEntity "binary_sensor.door_contact", name = "Door Sensor"
+
+controlsView.addCard(controlsCard)
+
+# 2. Quick Glance Status Card
+let statusCard = haCard(ctGlance, "Quick Status"):
+  card.setColumns(3)
+  card.addEntity "sensor.room_temp", name = "Temp"
+  card.addEntity "binary_sensor.door_contact", name = "Door"
+  card.addEntity "switch.main_power", name = "Power"
+
+controlsView.addCard(statusCard)
+dash.addView(controlsView)
+</code></pre></div>
+<p>myDashboard.toYaml()</p>
+<p>esphomeSetup:
+  info("DashboardExample", "Synthesizing Lovelace dashboard YAML...")
+  let yamlStr = buildLovelaceDashboard()
+  dashboardConfigSensor.publishState(yamlStr)
+  info("DashboardExample", "Lovelace YAML published to text_sensor.lovelace_card_yaml")</p>
+<p>esphomeLoop:
+  discard</p>
+<div class="language-text highlight"><pre><span></span><code>```
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">ESPHome YAML (<code>dashboard_surface.yaml</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```yaml</p>
+</div>
+</div>
+</div>
+<p>esphome:
+  name: nim-dashboard-surface
+  friendly_name: "Nim Dashboard Surface Demo"</p>
+<p>esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf</p>
+<p>logger:
+  level: INFO</p>
+<p>api:</p>
+<p>wifi:
+  ap:
+    ssid: "Dashboard-Surface-Fallback"</p>
+<p>external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]</p>
+<p>nim:
+  source: dashboard_surface.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"</p>
+<p>text_sensor:
+  - platform: template
+    id: lovelace_card_yaml
+    name: "Lovelace Card YAML"</p>
+<p>sensor:
+  - platform: template
+    id: room_temp
+    name: "Room Temperature"
+    unit_of_measurement: "°C"
+    update_interval: 60s</p>
+<p>binary_sensor:
+  - platform: template
+    id: door_contact
+    name: "Door Contact"</p>
+<p>switch:
+  - platform: template
+    id: main_power
+    name: "Main Power"
+    optimistic: true</p>
+<div class="language-text highlight"><pre><span></span><code>```
+</code></pre></div>
 
 
 

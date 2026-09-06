@@ -833,6 +833,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smart-thermostat-surface-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Smart Thermostat Surface Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-hasurface-haservice-haschedule-and-embedded-dsp-pid-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haSurface</code>, <code>haService</code>, <code>haSchedule</code>, and embedded DSP PID control.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1406,6 +1439,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#complete-working-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Complete Working Project
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#smart-thermostat-surface-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Smart Thermostat Surface Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demonstrates-hasurface-haservice-haschedule-and-embedded-dsp-pid-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Demonstrates <code>haSurface</code>, <code>haService</code>, <code>haSchedule</code>, and embedded DSP PID control.
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1604,6 +1670,149 @@
 </span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Active"</span>
 </span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">    </span><span class="nt">device_class</span><span class="p">:</span><span class="w"> </span><span class="s">"sound"</span>
 </span></code></pre></div>
+<hr />
+<h2 id="complete-working-project">Complete Working Project<a class="headerlink" href="#complete-working-project" title="Permanent link">&para;</a></h2>
+<p>The following code is pulled directly from <a href="https://github.com/axiomantic/nim-esphome/tree/main/examples/smart_thermostat"><code>examples/smart_thermostat/</code></a>, which is compiled for embedded ESP32 targets and validated against ESPHome in the automated test suite:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Nim Source (<code>smart_thermostat.nim</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```nim</p>
+</div>
+</div>
+</div>
+<h2 id="smart-thermostat-surface-example">Smart Thermostat Surface Example<a class="headerlink" href="#smart-thermostat-surface-example" title="Permanent link">&para;</a></h2>
+<h2 id="demonstrates-hasurface-haservice-haschedule-and-embedded-dsp-pid-control">Demonstrates <code>haSurface</code>, <code>haService</code>, <code>haSchedule</code>, and embedded DSP PID control.<a class="headerlink" href="#demonstrates-hasurface-haservice-haschedule-and-embedded-dsp-pid-control" title="Permanent link">&para;</a></h2>
+<p>import nim_esphome
+import nim_esphome/dsl/surface
+import nim_esphome/dsl/actions
+import nim_esphome/dsl/schedule
+import nim_esphome/dsl/dashboard
+import nim_esphome/dsp</p>
+<p>var
+  currentTemp: float32 = 21.5'f32
+  targetTemp: float32 = 22.0'f32
+  heatingPower: float32 = 0.0'f32
+  isBoosting: bool = false
+  thermostatPid = newPIDController(kp = 5.0'f32, ki = 0.2'f32, kd = 1.0'f32, minOutput = 0.0'f32, maxOutput = 100.0'f32)
+  tempSensor = newSensor("current_temperature")
+  powerSensor = newSensor("heating_power")</p>
+<h1 id="1-composite-hardware-surface-definition">1. Composite Hardware Surface definition<a class="headerlink" href="#1-composite-hardware-surface-definition" title="Permanent link">&para;</a></h1>
+<p>let thermostatSurface* = haSurface("smart_thermostat"):
+  surf.name = "Living Room Climate Controller"
+  surf.model = "Nim Climate Pro"
+  surf.manufacturer = "Axiomantic"
+  surf.area = "Living Room"</p>
+<p>surf.addControl(sekNumber, "target_temperature", name = "Target Temperature", unit = "°C", icon = "mdi:thermometer")
+  surf.addControl(sekSwitch, "eco_mode", name = "Eco Mode", icon = "mdi:leaf")
+  surf.addControl(sekSelect, "hvac_mode", name = "HVAC Mode", icon = "mdi:hvac")</p>
+<p>surf.addTelemetry(sekSensor, "current_temperature", name = "Current Temperature", unit = "°C", deviceClass = "temperature")
+  surf.addTelemetry(sekSensor, "heating_power", name = "Heating Output", unit = "%", deviceClass = "power_factor")</p>
+<h1 id="2-custom-actions-callable-from-home-assistant-automations">2. Custom Actions callable from Home Assistant automations<a class="headerlink" href="#2-custom-actions-callable-from-home-assistant-automations" title="Permanent link">&para;</a></h1>
+<p>haService("boost_heating"):
+  def.description = "Temporarily boosts heating setpoint by specified delta degrees"
+  param "delta_celsius", pkFloat, min = 1.0, max = 5.0, defaultVal = "2.0", description = "Temperature boost in degrees Celsius"
+  param "duration_minutes", pkInt, min = 5.0, max = 120.0, defaultVal = "30", description = "Boost duration in minutes"</p>
+<p>onExecute(ctx):
+    let delta = float32(ctx.getFloat("delta_celsius"))
+    let dur = ctx.getInt("duration_minutes")
+    targetTemp += delta
+    isBoosting = true
+    info("Thermostat", "Heating boosted by " &amp; $delta &amp; "°C for " &amp; $dur &amp; " minutes")</p>
+<h1 id="3-non-blocking-rtos-schedule-for-closed-loop-pid-control">3. Non-blocking RTOS schedule for closed-loop PID control<a class="headerlink" href="#3-non-blocking-rtos-schedule-for-closed-loop-pid-control" title="Permanent link">&para;</a></h1>
+<p>haSchedule:
+  every 5.seconds:
+    # Read simulated temperature and update PID controller
+    heatingPower = thermostatPid.update(targetTemp, currentTemp, 5.0'f32)
+    tempSensor.publishState(currentTemp)
+    powerSensor.publishState(heatingPower)
+    info("Thermostat", "Loop tick: current=" &amp; $currentTemp &amp; " target=" &amp; $targetTemp &amp; " output=" &amp; $heatingPower &amp; "%")</p>
+<p>every 1.minutes:
+    # Heartbeat telemetry
+    info("Thermostat", "System healthy. Uptime: " &amp; $(millis() div 1000) &amp; "s")</p>
+<p>proc generateThermostatCard*(): string =
+  thermostatSurface.generateLovelaceYaml()</p>
+<p>esphomeSetup:
+  info("Thermostat", "Smart Thermostat surface initialized successfully")</p>
+<p>esphomeLoop:
+  tickSchedules(millis())</p>
+<div class="language-text highlight"><pre><span></span><code>```
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">ESPHome YAML (<code>smart_thermostat.yaml</code>)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>```yaml</p>
+</div>
+</div>
+</div>
+<p>esphome:
+  name: nim-smart-thermostat
+  friendly_name: "Nim Smart Thermostat"</p>
+<p>esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf</p>
+<p>logger:
+  level: INFO</p>
+<p>api:</p>
+<p>wifi:
+  ap:
+    ssid: "Thermostat-Fallback"</p>
+<p>external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]</p>
+<p>nim:
+  source: smart_thermostat.nim
+  nim_flags:
+    - "-d:danger"
+    - "-d:useMalloc"
+    - "-d:esphome"</p>
+<p>number:
+  - platform: template
+    id: target_temperature
+    name: "Target Temperature"
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer"
+    min_value: 15.0
+    max_value: 30.0
+    step: 0.5
+    optimistic: true</p>
+<p>switch:
+  - platform: template
+    id: eco_mode
+    name: "Eco Mode"
+    icon: "mdi:leaf"
+    optimistic: true</p>
+<p>select:
+  - platform: template
+    id: hvac_mode
+    name: "HVAC Mode"
+    icon: "mdi:hvac"
+    optimistic: true
+    options:
+      - "Off"
+      - "Heat"
+      - "Cool"
+      - "Auto"</p>
+<p>sensor:
+  - platform: template
+    id: current_temperature
+    name: "Current Temperature"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    update_interval: 60s</p>
+<ul>
+<li>
+<p>platform: template
+    id: heating_power
+    name: "Heating Output"
+    unit_of_measurement: "%"
+    device_class: "power_factor"
+    update_interval: 60s</p>
+<p>```</p>
+</li>
+</ul>
 
 
 
