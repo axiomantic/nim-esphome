@@ -29,6 +29,6 @@ jobs:
         run: |
           nim c -r --path:src tests/test_basic.nim
 
-      - name: Test C++ Code Generation (ARC + useMalloc)
+      - name: Test C++ Code Generation (ARC + useMalloc + embedded flags)
         run: |
-          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc --path:src examples/blink/blink.nim
+          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim

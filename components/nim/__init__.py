@@ -95,10 +95,17 @@ async def to_code(config):
     if nimbase_path and os.path.isfile(nimbase_path):
         shutil.copy(nimbase_path, os.path.join(out_dir, "nimbase.h"))
 
-    # Determine nim-esphome root directory
     this_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(this_dir, "..", ".."))
     nim_esphome_src = os.path.join(repo_root, "src")
+
+    # Ensure component files are kept fresh in build tree
+    comp_build_dir = CORE.relative_build_path("src", "esphome", "components", "nim")
+    os.makedirs(comp_build_dir, exist_ok=True)
+    for fname in ["nim_component.h", "nim_component.cpp", "nim_esphome_bridge.h"]:
+        src_f = os.path.join(this_dir, fname)
+        if os.path.isfile(src_f):
+            shutil.copy(src_f, os.path.join(comp_build_dir, fname))
 
     cmd = [
         nim_bin,

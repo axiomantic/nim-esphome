@@ -9,3 +9,9 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.0"
+
+task test, "Run native host unit tests":
+  exec "nim c -r --path:src tests/test_basic.nim"
+
+task check_cpp, "Verify embedded C++ generation for ESP32 target":
+  exec "nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim"
