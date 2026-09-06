@@ -11,6 +11,7 @@ Welcome to the official documentation for **`nim-esphome`**.
 ESPHome is an exceptional declarative platform for IoT hardware configuration. However, when complex embedded logic is required—such as multi-state voice pipelines, sensor fusion, closed-loop PID control, or custom peripheral protocols—developers are often forced to write raw C++ inside multi-line YAML lambdas.
 
 Writing C++ in YAML lambdas presents serious drawbacks:
+
 - ❌ **No compile-time state guarantees**: Asynchronous network events and callbacks easily cause race conditions and invalid state transitions.
 - ❌ **Difficult host testing**: Verifying logic requires repeatedly compiling PlatformIO firmware and flashing physical microcontrollers.
 - ❌ **C++ verbosity & memory hazards**: Pointer arithmetic and unmanaged state introduce subtle memory corruptions.
@@ -28,7 +29,7 @@ flowchart LR
 - ⚡ **Zero-Overhead Embedded C++ Transpilation**: Nim compiles to clean, standard C++ without an interpreter or heavy runtime.
 - 🧠 **ARC Deterministic Memory**: Memory is managed deterministically via ARC (`--mm:arc`) and FreeRTOS heap (`-d:useMalloc`) with zero GC pause times.
 - 🧪 **Hardware-Free Host Unit Testing**: Run automated test suites instantly on macOS and Linux (`nim c -r`) without needing physical hardware attached.
-- 🛡️ **Compile-Time Typestates**: Model complex state machines where illegal transitions (e.g. triggering wake words during OTA updates) are rejected at compile time.
+- 🛡️ **Compile-Time Typestates (with [`nim-typestates`](https://github.com/elijahr/nim-typestates))**: Model complex state machines where illegal transitions (e.g. triggering wake words during OTA updates) are rejected at compile time. See the [Verified Voice Satellite Case Study](guides/esphome-satellite.md) for an in-depth implementation.
 
 ---
 

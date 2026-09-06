@@ -58,6 +58,12 @@ jobs:
           fi
           echo "created=true" >> "$GITHUB_OUTPUT"
 
+      - name: Set up Nim
+        if: steps.tag_check.outputs.created == 'true'
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: 'stable'
+
       - name: Set up Python
         if: steps.tag_check.outputs.created == 'true'
         uses: actions/setup-python@v5

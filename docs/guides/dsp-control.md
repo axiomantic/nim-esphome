@@ -7,6 +7,7 @@ This guide covers digital signal processing (DSP) filters, closed-loop PID contr
 ## Design Principles
 
 The DSP utilities in `nim-esphome` are engineered specifically for microcontrollers:
+
 1. **Zero Heap Allocation**: All filters use stack-allocated arrays and inline struct storage.
 2. **Deterministic Time Complexity**: O(1) insertions and updates prevent jitter in real-time loops.
 3. **Single-Precision Floating Point**: Uses 32-bit floats (`float32`), matching the hardware Floating Point Units (FPU) of ESP32 and ESP32-S3.

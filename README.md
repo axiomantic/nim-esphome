@@ -40,8 +40,9 @@
 ## Why Nim for ESPHome?
 
 ESPHome is great for declaratively configuring hardware, but complex embedded logic often gets squeezed into long, unmaintainable C++ lambdas in YAML. C++ lambdas lack:
+
 - Algebraic data types and pattern matching
-- Compile-time verified state machines (e.g. typestates)
+- Compile-time verified state machines (e.g. via [`nim-typestates`](https://github.com/elijahr/nim-typestates))
 - High-level syntax with memory safety guarantees
 - Fast local unit testing on host machines (macOS/Linux) without flashing hardware
 

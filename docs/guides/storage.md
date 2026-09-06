@@ -9,6 +9,7 @@ This guide explains how to store configuration settings, calibration data, and r
 Microcontroller RAM is volatile—whenever power is cycled or the watchdog triggers a reboot, all variable states are reset. 
 
 ESPHome incorporates a flash-backed Non-Volatile Storage (NVS) subsystem (`ESPPreferences`) with built-in wear leveling. `nim-esphome` wraps this system into idiomatic, generic Nim procedures:
+
 - Store numeric primitives (`int32`, `float32`, `bool`)
 - Store custom structs (`CalibrationData`, `NetworkConfig`)
 - Store arbitrary strings (`SSID`, token strings)

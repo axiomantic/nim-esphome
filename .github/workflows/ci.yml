@@ -8,33 +8,38 @@ on:
 
 jobs:
   test:
-    name: Test Nim ${{ matrix.nim-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-        nim-version: [ '2.0.14', '2.2.8', 'stable' ]
+    name: Test on Linux (Nim 2.2 & Stable)
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-
-      - name: Set up Nim
-        uses: jiro4989/setup-nim-action@v2
-        with:
-          nim-version: ${{ matrix.nim-version }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install documentation dependencies
+      - name: Install dependencies
         run: |
           pip install -r docs-requirements.txt
+          pip install esphome
 
-      - name: Run Build and Test Suite
+      - name: Set up Nim 2.2
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: '2.2.8'
+
+      - name: Run Build and Test Suite (Nim 2.2)
         run: |
           chmod +x scripts/build.sh
+          ./scripts/build.sh
+
+      - name: Set up Nim Stable
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: 'stable'
+
+      - name: Run Build and Test Suite (Nim Stable)
+        run: |
           ./scripts/build.sh

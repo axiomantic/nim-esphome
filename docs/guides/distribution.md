@@ -3,6 +3,7 @@
 Writing expressive, compile-time verified embedded logic in Nim is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.
 
 `nim-esphome` establishes a standardized distribution architecture that enables:
+
 1. **1-Click Browser Flashing** via [ESP-Web-Tools](https://esphome.github.io/esp-web-tools/) (WebSerial in Chrome/Edge).
 2. **One-Click Home Assistant Dashboard Import** via [My Home Assistant](https://my.home-assistant.io/).
 3. **Automated CI Binary Builds** that bundle partition tables, bootloader, and firmware into flashable factory binaries on release.

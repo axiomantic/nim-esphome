@@ -42,6 +42,7 @@ flowchart TD
 ```
 
 ### Key Advantages:
+
 1. **Zero Host Contamination**: Packages are installed strictly inside the `.esphome/build/<node>/.nimble` directory of the target device.
 2. **Deterministic Builds**: Each ESPHome node maintains its own independent package versions.
 3. **Offline Caching**: Once downloaded, subsequent builds reuse the cached packages without requiring internet connectivity.

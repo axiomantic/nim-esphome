@@ -10,6 +10,7 @@ The `nim_esphome/gpio` module provides hardware pin control without needing exte
 
 ### Pin Modes
 Microcontroller pins can be configured into four standard electrical modes:
+
 - `Input`: High-impedance floating digital input.
 - `Output`: Low-impedance push-pull digital output.
 - `InputPullup`: Input with internal weak pull-up resistor connected to 3.3V.

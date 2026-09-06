@@ -9,6 +9,7 @@ This case study demonstrates how `nim-esphome` powers **[`esphome-satellite`](ht
 In conventional smart home voice satellites, firmware state is typically distributed across asynchronous network events, Home Assistant websocket callbacks, and ad-hoc C++ variables in YAML lambdas.
 
 This loose architecture leads to well-known race conditions:
+
 1. **Premature Chime Clipping**: Audio playback starts before hardware I2S amplifiers or DACs wake up.
 2. **Stop Word Race Conditions**: Saying *"Stop"* while the assistant is replying can get clobbered by an in-flight TTS chunk.
 3. **Audio Ducking Failures**: Background music fails to duck or un-duck properly when wake words trigger.

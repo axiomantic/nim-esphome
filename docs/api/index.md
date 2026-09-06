@@ -21,6 +21,7 @@ The `nim-esphome` API is organized into modular packages under the `nim_esphome`
 ## Zero-Cost Abstraction Guarantees
 
 All public procedures, templates, and macros in `nim-esphome` follow strict embedded design principles:
+
 - **Zero Heap Overhead**: Operations default to stack allocation or direct hardware registers.
 - **Zero GC Pauses**: Fully compatible with Nim's ARC deterministic memory management (`--mm:arc`).
 - **Zero C++ Exception Bloat**: Compiles cleanly with `--exceptions:goto` and `--panics:on`.
