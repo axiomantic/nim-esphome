@@ -15,8 +15,16 @@
 - [Installation & Integration](#installation--integration)
 - [Quickstart: Blink / Heartbeat](#quickstart-blink--heartbeat)
 - [Component Configuration](#component-configuration)
-- [Embedded Architecture & Memory Model](#embedded-architecture--memory-model)
-- [C++ / ESPHome Interoperability](#c--esphome-interoperability)
+- [Automated Nimble Dependency Management](#automated-nimble-dependency-management)
+- [Embedded Architecture & Multi-CPU Target Alignment](#embedded-architecture--multi-cpu-target-alignment)
+- [Core APIs & ESPHome Interoperability](#core-apis--esphome-interoperability)
+  - [Logging & Microcontroller Timing](#logging--microcontroller-timing)
+  - [First-Class Entity Bindings](#first-class-entity-bindings)
+  - [Hardware Bus & Peripheral Abstractions (GPIO & I2C)](#hardware-bus--peripheral-abstractions-gpio--i2c)
+  - [Flash Preferences / Non-Volatile Storage (NVS)](#flash-preferences--non-volatile-storage-nvs)
+  - [Embedded Control & DSP Utilities](#embedded-control--dsp-utilities)
+  - [Calling Nim Procs from ESPHome C++](#calling-nim-procs-from-esphome-c)
+- [Projects Using nim-esphome](#projects-using-nim-esphome)
 - [Testing & CI](#testing--ci)
 - [Project Structure](#project-structure)
 - [License](#license)
@@ -226,7 +234,7 @@ During build generation:
 
 ---
 
-## Embedded Architecture & Memory Model
+## Embedded Architecture & Multi-CPU Target Alignment
 
 ESPHome targets resource-constrained microcontrollers spanning multiple 32-bit CPU architectures. `nim-esphome` transparently configures the target compiler environment based on your board:
 
@@ -242,9 +250,9 @@ ESPHome targets resource-constrained microcontrollers spanning multiple 32-bit C
 
 ---
 
-## C++ / ESPHome Interoperability
+## Core APIs & ESPHome Interoperability
 
-### Calling ESPHome APIs from Nim
+### Logging & Microcontroller Timing
 
 ```nim
 import nim_esphome
@@ -404,19 +412,56 @@ button:
 
 ---
 
+## Projects Using nim-esphome
+
+### [esphome-satellite](https://github.com/axiomantic/esphome-satellite)
+
+A compile-time verified 14-state voice satellite firmware state machine for [ESPHome](https://esphome.io) and Home Assistant (analogous to Home Assistant's `wyoming-satellite`, but executing directly on the ESP32 microcontroller).
+
+- **Problem Solved**: Conventional voice satellites distribute state across asynchronous Home Assistant network events and C++ callbacks, causing split-brain race conditions: premature chime clipping, false "stop" word clobbering, audio ducking failures, and offline phantom triggers.
+- **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and `typestates`. Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
+- **Supported Hardware**: Seeed Studio ReSpeaker XVF3800, Home Assistant Voice PE, ESP32-S3-BOX-3, and any standard ESP32 voice satellite.
+
+#### Quick Integration
+
+In your ESPHome device YAML:
+
+```yaml
+external_components:
+  - source:
+      type: git
+      url: https://github.com/axiomantic/nim-esphome
+      ref: main
+    components: [nim]
+
+packages:
+  satellite_fsm:
+    url: https://github.com/axiomantic/esphome-satellite
+    file: packages/satellite_nim_fsm.yaml
+    ref: main
+```
+
+Or configure the Nim entrypoint directly:
+
+```yaml
+nim:
+  source: /path/to/esphome-satellite/src/nim_esphome_satellite.nim
+  requires:
+    - https://github.com/elijahr/nim-typestates
+```
+
+---
+
 ## Testing & CI
 
-You can write native tests using Nim\x27s standard `unittest` library and run them locally:
+You can write native tests using Nim's standard `unittest` library and run them locally:
 
 ```bash
-# Run unit tests
-./scripts/test.sh
-
-# Test C++ generation locally
+# Run unit tests and embedded C++ transpilation checks
 ./scripts/build.sh
 ```
 
-GitHub Actions runs continuous integration across Linux and macOS on every push and pull request.
+GitHub Actions runs continuous integration across Linux and macOS on every push and pull request, validating host unit tests, python component schemas, and multi-architecture embedded cross-compilation (Xtensa, RISC-V, ARM).
 
 ---
 
@@ -426,21 +471,30 @@ GitHub Actions runs continuous integration across Linux and macOS on every push 
 nim-esphome/
 ├── components/
 │   └── nim/
-│       ├── __init__.py           # ESPHome external component hook & build step
+│       ├── __init__.py           # ESPHome external component hook, dependency resolver & compiler
 │       ├── nim_component.h       # C++ ESPHome Component class definition
-│       ├── nim_component.cpp     # C++ ESPHome Component implementation & bridge
+│       ├── nim_component.cpp     # C++ ESPHome Component implementation & ABI bridge
 │       └── nim_esphome_bridge.h  # C symbol bridge declarations
 ├── src/
-│   ├── nim_esphome.nim           # Main library entrypoint
+│   ├── nim_esphome.nim           # Main library entrypoint & exports
 │   └── nim_esphome/
-│       └── api.nim               # ESPHome C bindings (log, millis, delay)
+│       ├── api.nim               # ESPHome C runtime bindings (logging, timing, reboot, wdt)
+│       ├── entities.nim          # First-class Sensor, BinarySensor, Switch, TextSensor bindings
+│       ├── gpio.nim              # Microcontroller GPIO pinMode, digitalWrite, digitalRead
+│       ├── i2c.nim               # I2C bus transactions, register reads/writes
+│       ├── preferences.nim       # Non-volatile flash storage (NVS) savePreference / loadPreference
+│       └── dsp.nim               # PID controller, moving average/median, filters, debouncer
 ├── examples/
-│   └── blink/                    # Self-contained blink / heartbeat example
+│   └── blink/                    # Self-contained embedded example showcasing all APIs
 ├── tests/
-│   └── test_basic.nim            # Native host unit tests
+│   ├── test_basic.nim            # Core API and lifecycle unit tests
+│   ├── test_entities.nim         # Entity binding unit tests
+│   ├── test_peripherals.nim      # GPIO & I2C abstraction unit tests
+│   ├── test_preferences.nim      # Non-volatile storage unit tests
+│   ├── test_dsp.nim              # DSP algorithms & PID controller unit tests
+│   └── test_nimble_mgmt.py       # Python component & Nimble resolution unit tests
 ├── scripts/
-│   ├── build.sh                  # C++ compilation test script
-│   └── test.sh                   # Native test runner script
+│   └── build.sh                  # Comprehensive test runner & multi-target C++ cross-compiler
 └── nim_esphome.nimble            # Nimble package specification
 ```
 

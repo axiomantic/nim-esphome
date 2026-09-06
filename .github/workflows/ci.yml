@@ -25,10 +25,7 @@ jobs:
         with:
           nim-version: ${{ matrix.nim-version }}
 
-      - name: Run Core Unit Tests
+      - name: Run Build and Test Suite
         run: |
-          nim c -r --path:src tests/test_basic.nim
-
-      - name: Test C++ Code Generation (ARC + useMalloc + embedded flags)
-        run: |
-          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim
+          chmod +x scripts/build.sh
+          ./scripts/build.sh
