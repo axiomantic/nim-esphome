@@ -111,6 +111,8 @@ async def to_code(config):
         "-d:esphome",
         "--cpu:esp",
         "--os:any",
+        "--exceptions:goto",
+        "--panics:on",
         f"--nimcache:{out_dir}",
         f"--path:{nim_esphome_src}",
     ]
