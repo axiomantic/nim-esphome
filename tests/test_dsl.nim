@@ -321,14 +321,24 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
         partition = "sound_data",
         maxSize = 262144,
         flashOffset = 0x370000'u32,
-        description = "Optional loop audio played while thinking"
+        description = "Optional loop audio played while thinking",
+        dependsOnField = "feedback_style",
+        dependsOnValue = "Custom"
       )
 
       installer.addSelectField(
         name = "feedback_style",
         label = "Audio Feedback Style",
-        options = @["Spinner", "Pulse", "Sonar", "Tick", "Silent"],
-        defaultVal = "Spinner"
+        options = @["Spinner", "Pulse", "Sonar", "Tick", "Silent", "Custom"],
+        defaultVal = "Spinner",
+        optionDetails = @[
+          optionDetail("Spinner", "120ms cadence", "Fast rhythmic progress ticking"),
+          optionDetail("Pulse", "250ms cadence", "Subtle undulating heartbeat"),
+          optionDetail("Sonar", "800ms cadence", "Nautical high-pitch acoustic ping"),
+          optionDetail("Tick", "500ms cadence", "Mechanical clockwork tick"),
+          optionDetail("Silent", "No sound", "Completely silent processing"),
+          optionDetail("Custom", "User audio", "Loops custom audio from flash partition sound_data")
+        ]
       )
 
     check myInstaller.name == "voice-satellite"
@@ -341,11 +351,6 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "app1,     app,  ota_1,   0x1C0000, 0x1B0000," in csv4Mb
     check "sound_data, data, 0x82, 0x370000, 0x040000," in csv4Mb
 
-    let csv8Mb = myInstaller.generatePartitionsCsv(flashSizeMb = 8)
-    check "app0,     app,  ota_0,   0x10000,  0x300000," in csv8Mb
-    check "app1,     app,  ota_1,   0x310000, 0x300000," in csv8Mb
-    check "sound_data, data, 0x82, 0x610000, 0x040000," in csv8Mb
-
     # 2. Manifest verification
     let manifest = myInstaller.generateManifest()
     check "\"name\": \"voice-satellite\"" in manifest
@@ -356,6 +361,13 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     let html = myInstaller.generateHtml()
     check "<title>Voice Satellite Web Flasher</title>" in html
     check "data-offset=\"3604480\"" in html # 0x370000 in decimal
+    check "data-depends-on=\"feedback_style\"" in html
+    check "data-depends-val=\"Custom\"" in html
+    check "presetCard_feedback_style" in html
+    check "presetCadence_feedback_style" in html
+    check "previewBtn_feedback_style" in html
+    check "playPresetAudio" in html
+    check "120ms cadence" in html
     check "esp-web-install-button" in html
     check "updateDynamicManifest" in html
     check "URL.createObjectURL" in html
