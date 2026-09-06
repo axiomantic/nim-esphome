@@ -1,0 +1,140 @@
+import os
+import shutil
+import subprocess
+import esphome.codegen as cg
+import esphome.config_validation as cv
+from esphome.const import CONF_ID
+from esphome.core import CORE, EsphomeError
+
+CONF_SOURCE = "source"
+CONF_NIM_FLAGS = "nim_flags"
+CONF_NIM_PATH = "nim_path"
+CONF_NIMBLE_PATHS = "nimble_paths"
+
+DEPENDENCIES = []
+AUTO_LOAD = []
+
+nim_ns = cg.esphome_ns.namespace("nim")
+NimComponent = nim_ns.class_("NimComponent", cg.Component)
+
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(): cv.declare_id(NimComponent),
+        cv.Required(CONF_SOURCE): cv.file_,
+        cv.Optional(CONF_NIM_FLAGS, default=[]): cv.ensure_list(cv.string),
+        cv.Optional(CONF_NIM_PATH, default="nim"): cv.string,
+        cv.Optional(CONF_NIMBLE_PATHS, default=[]): cv.ensure_list(cv.directory),
+    }
+).extend(cv.COMPONENT_SCHEMA)
+
+
+def find_nim_binary(configured_path: str) -> str:
+    if configured_path and shutil.which(configured_path):
+        return shutil.which(configured_path)
+
+    # Common search paths (mise, homebrew, standard unix)
+    candidates = [
+        os.path.expanduser("~/.local/share/mise/shims/nim"),
+        os.path.expanduser("~/.nimble/bin/nim"),
+        "/opt/homebrew/bin/nim",
+        "/usr/local/bin/nim",
+        "/usr/bin/nim",
+    ]
+    for candidate in candidates:
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+
+    raise EsphomeError(
+        f"Nim compiler not found. Please ensure 'nim' is in your PATH or specify '{CONF_NIM_PATH}'."
+    )
+
+
+def find_nimbase_h(nim_bin: str) -> str:
+    try:
+        res = subprocess.run(
+            [nim_bin, "dump"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+        )
+        for line in res.stderr.splitlines():
+            line = line.strip()
+            candidate = os.path.join(line, "nimbase.h")
+            if os.path.isfile(candidate):
+                return candidate
+    except Exception:
+        pass
+
+    # Fallback to standard locations relative to binary
+    bin_real = os.path.realpath(nim_bin)
+    bin_dir = os.path.dirname(bin_real)
+    candidate = os.path.join(os.path.dirname(bin_dir), "lib", "nimbase.h")
+    if os.path.isfile(candidate):
+        return candidate
+
+    return ""
+
+
+async def to_code(config):
+    var = cg.new_Pvariable(config[CONF_ID])
+    await cg.register_component(var, config)
+
+    source_path = CORE.relative_config_path(config[CONF_SOURCE])
+    if not os.path.isfile(source_path):
+        raise EsphomeError(f"Nim source file not found: {source_path}")
+
+    nim_bin = find_nim_binary(config[CONF_NIM_PATH])
+    nimbase_path = find_nimbase_h(nim_bin)
+
+    # Output directory inside the PlatformIO src tree
+    out_dir = CORE.relative_build_path("src", "nim_gen")
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Copy nimbase.h into the generated src directory
+    if nimbase_path and os.path.isfile(nimbase_path):
+        shutil.copy(nimbase_path, os.path.join(out_dir, "nimbase.h"))
+
+    # Determine nim-esphome root directory
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.abspath(os.path.join(this_dir, "..", ".."))
+    nim_esphome_src = os.path.join(repo_root, "src")
+
+    cmd = [
+        nim_bin,
+        "cpp",
+        "--compileOnly",
+        "--noMain:on",
+        "--mm:arc",
+        "-d:danger",
+        "-d:useMalloc",
+        f"--nimcache:{out_dir}",
+        f"--path:{nim_esphome_src}",
+    ]
+
+    for p in config[CONF_NIMBLE_PATHS]:
+        cmd.append(f"--path:{p}")
+
+    for flag in config[CONF_NIM_FLAGS]:
+        cmd.append(flag)
+
+    cmd.append(source_path)
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=False,
+        )
+        if proc.returncode != 0:
+            raise EsphomeError(
+                f"Nim compilation failed (exit code {proc.returncode}):\n{proc.stdout}"
+            )
+    except FileNotFoundError as e:
+        raise EsphomeError(f"Failed to execute {cmd}: {e}")
+
+    # Ensure build system includes the generated headers and component bridge
+    cg.add_build_flag(f"-I{out_dir}")
+    cg.add_build_flag(f"-I{this_dir}")

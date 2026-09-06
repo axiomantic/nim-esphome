@@ -1,0 +1,21 @@
+# Nim cache and binaries
+nimcache/
+.cache/
+*.exe
+*.out
+*.o
+*.obj
+*.cpp
+*.json
+!examples/**/*.json
+tests/test_basic
+
+# Python / ESPHome
+__pycache__/
+*.py[cod]
+.esphome/
+.pio/
+
+# OS artifacts
+.DS_Store
+Thumbs.db

@@ -1,0 +1,19 @@
+esphome:
+  name: nim-blink-demo
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+external_components:
+  - source:
+      type: local
+      path: ../../components
+    components: [nim]
+
+nim:
+  source: blink.nim
