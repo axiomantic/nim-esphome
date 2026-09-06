@@ -29,4 +29,18 @@ if [ -x "/Users/eek/Development/voicesolate/.venv/bin/python" ]; then
 fi
 $PYTHON_BIN -m unittest discover -s tests -p "test_*.py"
 
+echo "=== Building documentation site with Zensical ==="
+ZENSICAL_BIN="zensical"
+if command -v zensical >/dev/null 2>&1; then
+    ZENSICAL_BIN="zensical"
+elif [ -x "/Users/eek/Development/voicesolate/.venv/bin/zensical" ]; then
+    ZENSICAL_BIN="/Users/eek/Development/voicesolate/.venv/bin/zensical"
+fi
+if command -v "$ZENSICAL_BIN" >/dev/null 2>&1 || [ -x "$ZENSICAL_BIN" ]; then
+    "$ZENSICAL_BIN" build --strict
+else
+    echo "zensical not installed, skipping documentation build verification"
+fi
+
 echo "=== All nim-esphome checks passed! ==="
+

@@ -1,9 +1,12 @@
 # nim-esphome
 
 [![CI](https://github.com/axiomantic/nim-esphome/actions/workflows/ci.yml/badge.svg)](https://github.com/axiomantic/nim-esphome/actions/workflows/ci.yml)
+[![Documentation](https://img.shields.io/badge/docs-zensical-blue.svg)](https://axiomantic.github.io/nim-esphome/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**`nim-esphome`** brings the expressive power, compile-time safety, and zero-overhead performance of [Nim](https://nim-lang.org) to [ESPHome](https://esphome.io). Write custom ESP32/ESP8266 logic, embedded state machines, filters, and device drivers in Nim that compile directly into ESPHome\x27s PlatformIO and ESP-IDF build pipelines.
+**`nim-esphome`** brings the expressive power, compile-time safety, and zero-overhead performance of [Nim](https://nim-lang.org) to [ESPHome](https://esphome.io). Write custom ESP32/ESP8266 logic, embedded state machines, filters, and device drivers in Nim that compile directly into ESPHome's PlatformIO and ESP-IDF build pipelines.
+
+> 📚 **Complete Documentation & API Reference**: Browse the full static documentation site built with [Zensical](https://github.com/squidfunk/zensical) in [`docs/`](docs/index.md) or online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/).
 
 ---
 
@@ -14,6 +17,7 @@
 - [Prerequisites](#prerequisites)
 - [Installation & Integration](#installation--integration)
 - [Quickstart: Blink / Heartbeat](#quickstart-blink--heartbeat)
+- [Documentation & Guides](#documentation--guides)
 - [Component Configuration](#component-configuration)
 - [Automated Nimble Dependency Management](#automated-nimble-dependency-management)
 - [Embedded Architecture & Multi-CPU Target Alignment](#embedded-architecture--multi-cpu-target-alignment)
@@ -170,7 +174,27 @@ sensor:
 esphome run device.yaml
 ```
 
-The ESPHome build tool automatically invokes the Nim compiler, cross-compiling your Nim module into 32-bit C++ sources in PlatformIO\x27s build directory and compiling it into the final firmware binary.
+The ESPHome build tool automatically invokes the Nim compiler, cross-compiling your Nim module into 32-bit C++ sources in PlatformIO's build directory and compiling it into the final firmware binary.
+
+> 📖 **Getting Started Guide**: See the complete [Getting Started Guide](docs/guides/getting-started.md) for step-by-step setup and local development tips.
+
+---
+
+## Documentation & Guides
+
+Comprehensive guides and API references are available in the [`docs/`](docs/index.md) directory and online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/):
+
+- 🚀 [**Getting Started**](docs/guides/getting-started.md): Installation, build pipeline, and first project.
+- ⚙️ [**YAML Configuration**](docs/guides/configuration.md): Complete schema options, flags, and architecture overrides.
+- 📦 [**Nimble Dependencies**](docs/guides/dependencies.md): Automated package downloads, Git repository URLs, and caching.
+- ⚡ [**Target Architectures & Cross-Compilation**](docs/guides/architectures.md): Multi-CPU alignment (Xtensa, RISC-V, ARM), pointer widths, and ARC memory.
+- 🎛️ [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, and text sensors.
+- 🔌 [**Hardware Buses (GPIO & I2C)**](docs/guides/hardware.md): Microcontroller pin modes and I2C peripheral register transfers.
+- 💾 [**Flash Preferences (NVS)**](docs/guides/storage.md): Non-volatile parameter storage across power cycles.
+- 📈 [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
+- 🔗 [**C++ Interoperability**](docs/guides/interop.md): Exporting Nim procs to YAML lambdas and calling C++ libraries.
+- 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world 14-state verified typestate FSM for ESPHome.
+- 📚 [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
 
 ---
 
@@ -213,6 +237,8 @@ nim:
 | `nim_path` | `string` | `"nim"` | Path to the `nim` compiler executable |
 | `target_cpu` | `string` | Auto | Target CPU architecture (`esp`, `riscv32`, `arm`). Auto-detected from board. |
 
+> 📖 **Full Guide**: See the [YAML Configuration Guide](docs/guides/configuration.md) for detailed descriptions, platform defaults, and optimization flags.
+
 ---
 
 ## Automated Nimble Dependency Management
@@ -232,6 +258,8 @@ During build generation:
 2. Packages and Git repositories are installed without polluting global environments or requiring host pre-installation.
 3. The component automatically configures `--nimblePath` and package module paths directly into the embedded Nim transpilation command.
 
+> 📖 **Full Guide**: See the [Automated Nimble Dependencies Guide](docs/guides/dependencies.md) for caching architecture and offline development.
+
 ---
 
 ## Embedded Architecture & Multi-CPU Target Alignment
@@ -247,6 +275,8 @@ ESPHome targets resource-constrained microcontrollers spanning multiple 32-bit C
 3. **C++ Exception Handling**: ESP-IDF defaults to `-fno-exceptions`. `nim-esphome` configures `--exceptions:goto` and `--panics:on`, eliminating C++ `try/catch` and libsupc++ overhead.
 4. **Deterministic Memory**: Uses `--mm:arc` with `-d:useMalloc` to delegate all allocations to FreeRTOS's heap allocator without GC pause times.
 5. **Const C-Strings**: Provides `ConstCString` mapped to `const char*` to avoid `-Wwrite-strings` C++ compiler warnings on modern GCC/Clang.
+
+> 📖 **Full Guide**: See [Target Architectures & Cross-Compilation](docs/guides/architectures.md) for deep-dive technical details on embedded memory and code generation.
 
 ---
 
@@ -268,6 +298,8 @@ let t: uint32 = millis()
 delay(100) # milliseconds
 ```
 
+> 📚 **API Reference**: See [`nim_esphome/api`](docs/api/api.md) for logging macros, microsecond clocks, watchdog feeding, and system reboot.
+
 ### First-Class Entity Bindings
 
 Publish state directly to ESPHome entities (`sensor`, `binary_sensor`, `switch`, `text_sensor`) from Nim using type-safe handles:
@@ -288,6 +320,8 @@ statusMsg.publishState("Running")
 ```
 
 When compiled for embedded firmware, `publishState` looks up registered entities dynamically in the ESPHome `Application` registry and executes `publish_state(...)`. In local unit tests on host machines, a mock registry is maintained for headless verification.
+
+> 📖 **Full Guide & API**: See [Entities & Home Assistant Guide](docs/guides/entities.md) and [`nim_esphome/entities`](docs/api/entities.md).
 
 ### Hardware Bus & Peripheral Abstractions (GPIO & I2C)
 
@@ -326,6 +360,8 @@ let chipId: uint8 = accelerometer.readByte(0x75)
 let rawData: seq[uint8] = accelerometer.readRegister(0x3B, 6)
 ```
 
+> 📖 **Full Guide & API**: See [Hardware Buses Guide](docs/guides/hardware.md), [`nim_esphome/gpio`](docs/api/gpio.md), and [`nim_esphome/i2c`](docs/api/i2c.md).
+
 ### Flash Preferences / Non-Volatile Storage (NVS)
 
 Persist calibration constants, runtime counters, and configurations across power cycles and reboots via ESPHome's NVS storage backend:
@@ -343,6 +379,8 @@ discard savePreference("target_temp", 22.5'f32)
 var wifiSsid = loadPreference("wifi_ssid", "DefaultSSID")
 discard savePreference("wifi_ssid", "HomeIoT")
 ```
+
+> 📖 **Full Guide & API**: See [Flash Preferences Guide](docs/guides/storage.md) and [`nim_esphome/preferences`](docs/api/preferences.md).
 
 ### Embedded Control & DSP Utilities
 
@@ -389,6 +427,8 @@ if buttonDebouncer.update(digitalRead(4) == Low, millis()):
     info("Button", "Clean button press event!")
 ```
 
+> 📖 **Full Guide & API**: See [Embedded DSP & Control Guide](docs/guides/dsp-control.md) and [`nim_esphome/dsp`](docs/api/dsp.md).
+
 ### Calling Nim Procs from ESPHome C++
 
 Define your procedure in Nim with `{.exportEsphome.}`:
@@ -410,6 +450,8 @@ button:
           setSensitivity(42);
 ```
 
+> 📖 **Full Guide & API**: See [C++ Interoperability Guide](docs/guides/interop.md) and [`nim_esphome` Core](docs/api/core.md).
+
 ---
 
 ## Projects Using nim-esphome
@@ -421,6 +463,9 @@ A compile-time verified 14-state voice satellite firmware state machine for [ESP
 - **Problem Solved**: Conventional voice satellites distribute state across asynchronous Home Assistant network events and C++ callbacks, causing split-brain race conditions: premature chime clipping, false "stop" word clobbering, audio ducking failures, and offline phantom triggers.
 - **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and `typestates`. Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
 - **Supported Hardware**: Seeed Studio ReSpeaker XVF3800, Home Assistant Voice PE, ESP32-S3-BOX-3, and any standard ESP32 voice satellite.
+
+> 📖 **Case Study**: Read the complete [Verified Voice Satellite Case Study](docs/guides/esphome-satellite.md) for architectural details and state machine diagrams.
+
 
 #### Quick Integration
 
