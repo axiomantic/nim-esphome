@@ -20,6 +20,7 @@ type
     psPulse = "Pulse"
     psSonar = "Sonar"
     psTick = "Tick"
+    psCustom = "Custom"
 
   ProcessingTickCallback* = proc(style: ProcessingSoundStyle, volume: float32, tickCount: int)
   StateChangeCallback* = proc(oldState, newState: SatelliteState)
