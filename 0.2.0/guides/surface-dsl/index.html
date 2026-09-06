@@ -12,13 +12,13 @@
         <meta name="author" content="Axiomantic">
       
       
-        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/0.2.0/guides/dsp-control/">
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/0.2.0/guides/surface-dsl/">
       
       
-        <link rel="prev" href="../storage/">
+        <link rel="prev" href="../schedule-dsl/">
       
       
-        <link rel="next" href="../interop/">
+        <link rel="next" href="../hardware/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>DSP & Closed-Loop Control - nim-esphome</title>
+        <title>Composite Hardware Surfaces DSL - nim-esphome</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#embedded-dsp-closed-loop-control" class="md-skip">
+        <a href="#composite-hardware-device-surface-dsl" class="md-skip">
           Skip to content
         </a>
       
@@ -127,7 +127,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DSP & Closed-Loop Control
+              Composite Hardware Surfaces DSL
             
           </span>
         </div>
@@ -709,10 +709,38 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../surface-dsl/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Composite Hardware Surfaces DSL
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -727,6 +755,88 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#core-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core Capabilities
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quickstart-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quickstart Example
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-dashboard-ui-esphome-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generating Dashboard UI &amp; ESPHome Configuration
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Dashboard UI &amp; ESPHome Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-generating-lovelace-dashboard-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        1. Generating Lovelace Dashboard YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generating-esphome-component-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2. Generating ESPHome Component YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -790,38 +900,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  DSP & Closed-Loop Control
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dsp-control/" class="md-nav__link">
         
   
   
@@ -836,110 +918,6 @@
   
 
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="On this page">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Design Principles
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pid-closed-loop-controller" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        PID Closed-Loop Controller
-      </span>
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="PID Closed-Loop Controller">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tuning-update-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Tuning &amp; Update Loop
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#moving-average-filter-movingaveragen" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Moving Average Filter (<code>MovingAverage[N]</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#moving-median-filter-movingmediann" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Moving Median Filter (<code>MovingMedian[N]</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#low-pass-exponential-filter-lowpassfilter" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Low-Pass Exponential Filter (<code>LowPassFilter</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#software-debouncer-debouncer" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Software Debouncer (<code>Debouncer</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1368,10 +1346,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#design-principles" class="md-nav__link">
+  <a href="#core-capabilities" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Design Principles
+        Core Capabilities
       </span>
     </span>
   </a>
@@ -1379,22 +1357,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pid-closed-loop-controller" class="md-nav__link">
+  <a href="#quickstart-example" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        PID Closed-Loop Controller
+        Quickstart Example
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="PID Closed-Loop Controller">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-dashboard-ui-esphome-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Generating Dashboard UI &amp; ESPHome Configuration
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Dashboard UI &amp; ESPHome Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tuning-update-loop" class="md-nav__link">
+  <a href="#1-generating-lovelace-dashboard-yaml" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Tuning &amp; Update Loop
+        1. Generating Lovelace Dashboard YAML
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generating-esphome-component-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2. Generating ESPHome Component YAML
       </span>
     </span>
   </a>
@@ -1403,50 +1403,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#moving-average-filter-movingaveragen" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Moving Average Filter (<code>MovingAverage[N]</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#moving-median-filter-movingmediann" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Moving Median Filter (<code>MovingMedian[N]</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#low-pass-exponential-filter-lowpassfilter" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Low-Pass Exponential Filter (<code>LowPassFilter</code>)
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#software-debouncer-debouncer" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Software Debouncer (<code>Debouncer</code>)
-      </span>
-    </span>
-  </a>
   
 </li>
       
@@ -1553,99 +1509,100 @@
   
 
 
-<h1 id="embedded-dsp-closed-loop-control">Embedded DSP &amp; Closed-Loop Control<a class="headerlink" href="#embedded-dsp-closed-loop-control" title="Permanent link">&para;</a></h1>
-<p>This guide covers digital signal processing (DSP) filters, closed-loop PID control algorithms, and input debouncing provided by <code>nim_esphome/dsp</code>.</p>
+<h1 id="composite-hardware-device-surface-dsl">Composite Hardware Device Surface DSL<a class="headerlink" href="#composite-hardware-device-surface-dsl" title="Permanent link">&para;</a></h1>
+<p>In conventional firmware development, hardware devices are expressed as disjointed collections of independent sensors, switches, and numbers. In Home Assistant, however, users interact with <strong>cohesive physical surfaces</strong>—such as a smart speaker, climate thermostat, air quality station, or multi-zone light controller.</p>
+<p>The <strong>Composite Hardware Device Surface DSL</strong> (<code>nim_esphome/dsl/surface</code>) provides a unified domain model representing an entire physical device surface.</p>
 <hr />
-<h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
-<p>The DSP utilities in <code>nim-esphome</code> are engineered specifically for microcontrollers:</p>
-<ol>
-<li><strong>Zero Heap Allocation</strong>: All filters use stack-allocated arrays and inline struct storage.</li>
-<li><strong>Deterministic Time Complexity</strong>: O(1) insertions and updates prevent jitter in real-time loops.</li>
-<li><strong>Single-Precision Floating Point</strong>: Uses 32-bit floats (<code>float32</code>), matching the hardware Floating Point Units (FPU) of ESP32 and ESP32-S3.</li>
-</ol>
+<h2 id="core-capabilities">Core Capabilities<a class="headerlink" href="#core-capabilities" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Unified Surface Definition</strong>: Combine hardware metadata (model, manufacturer, suggested area), controls, and telemetry into a single object.</li>
+<li><strong>Automatic Lovelace Card Synthesis</strong>: Call <code>surface.generateDashboardCard()</code> to instantly generate a matching Home Assistant dashboard card.</li>
+<li><strong>Automatic ESPHome YAML Generation</strong>: Call <code>surface.generateEsphomeYaml()</code> to generate complete ESPHome template entity declarations.</li>
+<li><strong>Home Assistant Device Registry Cohesion</strong>: Ensures all exposed entities share device metadata and appear grouped in the Home Assistant Devices list.</li>
+</ul>
 <hr />
-<h2 id="pid-closed-loop-controller">PID Closed-Loop Controller<a class="headerlink" href="#pid-closed-loop-controller" title="Permanent link">&para;</a></h2>
-<p>The <code>PIDController</code> implements an industrial Proportional-Integral-Derivative feedback algorithm with <strong>anti-windup clamping</strong> to prevent integral saturation when actuators hit physical limits.</p>
-<h3 id="tuning-update-loop">Tuning &amp; Update Loop<a class="headerlink" href="#tuning-update-loop" title="Permanent link">&para;</a></h3>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
+<h2 id="quickstart-example">Quickstart Example<a class="headerlink" href="#quickstart-example" title="Permanent link">&para;</a></h2>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span><span class="o">/</span><span class="n">dsl</span><span class="o">/</span><span class="n">surface</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c"># Initialize PID controller with gains and output bounds</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kd">var</span><span class="w"> </span><span class="n">heaterPid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newPIDController</span><span class="p">(</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.5'f32</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">ki</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8'f32</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.15'f32</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="n">minOutput</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0'f32</span><span class="p">,</span><span class="w">    </span><span class="c"># 0% heater power</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="n">maxOutput</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100.0'f32</span><span class="w">   </span><span class="c"># 100% heater power (PWM duty cycle)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kd">var</span><span class="w"> </span><span class="n">lastTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">()</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">let</span><span class="w"> </span><span class="n">satellite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">haSurface</span><span class="p">(</span><span class="s">"living_room_satellite"</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Living Room Voice Satellite"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"ReSpeaker XVF3800"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">manufacturer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Seeed Studio"</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Living Room"</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="c"># Interactive Controls</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekSelect</span><span class="p">,</span><span class="w"> </span><span class="s">"processing_sound"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Processing Sound"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekNumber</span><span class="p">,</span><span class="w"> </span><span class="s">"volume"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Volume"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:volume-high"</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addControl</span><span class="p">(</span><span class="n">sekSwitch</span><span class="p">,</span><span class="w"> </span><span class="s">"wake_chime"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wake Chime"</span><span class="p">,</span><span class="w"> </span><span class="n">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span><span class="p">)</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">esphomeLoop</span><span class="p">:</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">()</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">float32</span><span class="p">(</span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lastTime</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000.0'f32</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">1.0'f32</span><span class="p">:</span><span class="w"> </span><span class="c"># Update every second</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="n">lastTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">currentTemp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readTemperatureSensor</span><span class="p">()</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">targetTemp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">24.0'f32</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">power</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">heaterPid</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">targetTemp</span><span class="p">,</span><span class="w"> </span><span class="n">currentTemp</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">)</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="n">setHeaterPwmDuty</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="n">info</span><span class="p">(</span><span class="s">"Thermostat"</span><span class="p">,</span><span class="w"> </span><span class="s">"Heater output power: "</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">$</span><span class="n">power</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="s">"%"</span><span class="p">)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="c"># Read-only Telemetry</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addTelemetry</span><span class="p">(</span><span class="n">sekSensor</span><span class="p">,</span><span class="w"> </span><span class="s">"wifi_rssi"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Wi-Fi Signal"</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dBm"</span><span class="p">,</span><span class="w"> </span><span class="n">deviceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"signal_strength"</span><span class="p">)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="n">surface</span><span class="p">.</span><span class="n">addTelemetry</span><span class="p">(</span><span class="n">sekBinarySensor</span><span class="p">,</span><span class="w"> </span><span class="s">"voice_active"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Voice Active"</span><span class="p">,</span><span class="w"> </span><span class="n">deviceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sound"</span><span class="p">)</span>
 </span></code></pre></div>
 <hr />
-<h2 id="moving-average-filter-movingaveragen">Moving Average Filter (<code>MovingAverage[N]</code>)<a class="headerlink" href="#moving-average-filter-movingaveragen" title="Permanent link">&para;</a></h2>
-<p>The <code>MovingAverage</code> filter maintains a sliding circular buffer of <span class="arithmatex">\(N\)</span> samples in stack memory. It adds new samples and subtracts discarded samples in constant <span class="arithmatex">\(O(1)\)</span> time.</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c"># 10-sample moving average filter</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kd">var</span><span class="w"> </span><span class="n">adcFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newMovingAverage</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span><span class="p">()</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">esphomeLoop</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">rawAdc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">float32</span><span class="p">(</span><span class="n">readAnalogPin</span><span class="p">())</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">smoothAdc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adcFilter</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">rawAdc</span><span class="p">)</span>
+<h2 id="generating-dashboard-ui-esphome-configuration">Generating Dashboard UI &amp; ESPHome Configuration<a class="headerlink" href="#generating-dashboard-ui-esphome-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="1-generating-lovelace-dashboard-yaml">1. Generating Lovelace Dashboard YAML<a class="headerlink" href="#1-generating-lovelace-dashboard-yaml" title="Permanent link">&para;</a></h3>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">echo</span><span class="w"> </span><span class="n">satellite</span><span class="p">.</span><span class="n">generateLovelaceYaml</span><span class="p">()</span>
 </span></code></pre></div>
-<hr />
-<h2 id="moving-median-filter-movingmediann">Moving Median Filter (<code>MovingMedian[N]</code>)<a class="headerlink" href="#moving-median-filter-movingmediann" title="Permanent link">&para;</a></h2>
-<p>Ultrasonic distance sensors (e.g. HC-SR04), optical rangefinders, and dirty analog ADC lines often experience sharp transient noise spikes. Linear filters (like moving averages) smear noise spikes across time. </p>
-<p>The <code>MovingMedian</code> filter sorts samples in place on the stack to extract the statistical median, cleanly rejecting impulse noise:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c"># 7-sample moving median filter</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">var</span><span class="w"> </span><span class="n">distanceFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newMovingMedian</span><span class="o">[</span><span class="mi">7</span><span class="o">]</span><span class="p">()</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">esphomeLoop</span><span class="p">:</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">rawDistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readUltrasonicSensor</span><span class="p">()</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">cleanDistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distanceFilter</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">rawDistance</span><span class="p">)</span>
+<p>Output:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">entities</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">"Living</span><span class="nv"> </span><span class="s">Room</span><span class="nv"> </span><span class="s">Voice</span><span class="nv"> </span><span class="s">Satellite"</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">entities</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select.processing_sound</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Processing</span><span class="nv"> </span><span class="s">Sound"</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number.volume</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Volume"</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:volume-high"</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switch.wake_chime</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wake</span><span class="nv"> </span><span class="s">Chime"</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sensor.wifi_rssi</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wi-Fi</span><span class="nv"> </span><span class="s">Signal"</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">entity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binary_sensor.voice_active</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Active"</span>
 </span></code></pre></div>
-<hr />
-<h2 id="low-pass-exponential-filter-lowpassfilter">Low-Pass Exponential Filter (<code>LowPassFilter</code>)<a class="headerlink" href="#low-pass-exponential-filter-lowpassfilter" title="Permanent link">&para;</a></h2>
-<p>The <code>LowPassFilter</code> implements a single-pole Infinite Impulse Response (IIR) filter:</p>
-<div class="arithmatex">\[y[n] = \alpha \cdot x[n] + (1 - \alpha) \cdot y[n-1]\]</div>
-<p>Where <span class="arithmatex">\(\alpha \in [0.0, 1.0]\)</span>. Lower values of <span class="arithmatex">\(\alpha\)</span> provide heavier smoothing:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kd">var</span><span class="w"> </span><span class="n">lpf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newLowPassFilter</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1'f32</span><span class="p">)</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">let</span><span class="w"> </span><span class="n">smoothedValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lpf</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">noisySignal</span><span class="p">)</span>
+<h3 id="2-generating-esphome-component-yaml">2. Generating ESPHome Component YAML<a class="headerlink" href="#2-generating-esphome-component-yaml" title="Permanent link">&para;</a></h3>
+<div class="language-nim highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">echo</span><span class="w"> </span><span class="n">satellite</span><span class="p">.</span><span class="n">generateEsphomeYaml</span><span class="p">()</span>
 </span></code></pre></div>
-<hr />
-<h2 id="software-debouncer-debouncer">Software Debouncer (<code>Debouncer</code>)<a class="headerlink" href="#software-debouncer-debouncer" title="Permanent link">&para;</a></h2>
-<p>Mechanical switches, push buttons, and magnetic reed contacts vibrate mechanically upon contact, generating dozens of spurious high/low transitions over a span of 5–30 ms.</p>
-<p>The <code>Debouncer</code> ensures a state change is only acknowledged after remaining stable for <code>debounceTimeMs</code> milliseconds:</p>
-<div class="language-nim highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kd">var</span><span class="w"> </span><span class="n">buttonDebounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newDebouncer</span><span class="p">(</span><span class="n">debounceTimeMs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="sc">'u32)</span>
+<p>Output:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># =============================================================================</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Generated Hardware Surface: Living Room Voice Satellite (ReSpeaker XVF3800)</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># =============================================================================</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">esphomeLoop</span><span class="p">:</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">isPressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Low</span><span class="p">)</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">isStablePressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buttonDebounce</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">isPressed</span><span class="p">,</span><span class="w"> </span><span class="n">millis</span><span class="p">())</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">buttonDebounce</span><span class="p">.</span><span class="n">rose</span><span class="p">:</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">info</span><span class="p">(</span><span class="s">"Button"</span><span class="p">,</span><span class="w"> </span><span class="s">"Clean button press registered!"</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">select</span><span class="p">:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">processing_sound</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Processing</span><span class="nv"> </span><span class="s">Sound"</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:progress-clock"</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">buttonDebounce</span><span class="p">.</span><span class="n">fell</span><span class="p">:</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="n">info</span><span class="p">(</span><span class="s">"Button"</span><span class="p">,</span><span class="w"> </span><span class="s">"Clean button release registered!"</span><span class="p">)</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="nt">number</span><span class="p">:</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Volume"</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:volume-high"</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="nt">switch</span><span class="p">:</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wake_chime</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wake</span><span class="nv"> </span><span class="s">Chime"</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"mdi:bell-ring"</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">optimistic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="nt">sensor</span><span class="p">:</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wifi_rssi</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Wi-Fi</span><span class="nv"> </span><span class="s">Signal"</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">    </span><span class="nt">unit_of_measurement</span><span class="p">:</span><span class="w"> </span><span class="s">"dBm"</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">    </span><span class="nt">device_class</span><span class="p">:</span><span class="w"> </span><span class="s">"signal_strength"</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="nt">binary_sensor</span><span class="p">:</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">template</span>
+</span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">voice_active</span>
+</span><span id="__span-4-36"><a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Voice</span><span class="nv"> </span><span class="s">Active"</span>
+</span><span id="__span-4-37"><a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="w">    </span><span class="nt">device_class</span><span class="p">:</span><span class="w"> </span><span class="s">"sound"</span>
 </span></code></pre></div>
 
 
@@ -1686,7 +1643,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../storage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Flash Preferences (NVS)">
+          <a href="../schedule-dsl/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RTOS Task &amp; Schedule DSL">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1696,20 +1653,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Flash Preferences (NVS)
+                RTOS Task & Schedule DSL
               </div>
             </div>
           </a>
         
         
           
-          <a href="../interop/" class="md-footer__link md-footer__link--next" aria-label="Next: C++ Interoperability">
+          <a href="../hardware/" class="md-footer__link md-footer__link--next" aria-label="Next: Hardware Buses (GPIO &amp; I2C)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                C++ Interoperability
+                Hardware Buses (GPIO & I2C)
               </div>
             </div>
             <div class="md-footer__button md-icon">
