@@ -80,7 +80,11 @@ toggle.name = "Switch to system preference"
 provider = "mike"
 default = "latest"
 
+[project.plugins.mkdocstrings]
+default_handler = "nim"
 
+[project.plugins.mkdocstrings.handlers.nim]
+paths = ["src"]
 
 [project.markdown_extensions]
 abbr = {}

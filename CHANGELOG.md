@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-version documentation support using `squidfunk/mike` with automated version drop-down selection and `gh-pages` deployment.
 - Automated version tagging and documentation deployment workflow triggered by version bumps in `nim_esphome.nimble`.
 - Project templating and 1-click distribution architecture guide covering ESP-Web-Tools in-browser flashing, My Home Assistant dashboard import, and automated CI factory binary releases.
+- Native Zensical API documentation generation via `mkdocstrings-nim` 0.3.0 with dynamic AST extraction and automatic stylesheet injection.
 
 ## [0.1.0] - 2026-09-06
 
