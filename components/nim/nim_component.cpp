@@ -296,9 +296,10 @@ void NimComponent::setup() {
 #ifdef USE_SELECT
   for (auto *s : esphome::App.get_selects()) {
     if (s != nullptr) {
-      s->add_on_state_callback([s](const std::string &value, size_t index) {
+      s->add_on_state_callback([s](size_t index) {
         if (nim_dispatch_select_state) {
-          nim_dispatch_select_state(s->get_object_id().c_str(), value.c_str());
+          const char *opt = s->option_at(index);
+          nim_dispatch_select_state(s->get_object_id().c_str(), opt != nullptr ? opt : "");
         }
       });
     }
