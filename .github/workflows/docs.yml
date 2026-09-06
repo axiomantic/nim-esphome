@@ -31,7 +31,7 @@ jobs:
         uses: asdf-vm/actions/install@v4
         with:
           tool_versions: |
-            nim latest:2.2
+            nim 2.2.10
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,6 +41,19 @@ jobs:
       - name: Install documentation dependencies
         run: |
           pip install -r docs-requirements.txt
+
+      - name: Prepare Nim compiler libraries for docstrings
+        run: |
+          if command -v asdf >/dev/null 2>&1 && asdf which nim >/dev/null 2>&1; then
+            NIM_BIN="$(asdf which nim)"
+          else
+            NIM_BIN="$(which nim)"
+          fi
+          NIM_REAL="$(readlink -f "$NIM_BIN" 2>/dev/null || echo "$NIM_BIN")"
+          NIM_DIR="$(dirname "$(dirname "$NIM_REAL")")"
+          if [ -d "$NIM_DIR/compiler" ] && [ ! -e "$NIM_DIR/lib/compiler" ]; then
+            ln -sf "$NIM_DIR/compiler" "$NIM_DIR/lib/compiler" 2>/dev/null || true
+          fi
 
       - name: Strict documentation build validation
         run: |
