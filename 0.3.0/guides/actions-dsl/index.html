@@ -1611,7 +1611,7 @@
 <h1 id="custom-actions-service-calls-dsl">Custom Actions &amp; Service Calls DSL<a class="headerlink" href="#custom-actions-service-calls-dsl" title="Permanent link">&para;</a></h1>
 <p>In Home Assistant, <strong>Actions</strong> (historically called <strong>Services</strong>) allow users, automations, and scripts to trigger device-specific routines with custom arguments (e.g. <code>satellite.play_custom_tone(frequency=880, duration_ms=500)</code>).</p>
 <p>Implementing custom services in native ESPHome C++ requires managing untyped argument maps, manual string parsing, and verbose lambda bindings.</p>
-<p>The <strong>Custom Actions DSL</strong> (<code>nim_esphome/dsl/actions</code>) enables firmware authors to declare compile-time and runtime type-safe Home Assistant actions directly in Nim.</p>
+<p>The <strong>Custom Actions DSL</strong> (<code>nim_esphome/dsl/actions</code>) enables firmware authors to declare typed Home Assistant actions directly in Nim.</p>
 <hr />
 <h2 id="core-features">Core Features<a class="headerlink" href="#core-features" title="Permanent link">&para;</a></h2>
 <ul>
