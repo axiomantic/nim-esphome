@@ -194,17 +194,23 @@ nim:
 | `nim_flags` | `list` | `[]` | Extra arguments passed to `nim cpp` |
 | `nimble_paths` | `list` | `[]` | Additional search paths for Nim packages |
 | `nim_path` | `string` | `"nim"` | Path to the `nim` compiler executable |
+| `target_cpu` | `string` | Auto | Target CPU architecture (`esp`, `riscv32`, `arm`). Auto-detected from board. |
 
 ---
 
 ## Embedded Architecture & Memory Model
 
-ESPHome targets resource-constrained microcontrollers like the ESP32 (Xtensa or RISC-V 32-bit architecture). Standard Nim configurations assume 64-bit POSIX hosts. `nim-esphome` transparently configures the target compiler environment:
+ESPHome targets resource-constrained microcontrollers spanning multiple 32-bit CPU architectures. `nim-esphome` transparently configures the target compiler environment based on your board:
 
-1. **Target Architecture Alignment**: Passes `--cpu:esp --os:any` so `sizeof(pointer)` and `sizeof(int)` match the 32-bit microcontroller (`sizeof(NI) == 4`).
-2. **C++ Exception Handling**: ESP-IDF defaults to `-fno-exceptions`. `nim-esphome` configures `--exceptions:goto` and `--panics:on`, eliminating C++ `try/catch` and libsupc++ overhead.
-3. **Deterministic Memory**: Uses `--mm:arc` with `-d:useMalloc` to delegate all allocations to FreeRTOS\x27s heap allocator without GC pause times.
-4. **Const C-Strings**: Provides `ConstCString` mapped to `const char*` to avoid `-Wwrite-strings` C++ compiler warnings on modern GCC/Clang.
+1. **Multi-Architecture Auto-Detection**:
+   - **ESP32 / ESP32-S2 / ESP32-S3**: Automatically sets `--cpu:esp` (32-bit Xtensa).
+   - **ESP32-C2 / ESP32-C3 / ESP32-C6 / ESP32-H2 / ESP32-P4**: Automatically sets `--cpu:riscv32` (32-bit RISC-V).
+   - **Raspberry Pi RP2040**: Automatically sets `--cpu:arm --os:any` (Cortex-M0+).
+   - Can be overridden explicitly via `target_cpu: riscv32` or via `nim_flags: ["--cpu:..."]`.
+2. **Target Pointer Alignment**: Enforces 32-bit microcontroller pointer width (`sizeof(NI) == 4`).
+3. **C++ Exception Handling**: ESP-IDF defaults to `-fno-exceptions`. `nim-esphome` configures `--exceptions:goto` and `--panics:on`, eliminating C++ `try/catch` and libsupc++ overhead.
+4. **Deterministic Memory**: Uses `--mm:arc` with `-d:useMalloc` to delegate all allocations to FreeRTOS's heap allocator without GC pause times.
+5. **Const C-Strings**: Provides `ConstCString` mapped to `const char*` to avoid `-Wwrite-strings` C++ compiler warnings on modern GCC/Clang.
 
 ---
 

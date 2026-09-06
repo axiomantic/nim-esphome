@@ -10,6 +10,7 @@ CONF_SOURCE = "source"
 CONF_NIM_FLAGS = "nim_flags"
 CONF_NIM_PATH = "nim_path"
 CONF_NIMBLE_PATHS = "nimble_paths"
+CONF_TARGET_CPU = "target_cpu"
 
 DEPENDENCIES = []
 AUTO_LOAD = []
@@ -24,6 +25,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_NIM_FLAGS, default=[]): cv.ensure_list(cv.string),
         cv.Optional(CONF_NIM_PATH, default="nim"): cv.string,
         cv.Optional(CONF_NIMBLE_PATHS, default=[]): cv.ensure_list(cv.directory),
+        cv.Optional(CONF_TARGET_CPU): cv.string,
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -73,7 +75,20 @@ def find_nimbase_h(nim_bin: str) -> str:
     if os.path.isfile(candidate):
         return candidate
 
-    return ""
+def detect_target_cpu(configured_cpu: str = None) -> str:
+    if configured_cpu:
+        return configured_cpu
+    if getattr(CORE, "is_rp2040", False):
+        return "arm"
+    if getattr(CORE, "is_esp8266", False):
+        return "esp"
+    if getattr(CORE, "is_esp32", False):
+        board = str(getattr(CORE, "board", "")).lower()
+        riscv_boards = ["-c2", "-c3", "-c6", "-h2", "-p4", "esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32p4"]
+        if any(r in board for r in riscv_boards):
+            return "riscv32"
+        return "esp"
+    return "esp"
 
 
 async def to_code(config):
@@ -107,6 +122,9 @@ async def to_code(config):
         if os.path.isfile(src_f):
             shutil.copy(src_f, os.path.join(comp_build_dir, fname))
 
+    has_cpu_flag = any(flag.startswith("--cpu:") for flag in config[CONF_NIM_FLAGS])
+    target_cpu = detect_target_cpu(config.get(CONF_TARGET_CPU))
+
     cmd = [
         nim_bin,
         "cpp",
@@ -116,13 +134,15 @@ async def to_code(config):
         "-d:danger",
         "-d:useMalloc",
         "-d:esphome",
-        "--cpu:esp",
         "--os:any",
         "--exceptions:goto",
         "--panics:on",
         f"--nimcache:{out_dir}",
         f"--path:{nim_esphome_src}",
     ]
+
+    if not has_cpu_flag:
+        cmd.append(f"--cpu:{target_cpu}")
 
     for p in config[CONF_NIMBLE_PATHS]:
         cmd.append(f"--path:{p}")
