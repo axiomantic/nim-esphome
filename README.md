@@ -31,6 +31,7 @@
 - [Projects Using nim-esphome](#projects-using-nim-esphome)
 - [Testing & CI](#testing--ci)
 - [Project Structure](#project-structure)
+- [Changelog](#changelog)
 - [License](#license)
 
 ---
@@ -542,6 +543,10 @@ nim-esphome/
 │   └── build.sh                  # Comprehensive test runner & multi-target C++ cross-compiler
 └── nim_esphome.nimble            # Nimble package specification
 ```
+
+## Changelog
+
+All notable changes are documented in [CHANGELOG.md](CHANGELOG.md) in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
 ---
 

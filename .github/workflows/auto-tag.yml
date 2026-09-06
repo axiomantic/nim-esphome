@@ -1,0 +1,93 @@
+name: Auto Tag
+
+on:
+  push:
+    branches: [main]
+    paths: ["*.nimble"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TAG_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Extract version from .nimble
+        id: ver
+        run: |
+          NIMBLE=$(ls *.nimble | head -1)
+          VERSION=$(grep -m1 -E '^version\s*=\s*"' "$NIMBLE" | sed -E 's/^version\s*=\s*"([^"]+)".*/\1/')
+          [ -z "$VERSION" ] && { echo "No version found in $NIMBLE"; exit 1; }
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Tag and release if not exists
+        id: tag_check
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "Tag v$VERSION already exists, skipping."
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Creating and pushing tag v$VERSION..."
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git push origin "v$VERSION"
+
+          if command -v gh >/dev/null 2>&1; then
+            gh release create "v$VERSION" --title "v$VERSION" --generate-notes || true
+          fi
+          echo "created=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        if: steps.tag_check.outputs.created == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install documentation dependencies
+        if: steps.tag_check.outputs.created == 'true'
+        run: |
+          pip install -r docs-requirements.txt
+
+      - name: Deploy versioned documentation with mike
+        if: steps.tag_check.outputs.created == 'true'
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          mike deploy --push --update-aliases "$VERSION" latest
+          mike set-default --push latest
+
+      - name: Checkout gh-pages for GitHub Actions Pages deployment
+        if: steps.tag_check.outputs.created == 'true'
+        run: |
+          git checkout gh-pages
+
+      - name: Upload artifact for GitHub Pages
+        if: steps.tag_check.outputs.created == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages (Actions)
+        if: steps.tag_check.outputs.created == 'true'
+        id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
