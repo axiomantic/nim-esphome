@@ -1316,11 +1316,13 @@
 <h2 id="gpio-pin-manipulation">GPIO Pin Manipulation<a class="headerlink" href="#gpio-pin-manipulation" title="Permanent link">&para;</a></h2>
 <p>The <code>nim_esphome/gpio</code> module provides hardware pin control without needing external C++ libraries.</p>
 <h3 id="pin-modes">Pin Modes<a class="headerlink" href="#pin-modes" title="Permanent link">&para;</a></h3>
-<p>Microcontroller pins can be configured into four standard electrical modes:
-- <code>Input</code>: High-impedance floating digital input.
-- <code>Output</code>: Low-impedance push-pull digital output.
-- <code>InputPullup</code>: Input with internal weak pull-up resistor connected to 3.3V.
-- <code>InputPulldown</code>: Input with internal weak pull-down resistor connected to GND.</p>
+<p>Microcontroller pins can be configured into four standard electrical modes:</p>
+<ul>
+<li><code>Input</code>: High-impedance floating digital input.</li>
+<li><code>Output</code>: Low-impedance push-pull digital output.</li>
+<li><code>InputPullup</code>: Input with internal weak pull-up resistor connected to 3.3V.</li>
+<li><code>InputPulldown</code>: Input with internal weak pull-down resistor connected to GND.</li>
+</ul>
 <h3 id="basic-gpio-example">Basic GPIO Example<a class="headerlink" href="#basic-gpio-example" title="Permanent link">&para;</a></h3>
 <div class="language-nim highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="n">nim_esphome</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>

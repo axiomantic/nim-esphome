@@ -1334,10 +1334,12 @@
 
 <h1 id="project-templating-1-click-distribution">Project Templating &amp; 1-Click Distribution<a class="headerlink" href="#project-templating-1-click-distribution" title="Permanent link">&para;</a></h1>
 <p>Writing expressive, compile-time verified embedded logic in Nim is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.</p>
-<p><code>nim-esphome</code> establishes a standardized distribution architecture that enables:
-1. <strong>1-Click Browser Flashing</strong> via <a href="https://esphome.github.io/esp-web-tools/">ESP-Web-Tools</a> (WebSerial in Chrome/Edge).
-2. <strong>One-Click Home Assistant Dashboard Import</strong> via <a href="https://my.home-assistant.io/">My Home Assistant</a>.
-3. <strong>Automated CI Binary Builds</strong> that bundle partition tables, bootloader, and firmware into flashable factory binaries on release.</p>
+<p><code>nim-esphome</code> establishes a standardized distribution architecture that enables:</p>
+<ol>
+<li><strong>1-Click Browser Flashing</strong> via <a href="https://esphome.github.io/esp-web-tools/">ESP-Web-Tools</a> (WebSerial in Chrome/Edge).</li>
+<li><strong>One-Click Home Assistant Dashboard Import</strong> via <a href="https://my.home-assistant.io/">My Home Assistant</a>.</li>
+<li><strong>Automated CI Binary Builds</strong> that bundle partition tables, bootloader, and firmware into flashable factory binaries on release.</li>
+</ol>
 <hr />
 <h2 id="the-standardized-project-structure">The Standardized Project Structure<a class="headerlink" href="#the-standardized-project-structure" title="Permanent link">&para;</a></h2>
 <p>A distribution-ready Nim-ESPHome repository follows this standard layout:</p>

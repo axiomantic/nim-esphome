@@ -1280,10 +1280,12 @@
 <p>This guide covers digital signal processing (DSP) filters, closed-loop PID control algorithms, and input debouncing provided by <code>nim_esphome/dsp</code>.</p>
 <hr />
 <h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
-<p>The DSP utilities in <code>nim-esphome</code> are engineered specifically for microcontrollers:
-1. <strong>Zero Heap Allocation</strong>: All filters use stack-allocated arrays and inline struct storage.
-2. <strong>Deterministic Time Complexity</strong>: O(1) insertions and updates prevent jitter in real-time loops.
-3. <strong>Single-Precision Floating Point</strong>: Uses 32-bit floats (<code>float32</code>), matching the hardware Floating Point Units (FPU) of ESP32 and ESP32-S3.</p>
+<p>The DSP utilities in <code>nim-esphome</code> are engineered specifically for microcontrollers:</p>
+<ol>
+<li><strong>Zero Heap Allocation</strong>: All filters use stack-allocated arrays and inline struct storage.</li>
+<li><strong>Deterministic Time Complexity</strong>: O(1) insertions and updates prevent jitter in real-time loops.</li>
+<li><strong>Single-Precision Floating Point</strong>: Uses 32-bit floats (<code>float32</code>), matching the hardware Floating Point Units (FPU) of ESP32 and ESP32-S3.</li>
+</ol>
 <hr />
 <h2 id="pid-closed-loop-controller">PID Closed-Loop Controller<a class="headerlink" href="#pid-closed-loop-controller" title="Permanent link">&para;</a></h2>
 <p>The <code>PIDController</code> implements an industrial Proportional-Integral-Derivative feedback algorithm with <strong>anti-windup clamping</strong> to prevent integral saturation when actuators hit physical limits.</p>

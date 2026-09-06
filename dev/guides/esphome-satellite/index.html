@@ -1203,11 +1203,13 @@
 <hr />
 <h2 id="the-problem-with-traditional-voice-satellites">The Problem with Traditional Voice Satellites<a class="headerlink" href="#the-problem-with-traditional-voice-satellites" title="Permanent link">&para;</a></h2>
 <p>In conventional smart home voice satellites, firmware state is typically distributed across asynchronous network events, Home Assistant websocket callbacks, and ad-hoc C++ variables in YAML lambdas.</p>
-<p>This loose architecture leads to well-known race conditions:
-1. <strong>Premature Chime Clipping</strong>: Audio playback starts before hardware I2S amplifiers or DACs wake up.
-2. <strong>Stop Word Race Conditions</strong>: Saying <em>"Stop"</em> while the assistant is replying can get clobbered by an in-flight TTS chunk.
-3. <strong>Audio Ducking Failures</strong>: Background music fails to duck or un-duck properly when wake words trigger.
-4. <strong>Offline &amp; OTA Phantom Triggers</strong>: Microphones continue capturing audio and triggering pipelines even during firmware OTA updates or when Home Assistant is disconnected.</p>
+<p>This loose architecture leads to well-known race conditions:</p>
+<ol>
+<li><strong>Premature Chime Clipping</strong>: Audio playback starts before hardware I2S amplifiers or DACs wake up.</li>
+<li><strong>Stop Word Race Conditions</strong>: Saying <em>"Stop"</em> while the assistant is replying can get clobbered by an in-flight TTS chunk.</li>
+<li><strong>Audio Ducking Failures</strong>: Background music fails to duck or un-duck properly when wake words trigger.</li>
+<li><strong>Offline &amp; OTA Phantom Triggers</strong>: Microphones continue capturing audio and triggering pipelines even during firmware OTA updates or when Home Assistant is disconnected.</li>
+</ol>
 <hr />
 <h2 id="the-typestate-solution">The Typestate Solution<a class="headerlink" href="#the-typestate-solution" title="Permanent link">&para;</a></h2>
 <p><code>esphome-satellite</code> eliminates these bugs entirely by implementing a formal <strong>14-state typestate Finite State Machine (FSM)</strong> in Nim using <code>nim-esphome</code> and the <code>typestates</code> package.</p>

@@ -1225,11 +1225,13 @@
 <hr />
 <h2 id="why-nvs-preferences">Why NVS Preferences?<a class="headerlink" href="#why-nvs-preferences" title="Permanent link">&para;</a></h2>
 <p>Microcontroller RAM is volatile—whenever power is cycled or the watchdog triggers a reboot, all variable states are reset. </p>
-<p>ESPHome incorporates a flash-backed Non-Volatile Storage (NVS) subsystem (<code>ESPPreferences</code>) with built-in wear leveling. <code>nim-esphome</code> wraps this system into idiomatic, generic Nim procedures:
-- Store numeric primitives (<code>int32</code>, <code>float32</code>, <code>bool</code>)
-- Store custom structs (<code>CalibrationData</code>, <code>NetworkConfig</code>)
-- Store arbitrary strings (<code>SSID</code>, token strings)
-- Key items using either 32-bit integer IDs or human-readable string names</p>
+<p>ESPHome incorporates a flash-backed Non-Volatile Storage (NVS) subsystem (<code>ESPPreferences</code>) with built-in wear leveling. <code>nim-esphome</code> wraps this system into idiomatic, generic Nim procedures:</p>
+<ul>
+<li>Store numeric primitives (<code>int32</code>, <code>float32</code>, <code>bool</code>)</li>
+<li>Store custom structs (<code>CalibrationData</code>, <code>NetworkConfig</code>)</li>
+<li>Store arbitrary strings (<code>SSID</code>, token strings)</li>
+<li>Key items using either 32-bit integer IDs or human-readable string names</li>
+</ul>
 <hr />
 <h2 id="string-keys-fnv-1a-hashing">String Keys &amp; FNV-1a Hashing<a class="headerlink" href="#string-keys-fnv-1a-hashing" title="Permanent link">&para;</a></h2>
 <p>ESPHome's internal preference engine identifies storage slots using 32-bit integer hashes. <code>nim-esphome</code> allows you to pass string keys directly; behind the scenes, it computes a standard 32-bit <strong>Fowler–Noll–Vo (FNV-1a)</strong> hash:</p>

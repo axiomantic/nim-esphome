@@ -1133,11 +1133,13 @@
 </table>
 <hr />
 <h2 id="zero-cost-abstraction-guarantees">Zero-Cost Abstraction Guarantees<a class="headerlink" href="#zero-cost-abstraction-guarantees" title="Permanent link">&para;</a></h2>
-<p>All public procedures, templates, and macros in <code>nim-esphome</code> follow strict embedded design principles:
-- <strong>Zero Heap Overhead</strong>: Operations default to stack allocation or direct hardware registers.
-- <strong>Zero GC Pauses</strong>: Fully compatible with Nim's ARC deterministic memory management (<code>--mm:arc</code>).
-- <strong>Zero C++ Exception Bloat</strong>: Compiles cleanly with <code>--exceptions:goto</code> and <code>--panics:on</code>.
-- <strong>Zero Flash Docstring Overhead</strong>: Nim compiler docstrings (<code>##</code>) are stripped completely during transpilation to C++, ensuring that comprehensive API documentation consumes 0 bytes of microcontroller flash memory.</p>
+<p>All public procedures, templates, and macros in <code>nim-esphome</code> follow strict embedded design principles:</p>
+<ul>
+<li><strong>Zero Heap Overhead</strong>: Operations default to stack allocation or direct hardware registers.</li>
+<li><strong>Zero GC Pauses</strong>: Fully compatible with Nim's ARC deterministic memory management (<code>--mm:arc</code>).</li>
+<li><strong>Zero C++ Exception Bloat</strong>: Compiles cleanly with <code>--exceptions:goto</code> and <code>--panics:on</code>.</li>
+<li><strong>Zero Flash Docstring Overhead</strong>: Nim compiler docstrings (<code>##</code>) are stripped completely during transpilation to C++, ensuring that comprehensive API documentation consumes 0 bytes of microcontroller flash memory.</li>
+</ul>
 
 
 
