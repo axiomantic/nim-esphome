@@ -1,0 +1,3788 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Embedded Nim runtime, hardware abstractions, and typestate DSL for ESPHome">
+      
+      
+        <meta name="author" content="Axiomantic">
+      
+      
+        <link rel="canonical" href="https://axiomantic.github.io/nim-esphome/0.3.0/api/preferences/">
+      
+      
+        <link rel="prev" href="../i2c/">
+      
+      
+        <link rel="next" href="../dsp/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.59">
+    
+    
+      
+        <title>nim_esphome/preferences - nim-esphome</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../assets/stylesheets/classic/main.38807bfb.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/classic/palette.c7ab7c71.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-nim_esphomepreferences" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="nim-esphome" class="md-header__button md-logo" aria-label="nim-esphome" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            nim-esphome
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              nim_esphome/preferences
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun-moon" viewBox="0 0 24 24"><path d="M12 2v2M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715M16 12a4 4 0 0 0-4-4M19 5l-1.256 1.256M20 12h2"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/axiomantic/nim-esphome" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    axiomantic/nim-esphome
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/getting-started/" class="md-tabs__link">
+          
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="nim-esphome" class="md-nav__button md-logo" aria-label="nim-esphome" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    nim-esphome
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/axiomantic/nim-esphome" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    axiomantic/nim-esphome
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Overview
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Guides
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting Started
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  YAML Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/dependencies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Nimble Dependencies
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/architectures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Target Architectures & Cross-Compilation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Entities & Home Assistant
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/dashboard-dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Lovelace Dashboard Surfaces DSL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/actions-dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Custom Actions & Services DSL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/schedule-dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  RTOS Task & Schedule DSL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/surface-dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Composite Hardware Surfaces DSL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Hardware Buses (GPIO & I2C)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Flash Preferences (NVS)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/dsp-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  DSP & Closed-Loop Control
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/interop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  C++ Interoperability
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/esphome-satellite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Verified Voice Satellite (Case Study)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project Templating & 1-Click Distribution
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/installer-dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web Installer & Dynamic Flashing DSL
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  API Reference
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  API Reference
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/api
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/entities
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/gpio
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i2c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/i2c
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/preferences
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/preferences
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        preferences
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="preferences">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fnv1a" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        fnv1a
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mockPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        mockPreferences
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/dsp
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  nim_esphome/dsl
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        preferences
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="preferences">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fnv1a" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        fnv1a
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mockPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        mockPreferences
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savePreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        savePreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loadPreference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+<h1 id="module-nim_esphomepreferences">Module: <code>nim_esphome/preferences</code><a class="headerlink" href="#module-nim_esphomepreferences" title="Permanent link">&para;</a></h1>
+<p>Non-volatile flash storage (NVS) abstraction for persisting parameters, calibration values, and state across reboots.</p>
+<link rel="stylesheet" href="../assets/stylesheets/mkdocstrings-nim.css">
+<style>
+
+/* Avoid breaking parameter names, etc. in table cells. */
+.doc-contents td code {
+  word-break: normal !important;
+}
+
+/* No line break before first paragraph of descriptions. */
+.doc-md-description,
+.doc-md-description>p:first-child {
+  display: inline;
+}
+
+/* No text transformation from Material for MkDocs for H5 headings. */
+.md-typeset h5 .doc-object-name {
+  text-transform: none;
+}
+
+/* Max width for docstring sections tables. */
+.doc .md-typeset__table,
+.doc .md-typeset__table table {
+  display: table !important;
+  width: 100%;
+}
+
+.doc .md-typeset__table tr {
+  display: table-row;
+}
+
+/* Defaults in Spacy table style. */
+.doc-param-default,
+.doc-type_param-default {
+  float: right;
+}
+
+/* Parameter headings must be inline, not blocks. */
+.doc-heading-parameter,
+.doc-heading-type_parameter {
+  display: inline;
+}
+
+/* Default font size for parameter headings. */
+.md-typeset .doc-heading-parameter {
+  font-size: inherit;
+}
+
+/* Prefer space on the right, not the left of parameter permalinks. */
+.doc-heading-parameter .headerlink,
+.doc-heading-type_parameter .headerlink {
+  margin-left: 0 !important;
+  margin-right: 0.2rem;
+}
+
+/* Backward-compatibility: docstring section titles in bold. */
+.doc-section-title {
+  font-weight: bold;
+}
+
+/* Backlinks crumb separator. */
+.doc-backlink-crumb {
+  display: inline-flex;
+  gap: .2rem;
+  white-space: nowrap;
+  align-items: center;
+  vertical-align: middle;
+}
+.doc-backlink-crumb:not(:first-child)::before {
+  background-color: var(--md-default-fg-color--lighter);
+  content: "";
+  display: inline;
+  height: 1rem;
+  --md-path-icon: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>');
+  -webkit-mask-image: var(--md-path-icon);
+  mask-image: var(--md-path-icon);
+  width: 1rem;
+}
+.doc-backlink-crumb.last {
+  font-weight: bold;
+}
+
+/* Symbols in Navigation and ToC. */
+:root, :host,
+[data-md-color-scheme="default"] {
+  --doc-symbol-parameter-fg-color: #df50af;
+  --doc-symbol-type_parameter-fg-color: #df50af;
+  --doc-symbol-attribute-fg-color: #953800;
+  --doc-symbol-function-fg-color: #8250df;
+  --doc-symbol-method-fg-color: #8250df;
+  --doc-symbol-class-fg-color: #0550ae;
+  --doc-symbol-type_alias-fg-color: #0550ae;
+  --doc-symbol-module-fg-color: #5cad0f;
+
+  --doc-symbol-parameter-bg-color: #df50af1a;
+  --doc-symbol-type_parameter-bg-color: #df50af1a;
+  --doc-symbol-attribute-bg-color: #9538001a;
+  --doc-symbol-function-bg-color: #8250df1a;
+  --doc-symbol-method-bg-color: #8250df1a;
+  --doc-symbol-class-bg-color: #0550ae1a;
+  --doc-symbol-type_alias-bg-color: #0550ae1a;
+  --doc-symbol-module-bg-color: #5cad0f1a;
+
+  /* Nim-specific symbol colors */
+  --doc-symbol-const-fg-color: #cf222e;
+  --doc-symbol-const-bg-color: #cf222e1a;
+  --doc-symbol-var-fg-color: #953800;
+  --doc-symbol-var-bg-color: #9538001a;
+  --doc-symbol-let-fg-color: #953800;
+  --doc-symbol-let-bg-color: #9538001a;
+  --doc-symbol-type-fg-color: #0550ae;
+  --doc-symbol-type-bg-color: #0550ae1a;
+  --doc-symbol-proc-fg-color: #8250df;
+  --doc-symbol-proc-bg-color: #8250df1a;
+  --doc-symbol-func-fg-color: #8250df;
+  --doc-symbol-func-bg-color: #8250df1a;
+  --doc-symbol-iterator-fg-color: #8250df;
+  --doc-symbol-iterator-bg-color: #8250df1a;
+  --doc-symbol-template-fg-color: #8250df;
+  --doc-symbol-template-bg-color: #8250df1a;
+  --doc-symbol-macro-fg-color: #8250df;
+  --doc-symbol-macro-bg-color: #8250df1a;
+  --doc-symbol-converter-fg-color: #8250df;
+  --doc-symbol-converter-bg-color: #8250df1a;
+}
+
+[data-md-color-scheme="slate"] {
+  --doc-symbol-parameter-fg-color: #ffa8cc;
+  --doc-symbol-type_parameter-fg-color: #ffa8cc;
+  --doc-symbol-attribute-fg-color: #ffa657;
+  --doc-symbol-function-fg-color: #d2a8ff;
+  --doc-symbol-method-fg-color: #d2a8ff;
+  --doc-symbol-class-fg-color: #79c0ff;
+  --doc-symbol-type_alias-fg-color: #79c0ff;
+  --doc-symbol-module-fg-color: #baff79;
+
+  --doc-symbol-parameter-bg-color: #ffa8cc1a;
+  --doc-symbol-type_parameter-bg-color: #ffa8cc1a;
+  --doc-symbol-attribute-bg-color: #ffa6571a;
+  --doc-symbol-function-bg-color: #d2a8ff1a;
+  --doc-symbol-method-bg-color: #d2a8ff1a;
+  --doc-symbol-class-bg-color: #79c0ff1a;
+  --doc-symbol-type_alias-bg-color: #79c0ff1a;
+  --doc-symbol-module-bg-color: #baff791a;
+
+  /* Nim-specific symbol colors (dark mode) */
+  --doc-symbol-const-fg-color: #ff7b72;
+  --doc-symbol-const-bg-color: #ff7b721a;
+  --doc-symbol-var-fg-color: #ffa657;
+  --doc-symbol-var-bg-color: #ffa6571a;
+  --doc-symbol-let-fg-color: #ffa657;
+  --doc-symbol-let-bg-color: #ffa6571a;
+  --doc-symbol-type-fg-color: #79c0ff;
+  --doc-symbol-type-bg-color: #79c0ff1a;
+  --doc-symbol-proc-fg-color: #d2a8ff;
+  --doc-symbol-proc-bg-color: #d2a8ff1a;
+  --doc-symbol-func-fg-color: #d2a8ff;
+  --doc-symbol-func-bg-color: #d2a8ff1a;
+  --doc-symbol-iterator-fg-color: #d2a8ff;
+  --doc-symbol-iterator-bg-color: #d2a8ff1a;
+  --doc-symbol-template-fg-color: #d2a8ff;
+  --doc-symbol-template-bg-color: #d2a8ff1a;
+  --doc-symbol-macro-fg-color: #d2a8ff;
+  --doc-symbol-macro-bg-color: #d2a8ff1a;
+  --doc-symbol-converter-fg-color: #d2a8ff;
+  --doc-symbol-converter-bg-color: #d2a8ff1a;
+}
+
+code.doc-symbol {
+  border-radius: .1rem;
+  font-size: .85em;
+  padding: 0 .3em;
+  font-weight: bold;
+}
+
+code.doc-symbol-parameter,
+a code.doc-symbol-parameter {
+  color: var(--doc-symbol-parameter-fg-color);
+  background-color: var(--doc-symbol-parameter-bg-color);
+}
+
+code.doc-symbol-parameter::after {
+  content: "param";
+}
+
+code.doc-symbol-type_parameter,
+a code.doc-symbol-type_parameter {
+  color: var(--doc-symbol-type_parameter-fg-color);
+  background-color: var(--doc-symbol-type_parameter-bg-color);
+}
+
+code.doc-symbol-type_parameter::after {
+  content: "type-param";
+}
+
+code.doc-symbol-attribute,
+a code.doc-symbol-attribute {
+  color: var(--doc-symbol-attribute-fg-color);
+  background-color: var(--doc-symbol-attribute-bg-color);
+}
+
+code.doc-symbol-attribute::after {
+  content: "attr";
+}
+
+code.doc-symbol-function,
+a code.doc-symbol-function {
+  color: var(--doc-symbol-function-fg-color);
+  background-color: var(--doc-symbol-function-bg-color);
+}
+
+code.doc-symbol-function::after {
+  content: "func";
+}
+
+code.doc-symbol-method,
+a code.doc-symbol-method {
+  color: var(--doc-symbol-method-fg-color);
+  background-color: var(--doc-symbol-method-bg-color);
+}
+
+code.doc-symbol-method::after {
+  content: "meth";
+}
+
+code.doc-symbol-class,
+a code.doc-symbol-class {
+  color: var(--doc-symbol-class-fg-color);
+  background-color: var(--doc-symbol-class-bg-color);
+}
+
+code.doc-symbol-class::after {
+  content: "class";
+}
+
+
+code.doc-symbol-type_alias,
+a code.doc-symbol-type_alias {
+  color: var(--doc-symbol-type_alias-fg-color);
+  background-color: var(--doc-symbol-type_alias-bg-color);
+}
+
+code.doc-symbol-type_alias::after {
+  content: "type";
+}
+
+code.doc-symbol-module,
+a code.doc-symbol-module {
+  color: var(--doc-symbol-module-fg-color);
+  background-color: var(--doc-symbol-module-bg-color);
+}
+
+code.doc-symbol-module::after {
+  content: "mod";
+}
+
+/* Nim-specific symbol styles */
+code.doc-symbol-const,
+a code.doc-symbol-const {
+  color: var(--doc-symbol-const-fg-color);
+  background-color: var(--doc-symbol-const-bg-color);
+}
+
+code.doc-symbol-const::after {
+  content: "const";
+}
+
+code.doc-symbol-var,
+a code.doc-symbol-var {
+  color: var(--doc-symbol-var-fg-color);
+  background-color: var(--doc-symbol-var-bg-color);
+}
+
+code.doc-symbol-var::after {
+  content: "var";
+}
+
+code.doc-symbol-let,
+a code.doc-symbol-let {
+  color: var(--doc-symbol-let-fg-color);
+  background-color: var(--doc-symbol-let-bg-color);
+}
+
+code.doc-symbol-let::after {
+  content: "let";
+}
+
+code.doc-symbol-type,
+a code.doc-symbol-type {
+  color: var(--doc-symbol-type-fg-color);
+  background-color: var(--doc-symbol-type-bg-color);
+}
+
+code.doc-symbol-type::after {
+  content: "type";
+}
+
+code.doc-symbol-proc,
+a code.doc-symbol-proc {
+  color: var(--doc-symbol-proc-fg-color);
+  background-color: var(--doc-symbol-proc-bg-color);
+}
+
+code.doc-symbol-proc::after {
+  content: "proc";
+}
+
+code.doc-symbol-func,
+a code.doc-symbol-func {
+  color: var(--doc-symbol-func-fg-color);
+  background-color: var(--doc-symbol-func-bg-color);
+}
+
+code.doc-symbol-func::after {
+  content: "func";
+}
+
+code.doc-symbol-iterator,
+a code.doc-symbol-iterator {
+  color: var(--doc-symbol-iterator-fg-color);
+  background-color: var(--doc-symbol-iterator-bg-color);
+}
+
+code.doc-symbol-iterator::after {
+  content: "iter";
+}
+
+code.doc-symbol-template,
+a code.doc-symbol-template {
+  color: var(--doc-symbol-template-fg-color);
+  background-color: var(--doc-symbol-template-bg-color);
+}
+
+code.doc-symbol-template::after {
+  content: "templ";
+}
+
+code.doc-symbol-macro,
+a code.doc-symbol-macro {
+  color: var(--doc-symbol-macro-fg-color);
+  background-color: var(--doc-symbol-macro-bg-color);
+}
+
+code.doc-symbol-macro::after {
+  content: "macro";
+}
+
+code.doc-symbol-converter,
+a code.doc-symbol-converter {
+  color: var(--doc-symbol-converter-fg-color);
+  background-color: var(--doc-symbol-converter-bg-color);
+}
+
+code.doc-symbol-converter::after {
+  content: "conv";
+}
+
+.doc-signature .autorefs {
+  color: inherit;
+  border-bottom: 1px dotted currentcolor;
+}
+
+/* Source code blocks (admonitions). */
+:root {
+  --md-admonition-icon--mkdocstrings-source: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.22 4.97a.75.75 0 0 1 1.06 0l6.5 6.5a.75.75 0 0 1 0 1.06l-6.5 6.5a.749.749 0 0 1-1.275-.326.75.75 0 0 1 .215-.734L21.19 12l-5.97-5.97a.75.75 0 0 1 0-1.06m-6.44 0a.75.75 0 0 1 0 1.06L2.81 12l5.97 5.97a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-6.5-6.5a.75.75 0 0 1 0-1.06l6.5-6.5a.75.75 0 0 1 1.06 0"/></svg>')
+}
+.md-typeset .admonition.mkdocstrings-source,
+.md-typeset details.mkdocstrings-source {
+  border: none;
+  padding: 0;
+}
+.md-typeset .admonition.mkdocstrings-source:focus-within,
+.md-typeset details.mkdocstrings-source:focus-within {
+  box-shadow: none;
+}
+.md-typeset .mkdocstrings-source > .admonition-title,
+.md-typeset .mkdocstrings-source > summary {
+  background-color: inherit;
+}
+.md-typeset .mkdocstrings-source > .admonition-title::before,
+.md-typeset .mkdocstrings-source > summary::before {
+  background-color: var(--md-default-fg-color);
+  -webkit-mask-image: var(--md-admonition-icon--mkdocstrings-source);
+          mask-image: var(--md-admonition-icon--mkdocstrings-source);
+}
+
+/* Attribution footer for documented modules */
+.doc-attribution {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  text-align: right;
+  opacity: 0.6;
+}
+
+.doc-attribution:hover {
+  opacity: 1;
+}
+
+.doc-attribution a {
+  color: inherit;
+}
+
+/* Type field documentation */
+.doc-section-fields,
+.doc-section-values {
+  margin-top: 1rem;
+}
+
+.doc-field-list,
+.doc-value-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0;
+}
+
+.doc-field,
+.doc-value {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.doc-field:last-child,
+.doc-value:last-child {
+  border-bottom: none;
+}
+
+.doc-field-name,
+.doc-value-name {
+  font-weight: 600;
+}
+
+.doc-field-type,
+.doc-value-explicit code {
+  color: var(--md-code-fg-color);
+  background-color: var(--md-code-bg-color);
+  padding: 0.1em 0.3em;
+  border-radius: 0.2rem;
+  margin-left: 0.3em;
+}
+
+.doc-field-private {
+  opacity: 0.7;
+}
+
+.doc-field-private-label {
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.85em;
+  font-style: italic;
+  margin-left: 0.3em;
+}
+
+.doc-field-branch {
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.85em;
+  margin-left: 0.3em;
+}
+
+.doc-field-description,
+.doc-value-description {
+  color: var(--md-default-fg-color--light);
+}
+
+/* Doc object container - visual separation between entries */
+.doc.doc-object {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.doc.doc-object:last-child {
+  border-bottom: none;
+}
+
+/* Doc heading - tighter spacing */
+.doc.doc-heading {
+  margin-bottom: 0.5rem;
+}
+
+/* Pragma/label badges - supports both standalone and key:value formats */
+.doc-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.1em 0.4em;
+  margin-left: 0.5em;
+  border-radius: 0.25rem;
+  background-color: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+  vertical-align: middle;
+  font-family: var(--md-code-font-family);
+}
+
+/* Key-value pragma styling (e.g., deprecated: "msg") */
+.doc-label[data-label*=":"] {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+[data-md-color-scheme="slate"] .doc-label[data-label*=":"] {
+  background-color: #4a3f0a;
+  color: #ffc107;
+}
+
+/* Signature block - subtle background */
+.doc-signature {
+  margin: 0.5rem 0;
+  border-radius: 0.25rem;
+}
+
+.doc-signature pre {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--md-code-bg-color);
+  border-left: 3px solid var(--md-accent-fg-color);
+}
+
+/* Doc contents - tighter spacing */
+.doc.doc-contents {
+  margin-top: 0.75rem;
+  padding-left: 0;
+}
+
+/* Section headings (Parameters, Returns, etc.) - smaller and muted */
+.doc-section h5 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--md-default-fg-color--light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.75rem 0 0.25rem 0;
+  border: none;
+}
+
+/* Parameters list - more compact */
+.doc-section-parameters ul,
+.doc-section-returns ul,
+.doc-section-raises ul {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.doc-section-parameters li,
+.doc-section-returns li,
+.doc-section-raises li {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+}
+
+/* Returns section - inline when simple */
+.doc-section-returns p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Raises section - subtle warning styling */
+.doc-section-raises {
+  border-left: 2px solid #d97706;
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.doc-section-raises h5 {
+  color: #d97706;
+}
+
+[data-md-color-scheme="slate"] .doc-section-raises {
+  border-left-color: #fbbf24;
+}
+
+[data-md-color-scheme="slate"] .doc-section-raises h5 {
+  color: #fbbf24;
+}
+
+/* Description - tighter paragraph spacing */
+.doc-description p {
+  margin: 0.5rem 0;
+}
+
+.doc-description p:first-child {
+  margin-top: 0;
+}
+
+/* Source link styling - footnote-like appearance */
+.doc-source {
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--lighter);
+  margin-top: 0.75rem;
+  text-align: right;
+  opacity: 0.7;
+}
+
+.doc-source:hover {
+  opacity: 1;
+}
+
+.doc-source-label {
+  font-style: italic;
+}
+
+.doc-source a {
+  color: inherit;
+}
+
+.doc-source a:hover {
+  color: var(--md-accent-fg-color);
+}
+
+.doc-source code {
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
+</style>
+<div class="doc doc-object doc-module">
+  
+
+  <h2 id="preferences" class="doc doc-heading">
+    <code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>
+    <span class="doc doc-object-name doc-module-name">preferences</span>
+  <a href="#preferences" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p><code>nim_esphome/preferences</code>: Non-Volatile Flash Storage (NVS) persistence.</p>
+<p>Provides high-level read/write operations against ESPHome's internal NVS backend
+(<code>ESPPreferences</code>). Allows saving configuration parameters, calibration values,
+and state machines across reboots without filesystem overhead.</p>
+      </div>
+    
+
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="fnv1a" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">fnv1a</span>
+      
+    <a href="#fnv1a" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">fnv1a</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="n">uint32</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Computes a 32-bit Fowler–Noll–Vo (FNV-1a) hash for the given string <code>s</code>.</p>
+<p>Used to convert string keys into deterministic 32-bit NVS storage keys.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>s</code>
+              (<code>string</code>)
+               – Input string to hash.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>uint32</code> – 32-bit unsigned FNV-1a hash integer.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:7</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Persists a binary copy of value <code>val</code> of type <code>T</code> into flash storage under <code>key</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+               – 32-bit integer storage key.
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>T</code>)
+               – Value of type `T` to persist.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code> – `true` if write succeeded, `false` otherwise.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:22</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Convenience overload hashing <code>key</code> via FNV-1a and persisting <code>val</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+               – String key hashed to a 32-bit NVS key.
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>T</code>)
+               – Value of type `T` to persist.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code> – `true` if write succeeded, `false` otherwise.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:31</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="n">T</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Loads a value of type <code>T</code> from flash storage under <code>key</code>.</p>
+<p>Returns <code>defaultVal</code> if the key does not exist or size mismatch occurs.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+               – 32-bit integer storage key.
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>T</code>)
+               – Fallback value returned if key is missing.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>T</code> – Loaded value of type `T` or `defaultVal`.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:39</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="n">T</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Convenience overload hashing <code>key</code> via FNV-1a and loading value of type <code>T</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+               – String key hashed to a 32-bit NVS key.
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>T</code>)
+               – Fallback value returned if key is missing.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>T</code> – Loaded value of type `T` or `defaultVal`.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:52</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Persists a null-terminated string <code>val</code> into flash storage under <code>key</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+               – 32-bit integer storage key.
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>string</code>)
+               – String to persist.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code> – `true` if write succeeded, `false` otherwise.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:60</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Convenience overload hashing <code>key</code> via FNV-1a and persisting string <code>val</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+               – String key hashed to a 32-bit NVS key.
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>string</code>)
+               – String to persist.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code> – `true` if write succeeded, `false` otherwise.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:72</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">string</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Loads a string from flash storage under <code>key</code> with a maximum length of <code>maxLen</code>.</p>
+<p>Returns <code>defaultVal</code> if the key does not exist.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+               – 32-bit integer storage key.
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>string</code>)
+               – Fallback string returned if key is missing.
+            </li>
+          
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+               – Maximum allowable string buffer length.
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>string</code> – Loaded string or `defaultVal`.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:80</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">string</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Convenience overload hashing <code>key</code> via FNV-1a and loading string with <code>maxLen</code>.</p>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>string</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:101</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-var">
+  
+
+  <h3 id="mockPreferences" class="doc doc-heading">
+    <code class="doc-symbol doc-symbol-heading doc-symbol-var"></code>
+    <span class="doc doc-object-name doc-var-name">mockPreferences</span>
+  <a href="#mockPreferences" class="headerlink" title="Permanent link">&para;</a></h3>
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="kd">var</span><span class="w"> </span><span class="n">mockPreferences</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initTable</span><span class="o">[</span><span class="n">uint32</span><span class="p">,</span><span class="w"> </span><span class="nb">seq</span><span class="o">[</span><span class="n">byte</span><span class="o">]]</span><span class="p">()</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents">
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:107</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+              
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>T</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:109</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>T</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:117</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="n">T</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+              
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>T</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>T</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:120</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">):</span><span class="w"> </span><span class="n">T</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>T</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>T</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:129</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+              
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>string</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:132</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="savePreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">savePreference</span>
+      
+    <a href="#savePreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>val</code>
+              (<code>string</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:139</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">string</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>uint32</code>)
+              
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>string</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:142</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="loadPreference" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">loadPreference</span>
+      
+    <a href="#loadPreference" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">loadPreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">defaultVal</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">string</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+
+    
+      <div class="doc-section doc-section-parameters">
+        <h4>Parameters</h4>
+        <ul>
+          
+            <li>
+              <code>key</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>defaultVal</code>
+              (<code>string</code>)
+              
+            </li>
+          
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+              
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>string</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:152</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+
+    
+    <div class="doc-attribution">
+      <small>
+        Generated with <a href="https://github.com/elijahr/mkdocstrings-nim" target="_blank" rel="noopener">mkdocstrings-nim</a>
+      </small>
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../i2c/" class="md-footer__link md-footer__link--prev" aria-label="Previous: nim_esphome&#x2f;i2c">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                nim_esphome/i2c
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../dsp/" class="md-footer__link md-footer__link--next" aria-label="Next: nim_esphome&#x2f;dsp">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                nim_esphome/dsp
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.code.select","content.footnote.tooltips","content.tabs.link","content.tooltips","navigation.expand","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.sections","navigation.tabs","navigation.tabs.sticky","navigation.top","navigation.tracking","search.highlight"],"search":"../../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":{"default":"latest","provider":"mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.6970bfe9.min.js"></script>
+      
+    
+  </body>
+</html>
