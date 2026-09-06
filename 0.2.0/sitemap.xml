@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/getting-started/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/getting-started/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/configuration/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/configuration/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dependencies/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/dependencies/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/architectures/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/architectures/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/entities/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/entities/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/hardware/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/hardware/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/storage/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/storage/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dsp-control/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/dsp-control/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/interop/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/interop/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/esphome-satellite/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/esphome-satellite/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/distribution/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/guides/distribution/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/core/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/core/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/api/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/api/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/entities/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/entities/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/gpio/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/gpio/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/i2c/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/i2c/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/preferences/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/preferences/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsp/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/0.2.0/api/dsp/</loc>
       </url>
 </urlset>
