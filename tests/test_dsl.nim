@@ -308,3 +308,56 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "sensor:" in esphomeYaml
     check "id: processing_sound" in esphomeYaml
 
+  test "esphomeInstaller DSL and dynamic flashing abstractions":
+    let myInstaller = esphomeInstaller("voice-satellite"):
+      installer.title = "Voice Satellite Web Flasher"
+      installer.description = "Flash verified voice satellite firmware with custom sound assets"
+      installer.chipFamily = "ESP32-S3"
+
+      installer.addFileField(
+        name = "custom_audio",
+        label = "Custom Audio (.wav)",
+        accept = ".wav,audio/wav",
+        partition = "sound_data",
+        maxSize = 262144,
+        flashOffset = 0x370000'u32,
+        description = "Optional loop audio played while thinking"
+      )
+
+      installer.addSelectField(
+        name = "feedback_style",
+        label = "Audio Feedback Style",
+        options = @["Spinner", "Pulse", "Sonar", "Tick", "Silent"],
+        defaultVal = "Spinner"
+      )
+
+    check myInstaller.name == "voice-satellite"
+    check myInstaller.fields.len == 2
+    check myInstaller.customPartitions.len == 1
+
+    # 1. Partition Table CSV verification
+    let csv4Mb = myInstaller.generatePartitionsCsv(flashSizeMb = 4)
+    check "app0,     app,  ota_0,   0x10000,  0x1B0000," in csv4Mb
+    check "app1,     app,  ota_1,   0x1C0000, 0x1B0000," in csv4Mb
+    check "sound_data, data, 0x82, 0x370000, 0x040000," in csv4Mb
+
+    let csv8Mb = myInstaller.generatePartitionsCsv(flashSizeMb = 8)
+    check "app0,     app,  ota_0,   0x10000,  0x300000," in csv8Mb
+    check "app1,     app,  ota_1,   0x310000, 0x300000," in csv8Mb
+    check "sound_data, data, 0x82, 0x610000, 0x040000," in csv8Mb
+
+    # 2. Manifest verification
+    let manifest = myInstaller.generateManifest()
+    check "\"name\": \"voice-satellite\"" in manifest
+    check "\"chipFamily\": \"ESP32-S3\"" in manifest
+    check "\"path\": \"firmware-factory.bin\"" in manifest
+
+    # 3. HTML & JavaScript client abstraction verification
+    let html = myInstaller.generateHtml()
+    check "<title>Voice Satellite Web Flasher</title>" in html
+    check "data-offset=\"3604480\"" in html # 0x370000 in decimal
+    check "esp-web-install-button" in html
+    check "updateDynamicManifest" in html
+    check "URL.createObjectURL" in html
+
+

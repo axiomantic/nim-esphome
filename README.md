@@ -432,6 +432,27 @@ echo satellite.generateEsphomeYaml()
 ```
 > 📖 See [Composite Hardware Surfaces Guide](docs/guides/surface-dsl.md) and [`nim_esphome/dsl/surface`](docs/api/dsl.md#composite-hardware-device-dsl).
 
+#### 6. Web Installer & Dynamic Flashing DSL (`esphomeInstaller`)
+Generate interactive ESP-Web-Tools web installers with customizable form fields (file uploads, dropdown selects, text, checkboxes), dynamic WebSerial manifest construction, and verified collision-free flash partition calculations:
+
+```nim
+let satelliteInstaller = esphomeInstaller("voice-satellite"):
+  installer.title = "Voice Satellite Web Installer"
+  installer.chipFamily = "ESP32-S3"
+  installer.factoryBinPath = "firmware-factory.bin"
+
+  installer.addFileField(
+    name = "custom_audio",
+    label = "Custom Processing Sound (.wav)",
+    partition = "sound_data",
+    maxSize = 262144
+  )
+
+writeFile("partitions.csv", satelliteInstaller.generatePartitionsCsv(flashSizeMb = 4))
+writeFile("web/index.html", satelliteInstaller.generateHtml())
+```
+> 📖 See [Web Installer & Dynamic Flashing Guide](docs/guides/installer-dsl.md) and [`nim_esphome/dsl/installer`](docs/guides/installer-dsl.md).
+
 ### Hardware Bus & Peripheral Abstractions (GPIO & I2C)
 
 Control microcontroller GPIO pins and communicate over I2C buses directly from Nim:

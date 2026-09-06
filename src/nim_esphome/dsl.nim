@@ -14,6 +14,7 @@ import nim_esphome/dsl/dashboard
 import nim_esphome/dsl/actions
 import nim_esphome/dsl/schedule
 import nim_esphome/dsl/surface
+import nim_esphome/dsl/installer
 
 export entities
 export satellite
@@ -21,3 +22,4 @@ export dashboard
 export actions
 export schedule
 export surface
+export installer
