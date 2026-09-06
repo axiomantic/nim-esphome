@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#project-templating-1-click-distribution" class="md-skip">
+        <a href="#project-templating-distribution" class="md-skip">
           Skip to content
         </a>
       
@@ -989,15 +989,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-one-click-my-home-assistant-dashboard-import" class="md-nav__link">
+  <a href="#2-drop-in-remote-packages-dashboard-adoption" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        2. One-Click "My Home Assistant" Dashboard Import
+        2. Drop-in Remote Packages &amp; Dashboard Adoption
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. One-Click &quot;My Home Assistant&quot; Dashboard Import">
+    <nav class="md-nav" aria-label="2. Drop-in Remote Packages &amp; Dashboard Adoption">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1012,10 +1012,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-badge-url-pattern" class="md-nav__link">
+  <a href="#integration-methods" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The Badge URL Pattern
+        Integration Methods
       </span>
     </span>
   </a>
@@ -1477,15 +1477,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-one-click-my-home-assistant-dashboard-import" class="md-nav__link">
+  <a href="#2-drop-in-remote-packages-dashboard-adoption" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        2. One-Click "My Home Assistant" Dashboard Import
+        2. Drop-in Remote Packages &amp; Dashboard Adoption
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. One-Click &quot;My Home Assistant&quot; Dashboard Import">
+    <nav class="md-nav" aria-label="2. Drop-in Remote Packages &amp; Dashboard Adoption">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1500,10 +1500,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-badge-url-pattern" class="md-nav__link">
+  <a href="#integration-methods" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The Badge URL Pattern
+        Integration Methods
       </span>
     </span>
   </a>
@@ -1642,12 +1642,12 @@
   
 
 
-<h1 id="project-templating-1-click-distribution">Project Templating &amp; 1-Click Distribution<a class="headerlink" href="#project-templating-1-click-distribution" title="Permanent link">&para;</a></h1>
+<h1 id="project-templating-distribution">Project Templating &amp; Distribution<a class="headerlink" href="#project-templating-distribution" title="Permanent link">&para;</a></h1>
 <p>Writing expressive, statically-typed embedded logic in Nim is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.</p>
 <p><code>nim-esphome</code> establishes a standardized distribution architecture that enables:</p>
 <ol>
-<li><strong>1-Click Browser Flashing</strong> via <a href="https://esphome.github.io/esp-web-tools/">ESP-Web-Tools</a> (WebSerial in Chrome/Edge).</li>
-<li><strong>One-Click Home Assistant Dashboard Import</strong> via <a href="https://my.home-assistant.io/">My Home Assistant</a>.</li>
+<li><strong>In-Browser Web Flashing</strong> via <a href="https://esphome.github.io/esp-web-tools/">ESP-Web-Tools</a> (WebSerial in Chrome/Edge).</li>
+<li><strong>Drop-in Remote Packages &amp; Dashboard Adoption</strong> via ESPHome <code>packages:</code> and <code>dashboard_import:</code>.</li>
 <li><strong>Automated CI Binary Builds</strong> that bundle partition tables, bootloader, and firmware into flashable factory binaries on release.</li>
 </ol>
 <hr />
@@ -1720,8 +1720,8 @@
 <p>💡 Setting <code>"home_assistant_domain": "esphome"</code> prompts the user immediately after Wi-Fi configuration with a 1-click link to adopt the device into their local Home Assistant instance.</p>
 </blockquote>
 <hr />
-<h2 id="2-one-click-my-home-assistant-dashboard-import">2. One-Click "My Home Assistant" Dashboard Import<a class="headerlink" href="#2-one-click-my-home-assistant-dashboard-import" title="Permanent link">&para;</a></h2>
-<p>For users who already manage an ESPHome Dashboard add-on inside Home Assistant, provide a one-click import badge in your README.</p>
+<h2 id="2-drop-in-remote-packages-dashboard-adoption">2. Drop-in Remote Packages &amp; Dashboard Adoption<a class="headerlink" href="#2-drop-in-remote-packages-dashboard-adoption" title="Permanent link">&para;</a></h2>
+<p>For users who configure or compile devices through the ESPHome Dashboard or CLI, provide a standalone package YAML in your repository.</p>
 <h3 id="standalone-remote-package-packagesmy_boardyaml">Standalone Remote Package (<code>packages/my_board.yaml</code>)<a class="headerlink" href="#standalone-remote-package-packagesmy_boardyaml" title="Permanent link">&para;</a></h3>
 <p>Define the device configuration such that it pulls the Nim component directly from GitHub:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">substitutions</span><span class="p">:</span>
@@ -1740,37 +1740,42 @@
 </span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="nt">framework</span><span class="p">:</span>
 </span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">esp-idf</span>
 </span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="nt">external_components</span><span class="p">:</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/axiomantic/nim-esphome</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">      </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">    </span><span class="nt">components</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">nim</span><span class="p p-Indicator">]</span>
-</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="nt">nim</span><span class="p">:</span>
-</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/my-org/my-nim-device/main/src/my_device.nim</span>
-</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">  </span><span class="nt">nim_flags</span><span class="p">:</span>
-</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:danger"</span>
-</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:useMalloc"</span>
-</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:esphome"</span>
-</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>
-</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="nt">wifi</span><span class="p">:</span>
-</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">  </span><span class="nt">ap</span><span class="p">:</span>
-</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">    </span><span class="nt">ssid</span><span class="p">:</span><span class="w"> </span><span class="s">"My-Device-Fallback"</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="nt">dashboard_import</span><span class="p">:</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="nt">package_import_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github://my-org/my-nim-device/packages/my_board.yaml</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span><span class="nt">import_full_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nt">external_components</span><span class="p">:</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/axiomantic/nim-esphome</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">      </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">    </span><span class="nt">components</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">nim</span><span class="p p-Indicator">]</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="nt">nim</span><span class="p">:</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/my-org/my-nim-device/main/src/my_device.nim</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">  </span><span class="nt">nim_flags</span><span class="p">:</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:danger"</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:useMalloc"</span>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"-d:esphome"</span>
 </span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>
-</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="nt">captive_portal</span><span class="p">:</span>
-</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="nt">api</span><span class="p">:</span>
-</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="nt">ota</span><span class="p">:</span>
-</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">esphome</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="nt">wifi</span><span class="p">:</span>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="w">  </span><span class="nt">ap</span><span class="p">:</span>
+</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="w">    </span><span class="nt">ssid</span><span class="p">:</span><span class="w"> </span><span class="s">"My-Device-Fallback"</span>
+</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>
+</span><span id="__span-3-39"><a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="nt">captive_portal</span><span class="p">:</span>
+</span><span id="__span-3-40"><a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="nt">api</span><span class="p">:</span>
+</span><span id="__span-3-41"><a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a><span class="nt">ota</span><span class="p">:</span>
+</span><span id="__span-3-42"><a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">esphome</span>
 </span></code></pre></div>
-<h3 id="the-badge-url-pattern">The Badge URL Pattern<a class="headerlink" href="#the-badge-url-pattern" title="Permanent link">&para;</a></h3>
-<p>In your repository <code>README.md</code>, add the official Home Assistant redirect badge:</p>
-<div class="language-markdown highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[<span class="nt">![Open your Home Assistant instance and open the ESPHome dashboard to import this node.</span>](<span class="na">https://my.home-assistant.io/badges/dashboard_import.svg</span>)](https://my.home-assistant.io/redirect/dashboard_import/?package=github://my-org/my-nim-device/packages/my_board.yaml)
-</span></code></pre></div>
-<p>When clicked:
-1. It opens the user's Home Assistant dashboard.
-2. ESPHome displays an import modal with your configuration.
-3. The user clicks <strong>Adopt</strong> -&gt; <strong>Install</strong> to compile and flash wirelessly (OTA) or via USB.</p>
+<h3 id="integration-methods">Integration Methods<a class="headerlink" href="#integration-methods" title="Permanent link">&para;</a></h3>
+<p>Users can adopt your firmware in two ways:</p>
+<ol>
+<li><strong>Direct Package Inclusion</strong>: Add your repository package to their existing ESPHome configuration:
+   <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">packages</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">my_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github://my-org/my-nim-device/packages/my_board.yaml</span>
+</span></code></pre></div></li>
+<li><strong>Dashboard Adoption</strong>: When a user flashes the device via the web installer and connects it to their Wi-Fi, the ESPHome Dashboard discovers it on the local network. The <code>dashboard_import:</code> block causes ESPHome to display an <strong>Adopt</strong> button, pulling the remote configuration automatically.</li>
+</ol>
 <hr />
 <h2 id="3-automated-ci-binary-packaging">3. Automated CI Binary Packaging<a class="headerlink" href="#3-automated-ci-binary-packaging" title="Permanent link">&para;</a></h2>
 <p>To generate the <code>firmware-factory.bin</code> used by ESP-Web-Tools, combine the compiled bootloader, partition table, and firmware application into a single binary at offset <code>0x0</code>:</p>
@@ -1789,8 +1794,7 @@
 <h2 id="reference-implementation-esphome-satellite">Reference Implementation: <code>esphome-satellite</code><a class="headerlink" href="#reference-implementation-esphome-satellite" title="Permanent link">&para;</a></h2>
 <p>See <strong><a href="https://github.com/axiomantic/esphome-satellite"><code>esphome-satellite</code></a></strong> for a complete, live reference implementation of this architecture:
 - <strong>In-Browser Flasher</strong>: Live at <a href="https://axiomantic.github.io/esphome-satellite/"><code>axiomantic.github.io/esphome-satellite</code></a>.
-- <strong>Drop-in Packages</strong>: <a href="https://github.com/axiomantic/esphome-satellite/blob/main/packages/respeaker_xvf3800.yaml"><code>packages/respeaker_xvf3800.yaml</code></a>.
-- <strong>One-Click Badges</strong>: Displayed prominently on the <a href="https://github.com/axiomantic/esphome-satellite#quick-install-one-click">README</a>.</p>
+- <strong>Drop-in Packages</strong>: <a href="https://github.com/axiomantic/esphome-satellite/blob/main/packages/respeaker_xvf3800.yaml"><code>packages/respeaker_xvf3800.yaml</code></a>.</p>
 
 
 
