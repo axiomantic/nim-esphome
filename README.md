@@ -1,46 +1,134 @@
 # nim-esphome
 
-**`nim-esphome`** brings the expressive power, type safety, and zero-overhead performance of [Nim](https://nim-lang.org) to [ESPHome](https://esphome.io). Write custom components, device logic, sensors, and state machines in Nim that compile directly into ESPHome's PlatformIO / ESP-IDF build pipeline.
+[![CI](https://github.com/axiomantic/nim-esphome/actions/workflows/ci.yml/badge.svg)](https://github.com/axiomantic/nim-esphome/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**`nim-esphome`** brings the expressive power, compile-time safety, and zero-overhead performance of [Nim](https://nim-lang.org) to [ESPHome](https://esphome.io). Write custom ESP32/ESP8266 logic, embedded state machines, filters, and device drivers in Nim that compile directly into ESPHome\x27s PlatformIO and ESP-IDF build pipelines.
 
 ---
 
-## Highlights
+## Table of Contents
 
-- ⚡ **Zero-Overhead C++ Interop**: Compiles Nim directly to C++ using `--mm:arc` and `-d:useMalloc`, seamlessly integrating with ESP32 / ESP-IDF memory management without a heavy tracing GC.
-- 🔌 **ESPHome External Component**: Plug-and-play via ESPHome's `external_components`. Compiles your `.nim` source automatically during `esphome compile` / `esphome run`.
-- 🪵 **Native ESPHome Logging & Timing**: Built-in Nim bindings for `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`, `ESP_LOGD`, `millis()`, and `delay()`.
-- 🧩 **First-Class Component Lifecycle**: Simple templates for `esphomeSetup` and `esphomeLoop` hooked into ESPHome's event loop.
+- [Why Nim for ESPHome?](#why-nim-for-esphome)
+- [Key Features](#key-features)
+- [Prerequisites](#prerequisites)
+- [Installation & Integration](#installation--integration)
+- [Quickstart: Blink / Heartbeat](#quickstart-blink--heartbeat)
+- [Component Configuration](#component-configuration)
+- [Embedded Architecture & Memory Model](#embedded-architecture--memory-model)
+- [C++ / ESPHome Interoperability](#c--esphome-interoperability)
+- [Testing & CI](#testing--ci)
+- [Project Structure](#project-structure)
+- [License](#license)
 
 ---
 
-## Quickstart
+## Why Nim for ESPHome?
 
-### 1. Write Your Nim Component (`logic.nim`)
+ESPHome is great for declaratively configuring hardware, but complex embedded logic often gets squeezed into long, unmaintainable C++ lambdas in YAML. C++ lambdas lack:
+- Algebraic data types and pattern matching
+- Compile-time verified state machines (e.g. typestates)
+- High-level syntax with memory safety guarantees
+- Fast local unit testing on host machines (macOS/Linux) without flashing hardware
+
+`nim-esphome` solves this by giving you a first-class external component in ESPHome. You write idiomatic Nim code, and `nim-esphome` translates it to C++ on the fly, compiles it into your firmware binary, and links it directly against ESPHome\x27s runtime.
+
+---
+
+## Key Features
+
+- ⚡ **Zero-Overhead Embedded Runtime**: Uses Nim\x27s deterministic ARC memory management (`--mm:arc`), `-d:useMalloc`, `--exceptions:goto`, and `--panics:on`. No heavy tracing garbage collector or thread overhead.
+- 🔌 **Seamless External Component**: Plug-and-play via ESPHome\x27s standard `external_components`. Automatically generates and compiles `.cpp` files during `esphome compile` and `esphome run`.
+- 🪵 **ESPHome Logging & Clock Bindings**: Native Nim wrappers for `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`, `ESP_LOGD`, `millis()`, and `delay()`.
+- 🔄 **Lifecycle Hooks**: Simple `esphomeSetup` and `esphomeLoop` templates integrated directly with ESPHome\x27s main loop.
+- 🔗 **Exporting to C++ Lambdas**: Convenient `{.exportEsphome.}` pragma to expose C ABI functions callable directly from ESPHome YAML lambdas.
+- 🧪 **Hardware-Free Local Testing**: Write unit tests for your device logic in Nim and run them instantly on macOS or Linux using standard `nim c -r`.
+
+---
+
+## Prerequisites
+
+- **Nim**: Version 2.0.0 or later installed on the build machine (the computer running ESPHome CLI or Home Assistant builder).
+  ```bash
+  # macOS
+  brew install nim
+
+  # Linux (Debian/Ubuntu)
+  sudo apt-get install nim
+  # or via choosenim:
+  curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+  ```
+- **ESPHome**: Version 2024.x or later with ESP-IDF or Arduino framework.
+
+---
+
+## Installation & Integration
+
+### Option A: Local Directory (Recommended for Development)
+
+Clone `nim-esphome` to your local development machine:
+
+```bash
+git clone https://github.com/axiomantic/nim-esphome.git ~/Development/nim-esphome
+```
+
+Reference the `components` directory in your device\x27s ESPHome YAML:
+
+```yaml
+external_components:
+  - source:
+      type: local
+      path: /Users/username/Development/nim-esphome/components
+    components: [nim]
+```
+
+### Option B: Remote Git Repository
+
+Directly point ESPHome to the GitHub repository:
+
+```yaml
+external_components:
+  - source:
+      type: git
+      url: https://github.com/axiomantic/nim-esphome
+    components: [nim]
+```
+
+---
+
+## Quickstart: Blink / Heartbeat
+
+### 1. Write the Nim Logic (`my_logic.nim`)
 
 ```nim
 import nim_esphome
 
-var lastTick: uint32 = 0
+var lastHeartbeat: uint32 = 0
 
 esphomeSetup:
-  info("MyNim", "Nim runtime initialized successfully on ESPHome!")
+  info("MyDevice", "Nim logic initialized successfully!")
 
 esphomeLoop:
   let now = millis()
-  if now - lastTick >= 5000:
-    lastTick = now
-    info("MyNim", "Periodic 5s heartbeat from Nim loop")
+  if now - lastHeartbeat >= 5000:
+    lastHeartbeat = now
+    info("MyDevice", "Periodic 5s heartbeat from Nim runtime")
 
-# Export a function callable from ESPHome C++ lambdas or automations
-proc addNumbers*(a, b: int32): int32 {.exportEsphome.} =
-  result = a + b
+# Export a function to ESPHome C++ lambdas
+proc computeTargetLevel*(ambientLight: int32): int32 {.exportEsphome.} =
+  if ambientLight < 100:
+    return 255
+  elif ambientLight < 500:
+    return 128
+  else:
+    return 0
 ```
 
 ### 2. Configure ESPHome (`device.yaml`)
 
 ```yaml
 esphome:
-  name: nim-demo
+  name: my-esp32-device
 
 esp32:
   board: esp32dev
@@ -53,28 +141,156 @@ logger:
 external_components:
   - source:
       type: local
-      path: path/to/nim-esphome/components
+      path: /path/to/nim-esphome/components
     components: [nim]
 
 nim:
-  source: logic.nim
+  source: my_logic.nim
+
+sensor:
+  - platform: template
+    name: "Computed Target Level"
+    update_interval: 10s
+    lambda: |-
+      extern int32_t computeTargetLevel(int32_t);
+      return computeTargetLevel(50);
 ```
 
-Run `esphome run device.yaml` as usual. The Nim compiler translates your code to C++ and PlatformIO builds and flashes the firmware.
+### 3. Build & Flash
+
+```bash
+esphome run device.yaml
+```
+
+The ESPHome build tool automatically invokes the Nim compiler, cross-compiling your Nim module into 32-bit C++ sources in PlatformIO\x27s build directory and compiling it into the final firmware binary.
 
 ---
 
-## Component Configuration Options
+## Component Configuration
+
+Configure the `nim:` block in your ESPHome YAML:
+
+```yaml
+nim:
+  # Path to the primary .nim source file (Required)
+  source: src/my_logic.nim
+
+  # Additional include paths for external Nimble packages (Optional)
+  nimble_paths:
+    - /path/to/external/nim-typestates/src
+
+  # Extra flags passed directly to `nim cpp` (Optional)
+  nim_flags:
+    - "-d:danger"
+    - "--opt:size"
+
+  # Path to the nim executable (Default: "nim")
+  nim_path: "/usr/local/bin/nim"
+```
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `source` | `string` | **Required** | Path to the main `.nim` source file |
-| `nim_flags` | `list` | `[]` | Extra compiler flags passed to `nim cpp` (e.g. `-d:danger`) |
-| `nimble_paths` | `list` | `[]` | Additional search directories for Nimble packages |
+| `source` | `string` | **Required** | Absolute or relative path to the entrypoint `.nim` file |
+| `nim_flags` | `list` | `[]` | Extra arguments passed to `nim cpp` |
+| `nimble_paths` | `list` | `[]` | Additional search paths for Nim packages |
 | `nim_path` | `string` | `"nim"` | Path to the `nim` compiler executable |
+
+---
+
+## Embedded Architecture & Memory Model
+
+ESPHome targets resource-constrained microcontrollers like the ESP32 (Xtensa or RISC-V 32-bit architecture). Standard Nim configurations assume 64-bit POSIX hosts. `nim-esphome` transparently configures the target compiler environment:
+
+1. **Target Architecture Alignment**: Passes `--cpu:esp --os:any` so `sizeof(pointer)` and `sizeof(int)` match the 32-bit microcontroller (`sizeof(NI) == 4`).
+2. **C++ Exception Handling**: ESP-IDF defaults to `-fno-exceptions`. `nim-esphome` configures `--exceptions:goto` and `--panics:on`, eliminating C++ `try/catch` and libsupc++ overhead.
+3. **Deterministic Memory**: Uses `--mm:arc` with `-d:useMalloc` to delegate all allocations to FreeRTOS\x27s heap allocator without GC pause times.
+4. **Const C-Strings**: Provides `ConstCString` mapped to `const char*` to avoid `-Wwrite-strings` C++ compiler warnings on modern GCC/Clang.
+
+---
+
+## C++ / ESPHome Interoperability
+
+### Calling ESPHome APIs from Nim
+
+```nim
+import nim_esphome
+
+# Logging
+info("Tag", "Information message")
+warn("Tag", "Warning message")
+error("Tag", "Error message")
+debug("Tag", "Debug message")
+
+# Timing
+let t: uint32 = millis()
+delay(100) # milliseconds
+```
+
+### Calling Nim Procs from ESPHome C++
+
+Define your procedure in Nim with `{.exportEsphome.}`:
+
+```nim
+proc setSensitivity*(threshold: int32) {.exportEsphome.} =
+  info("NimCore", "Sensitivity threshold updated")
+```
+
+Declare and invoke the symbol in ESPHome YAML:
+
+```yaml
+button:
+  - platform: template
+    name: "Tune Sensitivity"
+    on_press:
+      - lambda: |-
+          extern void setSensitivity(int32_t);
+          setSensitivity(42);
+```
+
+---
+
+## Testing & CI
+
+You can write native tests using Nim\x27s standard `unittest` library and run them locally:
+
+```bash
+# Run unit tests
+./scripts/test.sh
+
+# Test C++ generation locally
+./scripts/build.sh
+```
+
+GitHub Actions runs continuous integration across Linux and macOS on every push and pull request.
+
+---
+
+## Project Structure
+
+```
+nim-esphome/
+├── components/
+│   └── nim/
+│       ├── __init__.py           # ESPHome external component hook & build step
+│       ├── nim_component.h       # C++ ESPHome Component class definition
+│       ├── nim_component.cpp     # C++ ESPHome Component implementation & bridge
+│       └── nim_esphome_bridge.h  # C symbol bridge declarations
+├── src/
+│   ├── nim_esphome.nim           # Main library entrypoint
+│   └── nim_esphome/
+│       └── api.nim               # ESPHome C bindings (log, millis, delay)
+├── examples/
+│   └── blink/                    # Self-contained blink / heartbeat example
+├── tests/
+│   └── test_basic.nim            # Native host unit tests
+├── scripts/
+│   ├── build.sh                  # C++ compilation test script
+│   └── test.sh                   # Native test runner script
+└── nim_esphome.nimble            # Nimble package specification
+```
 
 ---
 
 ## License
 
-MIT © [Elijah Rust](https://github.com/elijahr)
+MIT © [Axiomantic](https://github.com/axiomantic) / [Elijah Rust](https://github.com/elijahr)
