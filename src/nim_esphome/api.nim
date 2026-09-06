@@ -1,10 +1,10 @@
-## C++ interop bridge to ESPHome runtime APIs
+type ConstCString* {.importc: "const char*".} = cstring
 
 when defined(esphome):
-  proc nim_esp_log_i*(tag, msg: cstring) {.importc: "nim_esp_log_i", cdecl.}
-  proc nim_esp_log_w*(tag, msg: cstring) {.importc: "nim_esp_log_w", cdecl.}
-  proc nim_esp_log_e*(tag, msg: cstring) {.importc: "nim_esp_log_e", cdecl.}
-  proc nim_esp_log_d*(tag, msg: cstring) {.importc: "nim_esp_log_d", cdecl.}
+  proc nim_esp_log_i*(tag, msg: ConstCString) {.importc: "nim_esp_log_i", cdecl.}
+  proc nim_esp_log_w*(tag, msg: ConstCString) {.importc: "nim_esp_log_w", cdecl.}
+  proc nim_esp_log_e*(tag, msg: ConstCString) {.importc: "nim_esp_log_e", cdecl.}
+  proc nim_esp_log_d*(tag, msg: ConstCString) {.importc: "nim_esp_log_d", cdecl.}
 
   proc millis*(): uint32 {.importc: "nim_esp_millis", cdecl.}
   proc micros*(): uint32 {.importc: "nim_esp_micros", cdecl.}

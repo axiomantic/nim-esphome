@@ -109,6 +109,8 @@ async def to_code(config):
         "-d:danger",
         "-d:useMalloc",
         "-d:esphome",
+        "--cpu:esp",
+        "--os:any",
         f"--nimcache:{out_dir}",
         f"--path:{nim_esphome_src}",
     ]
