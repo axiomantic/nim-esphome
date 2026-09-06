@@ -7870,7 +7870,7 @@ code.doc-symbol-converter::after {
 <p>This module enables firmware developers to declaratively define Home Assistant
 Lovelace dashboard cards directly within their embedded Nim code.</p>
 <p>Features:
-- Compile-time construction of Lovelace <code>entities</code>, <code>tile</code>, <code>glance</code>, <code>grid</code>, and <code>button</code> cards.
+- Declarative construction of Lovelace <code>entities</code>, <code>tile</code>, <code>glance</code>, <code>grid</code>, and <code>button</code> cards.
 - Direct export to JSON and YAML formats compatible with Home Assistant Raw Dashboard Config.
 - Easy integration with ESPHome web servers or diagnostic configuration sensors.</p>
 <h4 id="dashboard--example">Example<a class="headerlink" href="#dashboard--example" title="Permanent link">&para;</a></h4>
@@ -10390,7 +10390,7 @@ code.doc-symbol-converter::after {
 <p>This module allows firmware authors to define Home Assistant custom services (actions)
 directly in Nim with full parameter typing and validation.</p>
 <p>Features:
-- Compile-time and runtime validation for service arguments (<code>string</code>, <code>int</code>, <code>float</code>, <code>bool</code>).
+- Typed validation for service arguments (<code>string</code>, <code>int</code>, <code>float</code>, <code>bool</code>).
 - Type-safe parameter getters (<code>getString</code>, <code>getInt</code>, <code>getFloat</code>, <code>getBool</code>).
 - Generates standard ESPHome <code>api.services</code> YAML configurations.
 - Mock invocation hooks for unit testing on host machines (<code>triggerServiceCall</code>).</p>

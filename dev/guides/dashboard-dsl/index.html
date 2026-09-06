@@ -1666,15 +1666,15 @@
 
 <h1 id="lovelace-dashboard-surface-dsl">Lovelace Dashboard Surface DSL<a class="headerlink" href="#lovelace-dashboard-surface-dsl" title="Permanent link">&para;</a></h1>
 <p>Firmware developers frequently face a disconnect between embedded hardware capabilities and user interfaces in Home Assistant. When a device exposes multiple controls—such as volume sliders, mode selectors, switches, or status sensors—users typically have to construct custom Lovelace dashboard cards manually.</p>
-<p>The <strong>Lovelace Dashboard Surface DSL</strong> (<code>nim_esphome/dsl/dashboard</code>) allows you to define, style, and generate production-ready Home Assistant dashboard cards directly alongside your firmware code.</p>
+<p>The <strong>Lovelace Dashboard Surface DSL</strong> (<code>nim_esphome/dsl/dashboard</code>) allows you to define, style, and generate Home Assistant dashboard cards directly alongside your firmware code.</p>
 <hr />
 <h2 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
-<p>The dashboard DSL operates at compile time to construct structured representations of Lovelace card components:</p>
+<p>The dashboard DSL constructs structured representations of Lovelace card components:</p>
 <ul>
 <li><strong><a href="../../api/dsl/"><code>DashboardCard</code></a></strong>: Encapsulates card types (<code>entities</code>, <code>tile</code>, <code>glance</code>, <code>grid</code>, <code>button</code>, <code>custom</code>), card headers, icons, column counts, and entity rows.</li>
 <li><strong><a href="../../api/dsl/"><code>DashboardEntity</code></a></strong>: Represents an individual entity row, supporting custom display names, icons, and secondary info (<code>last-changed</code>, <code>last-updated</code>).</li>
 <li><strong><a href="../../api/dsl/"><code>LovelaceDashboard</code></a></strong>: A complete multi-view dashboard specification.</li>
-<li><strong>Serialization</strong>: Instant compilation to <strong>JSON</strong> (<code>toJson()</code>) and <strong>YAML</strong> (<code>toYaml()</code>) matching Home Assistant's dashboard schema.</li>
+<li><strong>Serialization</strong>: Direct export to <strong>JSON</strong> (<code>toJson()</code>) and <strong>YAML</strong> (<code>toYaml()</code>) matching Home Assistant's dashboard schema.</li>
 </ul>
 <hr />
 <h2 id="quickstart-example">Quickstart Example<a class="headerlink" href="#quickstart-example" title="Permanent link">&para;</a></h2>

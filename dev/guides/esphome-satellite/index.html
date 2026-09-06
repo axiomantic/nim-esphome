@@ -1587,7 +1587,7 @@
 
 
 <h1 id="case-study-verified-voice-satellites-esphome-satellite">Case Study: Verified Voice Satellites (esphome-satellite)<a class="headerlink" href="#case-study-verified-voice-satellites-esphome-satellite" title="Permanent link">&para;</a></h1>
-<p>This case study demonstrates how <code>nim-esphome</code> powers <strong><a href="https://github.com/axiomantic/esphome-satellite"><code>esphome-satellite</code></a></strong>—a compile-time verified voice satellite state machine for ESPHome and Home Assistant.</p>
+<p>This case study demonstrates how <code>nim-esphome</code> powers <strong><a href="https://github.com/axiomantic/esphome-satellite"><code>esphome-satellite</code></a></strong>—an on-device voice satellite state machine for ESPHome and Home Assistant.</p>
 <hr />
 <h2 id="the-problem-with-traditional-voice-satellites">The Problem with Traditional Voice Satellites<a class="headerlink" href="#the-problem-with-traditional-voice-satellites" title="Permanent link">&para;</a></h2>
 <p>In conventional smart home voice satellites, firmware state is typically distributed across asynchronous network events, Home Assistant websocket callbacks, and ad-hoc C++ variables in YAML lambdas.</p>
@@ -1601,7 +1601,7 @@
 <hr />
 <h2 id="the-typestate-solution">The Typestate Solution<a class="headerlink" href="#the-typestate-solution" title="Permanent link">&para;</a></h2>
 <p><code>esphome-satellite</code> eliminates these bugs entirely by implementing a formal <strong>14-state typestate Finite State Machine (FSM)</strong> in Nim using <code>nim-esphome</code> and the <code>typestates</code> package.</p>
-<p>With typestates, states are represented as unique compile-time types. State transitions are defined as type transformations. If code attempts an illegal transition (such as triggering a wake word while in the <code>Muted</code> or <code>Updating</code> state), the Nim compiler rejects the build at compile time!</p>
+<p>With typestates, states are represented as unique compile-time types. State transitions are defined as type transformations. If code attempts an illegal transition (such as triggering a wake word while in the <code>Muted</code> or <code>Updating</code> state), the Nim compiler rejects the build at compile time.</p>
 <pre class="mermaid"><code>stateDiagram-v2
     [*] --&gt; IDLE
     IDLE --&gt; WOKEN: Wake Word Detected
@@ -1659,7 +1659,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>esphome-satellite
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/build.sh
 </span></code></pre></div>
-<p>All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware!</p>
+<p>All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware.</p>
 <hr />
 <h2 id="audio-feedback-the-processing-sound-loop">Audio Feedback &amp; The Processing Sound Loop<a class="headerlink" href="#audio-feedback-the-processing-sound-loop" title="Permanent link">&para;</a></h2>
 <p>During voice interactions, user experience depends heavily on clear, low-latency audio feedback across transitions:</p>
