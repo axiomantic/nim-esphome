@@ -19,6 +19,15 @@
 #ifdef USE_TEXT_SENSOR
 #include "esphome/components/text_sensor/text_sensor.h"
 #endif
+#ifdef USE_SELECT
+#include "esphome/components/select/select.h"
+#endif
+#ifdef USE_NUMBER
+#include "esphome/components/number/number.h"
+#endif
+#ifdef USE_BUTTON
+#include "esphome/components/button/button.h"
+#endif
 #ifdef USE_I2C
 #include "esphome/components/i2c/i2c_bus.h"
 #endif
@@ -29,6 +38,11 @@ extern "C" {
   void NimMain(void) __attribute__((weak));
   void nim_on_setup(void) __attribute__((weak));
   void nim_on_loop(void) __attribute__((weak));
+
+  void nim_dispatch_select_state(const char *entity_id, const char *value) __attribute__((weak));
+  void nim_dispatch_number_state(const char *entity_id, float value) __attribute__((weak));
+  void nim_dispatch_switch_state(const char *entity_id, bool value) __attribute__((weak));
+  void nim_dispatch_button_press(const char *entity_id) __attribute__((weak));
 
   void nim_esp_log_i(const char *tag, const char *msg) {
     esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_INFO, tag, __LINE__, "%s", msg);
@@ -119,6 +133,42 @@ extern "C" {
     for (auto *ts : esphome::App.get_text_sensors()) {
       if (ts != nullptr && (ts->get_name() == entity_id || ts->get_object_id() == entity_id)) {
         ts->publish_state(value);
+        return true;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  bool esphome_nim_publish_select(const char *entity_id, const char *value) {
+  #ifdef USE_SELECT
+    for (auto *s : esphome::App.get_selects()) {
+      if (s != nullptr && (s->get_name() == entity_id || s->get_object_id() == entity_id)) {
+        s->publish_state(value);
+        return true;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  bool esphome_nim_publish_number(const char *entity_id, float value) {
+  #ifdef USE_NUMBER
+    for (auto *n : esphome::App.get_numbers()) {
+      if (n != nullptr && (n->get_name() == entity_id || n->get_object_id() == entity_id)) {
+        n->publish_state(value);
+        return true;
+      }
+    }
+  #endif
+    return false;
+  }
+
+  bool esphome_nim_publish_button(const char *entity_id) {
+  #ifdef USE_BUTTON
+    for (auto *b : esphome::App.get_buttons()) {
+      if (b != nullptr && (b->get_name() == entity_id || b->get_object_id() == entity_id)) {
+        b->press();
         return true;
       }
     }
@@ -242,6 +292,52 @@ namespace nim {
 
 void NimComponent::setup() {
   ESP_LOGI(TAG, "Initializing Nim runtime...");
+
+#ifdef USE_SELECT
+  for (auto *s : esphome::App.get_selects()) {
+    if (s != nullptr) {
+      s->add_on_state_callback([s](const std::string &value, size_t index) {
+        if (nim_dispatch_select_state) {
+          nim_dispatch_select_state(s->get_object_id().c_str(), value.c_str());
+        }
+      });
+    }
+  }
+#endif
+#ifdef USE_NUMBER
+  for (auto *n : esphome::App.get_numbers()) {
+    if (n != nullptr) {
+      n->add_on_state_callback([n](float value) {
+        if (nim_dispatch_number_state) {
+          nim_dispatch_number_state(n->get_object_id().c_str(), value);
+        }
+      });
+    }
+  }
+#endif
+#ifdef USE_SWITCH
+  for (auto *sw : esphome::App.get_switches()) {
+    if (sw != nullptr) {
+      sw->add_on_state_callback([sw](bool state) {
+        if (nim_dispatch_switch_state) {
+          nim_dispatch_switch_state(sw->get_object_id().c_str(), state);
+        }
+      });
+    }
+  }
+#endif
+#ifdef USE_BUTTON
+  for (auto *b : esphome::App.get_buttons()) {
+    if (b != nullptr) {
+      b->add_on_press_callback([b]() {
+        if (nim_dispatch_button_press) {
+          nim_dispatch_button_press(b->get_object_id().c_str());
+        }
+      });
+    }
+  }
+#endif
+
   if (NimMain) {
     NimMain();
   }

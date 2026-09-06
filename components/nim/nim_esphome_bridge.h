@@ -25,6 +25,14 @@ bool esphome_nim_publish_sensor(const char *entity_id, float value);
 bool esphome_nim_publish_binary_sensor(const char *entity_id, bool value);
 bool esphome_nim_publish_switch(const char *entity_id, bool value);
 bool esphome_nim_publish_text_sensor(const char *entity_id, const char *value);
+bool esphome_nim_publish_select(const char *entity_id, const char *value);
+bool esphome_nim_publish_number(const char *entity_id, float value);
+bool esphome_nim_publish_button(const char *entity_id);
+
+void nim_dispatch_select_state(const char *entity_id, const char *value);
+void nim_dispatch_number_state(const char *entity_id, float value);
+void nim_dispatch_switch_state(const char *entity_id, bool value);
+void nim_dispatch_button_press(const char *entity_id);
 
 void nim_gpio_pin_mode(uint8_t pin, uint8_t mode);
 void nim_gpio_digital_write(uint8_t pin, bool val);

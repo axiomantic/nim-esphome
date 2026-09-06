@@ -9,7 +9,8 @@ nimcache/
 !components/**/*.cpp
 *.json
 !examples/**/*.json
-tests/test_basic
+tests/test_*
+!tests/test_*.nim
 
 # Python / ESPHome
 __pycache__/

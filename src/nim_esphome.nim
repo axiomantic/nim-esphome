@@ -19,6 +19,7 @@ import nim_esphome/gpio
 import nim_esphome/i2c
 import nim_esphome/preferences
 import nim_esphome/dsp
+import nim_esphome/dsl
 
 export api
 export entities
@@ -26,6 +27,7 @@ export gpio
 export i2c
 export preferences
 export dsp
+export dsl
 
 template esphomeSetup*(body: untyped) =
   ## Registers initialization logic invoked once during ESPHome's setup phase.

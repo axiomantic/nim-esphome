@@ -32,6 +32,7 @@ nav = [
       { "nim_esphome/i2c" = "api/i2c.md" },
       { "nim_esphome/preferences" = "api/preferences.md" },
       { "nim_esphome/dsp" = "api/dsp.md" },
+      { "nim_esphome/dsl" = "api/dsl.md" },
   ]},
 ]
 

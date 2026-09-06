@@ -90,3 +90,22 @@ cd esphome-satellite
 ```
 
 All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware!
+
+---
+
+## Audio Feedback & The Processing Sound Loop
+
+During voice interactions, user experience depends heavily on clear, low-latency audio feedback across transitions:
+
+```
+[IDLE] ──(wake word)──> [LISTENING] ──(speech ended)──> [PROCESSING] ──(tts start)──> [SPEAKING] ──> [IDLE]
+   │                         │                              │
+   └──(wake_sound)           └──(speech_end_sound)          └──(processing_sound loop)
+```
+
+### The `processing_sound` Architecture
+While the cloud or local Large Language Model (LLM) generates response tokens, `nim-esphome` runs an asynchronous **processing sound loop** (`startProcessingLoop` / `stopProcessingLoop`):
+- **Decoupled Sound Styles**: The architecture separates the interaction state (`Processing`) from the sound asset. Users can choose between `Silent`, `Typewriter`, `Pulse`, `Sonar`, or `Tick` directly in the Home Assistant UI.
+- **Instant Cutoff**: As soon as the first chunk of Text-to-Speech audio arrives (`onTtsStart`), `stopProcessingLoop()` halts the loop immediately, preventing audio collisions.
+- **Type-Safe Home Assistant Mapping**: Exposed to Home Assistant as a native `select` entity using `esphomeControls`, saved across reboots via Flash NVS.
+

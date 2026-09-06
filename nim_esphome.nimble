@@ -16,6 +16,7 @@ task test, "Run native host unit tests":
   exec "nim c -r --path:src tests/test_peripherals.nim"
   exec "nim c -r --path:src tests/test_preferences.nim"
   exec "nim c -r --path:src tests/test_dsp.nim"
+  exec "nim c -r --path:src tests/test_dsl.nim"
 
 task check_cpp, "Verify embedded C++ generation for ESP32 target":
   exec "nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim"

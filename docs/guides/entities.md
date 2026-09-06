@@ -14,6 +14,9 @@ This guide explains how to interact with ESPHome sensors, binary sensors, switch
 | `BinarySensor` | `binary_sensor:` | `bool` | PIR motion sensors, reed door contacts, water leak detectors |
 | `Switch` | `switch:` | `bool` | Power relays, output toggles, operational mode flags |
 | `TextSensor` | `text_sensor:` | `string` | State machine names, error logs, firmware build metadata |
+| `Select[T]` | `select:` | `enum` / `string` | Sound profiles, mode selection, audio feedback styles |
+| `Number` | `number:` | `float32` | Volume sliders, timeout thresholds, gain controls |
+| `Button` | `button:` | Trigger | Test sound triggers, device reboot, recalibration |
 
 ---
 
@@ -99,4 +102,86 @@ text_sensor:
   - platform: template
     id: device_status
     name: "Device Status"
+
+select:
+  - platform: template
+    id: processing_sound
+    name: "Processing Sound"
+    optimistic: true
+    options:
+      - "Silent"
+      - "Typewriter"
+      - "Pulse"
+      - "Sonar"
+
+number:
+  - platform: template
+    id: feedback_volume
+    name: "Feedback Volume"
+    min_value: 0
+    max_value: 100
+    step: 5
+    optimistic: true
+
+button:
+  - platform: template
+    id: test_chime
+    name: "Test Chime"
 ```
+
+---
+
+## Declarative Controls DSL (`esphomeControls`)
+
+`nim_esphome/dsl` provides the `esphomeControls` macro to define Home Assistant configuration controls, reactive callbacks, and Flash NVS persistence in a single declarative block:
+
+```nim
+import nim_esphome
+
+type ProcessingSoundStyle* = enum
+  psSilent     = "Silent"
+  psTypewriter = "Typewriter"
+  psPulse      = "Pulse"
+  psSonar      = "Sonar"
+
+esphomeControls:
+  # 1. Type-safe Select with compile-time enum parsing
+  select[ProcessingSoundStyle]("processing_sound"):
+    name = "Processing Sound Style"
+    default = psTypewriter
+    persist = true  # Automatically saved to Flash NVS
+    onSelect(style):
+      setProcessingAudioStyle(style)
+
+  # 2. Bounded Number slider
+  number("feedback_volume"):
+    name = "Feedback Volume"
+    min = 0.0
+    max = 100.0
+    step = 5.0
+    default = 75.0
+    persist = true
+    onChange(vol):
+      setMasterVolume(vol / 100.0)
+
+  # 3. Switch toggle
+  switch("wake_chime"):
+    name = "Wake Chime"
+    default = true
+    persist = true
+    onToggle(enabled):
+      enableWakeChime(enabled)
+
+  # 4. Action button
+  button("test_chime"):
+    name = "Play Test Chime"
+    onPress:
+      triggerPreviewSound()
+```
+
+### Automatic Flash NVS Persistence
+When `persist = true` is specified:
+1. The control loads its last-saved setting from flash memory on boot.
+2. If no setting exists in flash yet, it initializes to `default`.
+3. Whenever the user modifies the setting in Home Assistant, the new value is automatically persisted across reboots via `preferences.nim`.
+
