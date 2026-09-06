@@ -24,19 +24,31 @@ when defined(esphome):
   proc pinMode*(pin: uint8, mode: PinMode) =
     ## Configures the electrical mode (`Input`, `Output`, `InputPullup`, `InputPulldown`)
     ## of the specified GPIO `pin`.
+    ##
+    ## :param pin: Physical microcontroller GPIO pin index.
+    ## :param mode: Desired electrical mode (`PinMode`).
     nim_gpio_pin_mode(pin, uint8(ord(mode)))
 
   proc digitalWrite*(pin: uint8, state: PinState) =
     ## Writes a digital logic level (`High` or `Low`) to the specified GPIO `pin`.
+    ##
+    ## :param pin: Physical microcontroller GPIO pin index.
+    ## :param state: Desired digital logic level (`High` or `Low`).
     nim_gpio_digital_write(pin, state == High)
 
   proc digitalWrite*(pin: uint8, val: bool) =
     ## Convenience overload writing a boolean state (`true` -> `High`, `false` -> `Low`)
     ## to the specified GPIO `pin`.
+    ##
+    ## :param pin: Physical microcontroller GPIO pin index.
+    ## :param val: Boolean output value.
     nim_gpio_digital_write(pin, val)
 
   proc digitalRead*(pin: uint8): PinState =
     ## Reads and returns the current digital logic level (`High` or `Low`) of `pin`.
+    ##
+    ## :param pin: Physical microcontroller GPIO pin index to read.
+    ## :returns: Measured digital logic level (`High` or `Low`).
     if nim_gpio_digital_read(pin): High else: Low
 else:
   import std/tables
@@ -46,17 +58,30 @@ else:
 
   proc pinMode*(pin: uint8, mode: PinMode) =
     ## Configures GPIO mode in host mock table.
+    ##
+    ## :param pin: Mock GPIO pin index.
+    ## :param mode: PinMode to record.
     gpioModes[pin] = mode
 
   proc digitalWrite*(pin: uint8, state: PinState) =
     ## Writes GPIO state to host mock table.
+    ##
+    ## :param pin: Mock GPIO pin index.
+    ## :param state: PinState to record.
     gpioStates[pin] = state
 
   proc digitalWrite*(pin: uint8, val: bool) =
     ## Writes boolean GPIO state to host mock table.
+    ##
+    ## :param pin: Mock GPIO pin index.
+    ## :param val: Boolean state to record.
     gpioStates[pin] = if val: High else: Low
 
   proc digitalRead*(pin: uint8): PinState =
     ## Reads GPIO state from host mock table.
+    ##
+    ## :param pin: Mock GPIO pin index.
+    ## :returns: Recorded PinState or Low by default.
     gpioStates.getOrDefault(pin, Low)
+
 

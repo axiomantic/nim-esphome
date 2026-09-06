@@ -10,8 +10,7 @@ Core ESPHome C++ runtime bindings, hardware clocks, FreeRTOS task scheduling, wa
 ```nim
 type ConstCString* = cstring
 ```
-Immutable C string pointer mapped directly to C++ `const char*` (`{.importc: "const char*".}`).
-Prevents `-Wwrite-strings` compiler warnings when passing string literals to C++ APIs.
+Immutable C string pointer mapped directly to C++ `const char*` (`{.importc: "const char*".}`). Prevents `-Wwrite-strings` compiler warnings when passing string literals to C++ APIs.
 
 ---
 
@@ -23,6 +22,9 @@ proc millis*(): uint32
 ```
 Returns the number of milliseconds elapsed since the microcontroller booted.
 
+**Returns:**
+- `uint32`: Uptime in milliseconds as an unsigned 32-bit integer.
+
 ---
 
 ### `micros`
@@ -31,6 +33,9 @@ proc micros*(): uint32
 ```
 Returns the number of microseconds elapsed since the microcontroller booted. High-resolution timer useful for microsecond-level timing and PWM calculations.
 
+**Returns:**
+- `uint32`: High-resolution uptime in microseconds.
+
 ---
 
 ### `delayMs`
@@ -38,6 +43,11 @@ Returns the number of microseconds elapsed since the microcontroller booted. Hig
 proc delayMs*(ms: uint32)
 ```
 Delays execution for `ms` milliseconds. On microcontrollers, invokes ESPHome's `delay()` wrapper which yields execution to FreeRTOS background tasks.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `ms` | `uint32` | Duration in milliseconds to delay. |
 
 ---
 
@@ -63,6 +73,9 @@ proc getFreeHeap*(): uint32
 ```
 Returns the currently available free heap memory in bytes. Useful for tracking heap usage and diagnosing memory fragmentation.
 
+**Returns:**
+- `uint32`: Number of free heap bytes available for allocation.
+
 ---
 
 ### `reboot`
@@ -81,22 +94,52 @@ These templates wrap ESPHome's internal logging macros (`ESP_LOGI`, `ESP_LOGW`, 
 ```nim
 template info*(tag: string, msg: string)
 ```
-Logs an informational message under the specified `tag`.
+Logs an informational message under the specified `tag` (`ESP_LOGI`).
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `tag` | `string` | Identification string for the component or subsystem. |
+| `msg` | `string` | Informational log message. |
+
+---
 
 ### `warn`
 ```nim
 template warn*(tag: string, msg: string)
 ```
-Logs a warning message under the specified `tag`.
+Logs a warning message under the specified `tag` (`ESP_LOGW`).
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `tag` | `string` | Identification string for the component or subsystem. |
+| `msg` | `string` | Warning log message. |
+
+---
 
 ### `error`
 ```nim
 template error*(tag: string, msg: string)
 ```
-Logs an error message under the specified `tag`.
+Logs an error message under the specified `tag` (`ESP_LOGE`).
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `tag` | `string` | Identification string for the component or subsystem. |
+| `msg` | `string` | Error log message. |
+
+---
 
 ### `debug`
 ```nim
 template debug*(tag: string, msg: string)
 ```
-Logs a verbose debug message under the specified `tag`.
+Logs a verbose debug message under the specified `tag` (`ESP_LOGD`).
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `tag` | `string` | Identification string for the component or subsystem. |
+| `msg` | `string` | Verbose debug log message. |

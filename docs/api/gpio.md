@@ -38,6 +38,12 @@ proc pinMode*(pin: uint8, mode: PinMode)
 ```
 Configures the electrical mode of the specified physical GPIO `pin`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `pin` | `uint8` | Physical microcontroller GPIO pin index. |
+| `mode` | `PinMode` | Desired electrical operating mode (`Input`, `Output`, `InputPullup`, `InputPulldown`). |
+
 #### Example
 ```nim
 import nim_esphome
@@ -57,6 +63,12 @@ proc digitalWrite*(pin: uint8, state: PinState)
 ```
 Writes a digital logic level (`High` or `Low`) to the specified GPIO `pin`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `pin` | `uint8` | Physical microcontroller GPIO pin index. |
+| `state` | `PinState` | Desired digital logic level (`High` or `Low`). |
+
 ---
 
 ### `digitalWrite` (bool)
@@ -65,6 +77,12 @@ proc digitalWrite*(pin: uint8, val: bool)
 ```
 Convenience overload writing a boolean state (`true` -> `High`, `false` -> `Low`) to the specified GPIO `pin`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `pin` | `uint8` | Physical microcontroller GPIO pin index. |
+| `val` | `bool` | Boolean output value. |
+
 ---
 
 ### `digitalRead`
@@ -72,3 +90,11 @@ Convenience overload writing a boolean state (`true` -> `High`, `false` -> `Low`
 proc digitalRead*(pin: uint8): PinState
 ```
 Reads and returns the current digital logic level (`High` or `Low`) of `pin`.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `pin` | `uint8` | Physical microcontroller GPIO pin index to read. |
+
+**Returns:**
+- `PinState`: Measured digital logic level (`High` or `Low`).

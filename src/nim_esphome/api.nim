@@ -15,16 +15,24 @@ when defined(esphome):
 
   proc millis*(): uint32 {.importc: "nim_esp_millis", cdecl.}
     ## Returns the number of milliseconds elapsed since microcontroller boot.
+    ##
+    ## :returns: Uptime in milliseconds as an unsigned 32-bit integer.
   proc micros*(): uint32 {.importc: "nim_esp_micros", cdecl.}
     ## Returns the number of microseconds elapsed since microcontroller boot.
+    ##
+    ## :returns: High-resolution uptime in microseconds.
   proc delayMs*(ms: uint32) {.importc: "nim_esp_delay", cdecl.}
     ## Delays execution for `ms` milliseconds.
+    ##
+    ## :param ms: Duration in milliseconds to delay.
   proc yieldToScheduler*() {.importc: "nim_esp_yield", cdecl.}
     ## Yields execution to FreeRTOS and other cooperative background tasks.
   proc feedWatchdog*() {.importc: "nim_esp_feed_wdt", cdecl.}
     ## Feeds the hardware / task watchdog timer to prevent spurious reboot during long loops.
   proc getFreeHeap*(): uint32 {.importc: "nim_esp_get_free_heap", cdecl.}
     ## Returns the currently available free heap memory in bytes.
+    ##
+    ## :returns: Number of free heap bytes available for allocation.
   proc reboot*() {.importc: "nim_esp_reboot", cdecl.}
     ## Triggers an immediate hardware reboot of the microcontroller.
 else:
@@ -45,14 +53,20 @@ else:
 
   proc millis*(): uint32 =
     ## Returns the number of milliseconds elapsed since process start (mocked on host).
+    ##
+    ## :returns: Simulated uptime in milliseconds.
     uint32(epochTime() * 1000.0)
 
   proc micros*(): uint32 =
     ## Returns the number of microseconds elapsed since process start (mocked on host).
+    ##
+    ## :returns: Simulated uptime in microseconds.
     uint32(epochTime() * 1000000.0)
 
   proc delayMs*(ms: uint32) =
     ## Delays execution for `ms` milliseconds (mocked on host via os.sleep).
+    ##
+    ## :param ms: Duration in milliseconds to delay.
     os.sleep(int(ms))
 
   proc yieldToScheduler*() =
@@ -65,6 +79,8 @@ else:
 
   proc getFreeHeap*(): uint32 =
     ## Returns simulated free heap memory (1MB on host).
+    ##
+    ## :returns: Number of free heap bytes available.
     1024'u32 * 1024'u32 # 1MB mock heap
 
   proc reboot*() =
@@ -73,17 +89,30 @@ else:
 
 template info*(tag: string, msg: string) =
   ## Logs an informational message with the given `tag` using ESPHome's `ESP_LOGI`.
+  ##
+  ## :param tag: Identification string for the component or subsystem.
+  ## :param msg: Informational log message.
   nim_esp_log_i(cstring(tag), cstring(msg))
 
 template warn*(tag: string, msg: string) =
   ## Logs a warning message with the given `tag` using ESPHome's `ESP_LOGW`.
+  ##
+  ## :param tag: Identification string for the component or subsystem.
+  ## :param msg: Warning log message.
   nim_esp_log_w(cstring(tag), cstring(msg))
 
 template error*(tag: string, msg: string) =
   ## Logs an error message with the given `tag` using ESPHome's `ESP_LOGE`.
+  ##
+  ## :param tag: Identification string for the component or subsystem.
+  ## :param msg: Error log message.
   nim_esp_log_e(cstring(tag), cstring(msg))
 
 template debug*(tag: string, msg: string) =
   ## Logs a debug message with the given `tag` using ESPHome's `ESP_LOGD`.
+  ##
+  ## :param tag: Identification string for the component or subsystem.
+  ## :param msg: Verbose debug log message.
   nim_esp_log_d(cstring(tag), cstring(msg))
+
 

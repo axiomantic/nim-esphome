@@ -10,6 +10,9 @@ type
 
 proc newI2CDevice*(address: uint8): I2CDevice {.inline.} =
   ## Creates a handle to an I2C device at the specified 7-bit bus `address`.
+  ##
+  ## :param address: 7-bit peripheral slave address.
+  ## :returns: A new `I2CDevice` handle.
   I2CDevice(address: address)
 
 when defined(esphome):
@@ -20,11 +23,20 @@ when defined(esphome):
   proc write*(dev: I2CDevice, data: openArray[uint8]): bool =
     ## Transmits a raw buffer of bytes `data` to the I2C device.
     ## Returns `true` if all bytes were acknowledged (ACK) by the device.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param data: Bytes to transmit over the bus.
+    ## :returns: `true` if device acknowledged all transmitted bytes.
     if data.len == 0: return true
     nim_i2c_write(dev.address, unsafeAddr data[0], csize_t(data.len))
 
   proc writeRegister*(dev: I2CDevice, reg: uint8, data: openArray[uint8]): bool =
     ## Writes a multi-byte payload `data` into register `reg` of the I2C device.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param reg: 8-bit register address.
+    ## :param data: Bytes to write into the register.
+    ## :returns: `true` if write transaction succeeded.
     var buf = newSeq[uint8](data.len + 1)
     buf[0] = reg
     if data.len > 0:
@@ -33,11 +45,20 @@ when defined(esphome):
 
   proc writeByte*(dev: I2CDevice, reg: uint8, val: uint8): bool =
     ## Convenience helper to write a single 8-bit value `val` into register `reg`.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param reg: 8-bit register address.
+    ## :param val: 8-bit value to store.
+    ## :returns: `true` if write transaction succeeded.
     dev.writeRegister(reg, [val])
 
   proc read*(dev: I2CDevice, len: int): seq[uint8] =
     ## Reads `len` raw bytes from the I2C device.
     ## Returns an empty sequence if communication fails or NACK is received.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param len: Number of bytes to read.
+    ## :returns: Sequence containing read bytes, or empty seq on error.
     result = newSeq[uint8](len)
     if len > 0:
       let ok = nim_i2c_read(dev.address, addr result[0], csize_t(len))
@@ -47,6 +68,11 @@ when defined(esphome):
   proc readRegister*(dev: I2CDevice, reg: uint8, len: int): seq[uint8] =
     ## Performs a combined write-restart-read transaction: writes register `reg`
     ## and immediately reads `len` bytes back from the device.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param reg: 8-bit register address to read from.
+    ## :param len: Number of bytes to read.
+    ## :returns: Sequence containing read bytes, or empty seq on error.
     result = newSeq[uint8](len)
     var regByte = reg
     let ok = nim_i2c_write_read(dev.address, addr regByte, 1, if len > 0: addr result[0] else: nil, csize_t(len))
@@ -56,8 +82,13 @@ when defined(esphome):
   proc readByte*(dev: I2CDevice, reg: uint8): uint8 =
     ## Convenience helper to read a single 8-bit byte from register `reg`.
     ## Returns 0 on read failure.
+    ##
+    ## :param dev: Target `I2CDevice` peripheral.
+    ## :param reg: 8-bit register address to read from.
+    ## :returns: 8-bit byte read, or 0 on error.
     let res = dev.readRegister(reg, 1)
     if res.len > 0: res[0] else: 0'u8
+
 else:
   import std/tables
   var

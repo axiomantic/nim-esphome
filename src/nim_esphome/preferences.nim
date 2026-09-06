@@ -7,6 +7,9 @@
 proc fnv1a*(s: string): uint32 =
   ## Computes a 32-bit Fowler–Noll–Vo (FNV-1a) hash for the given string `s`.
   ## Used to convert string keys into deterministic 32-bit NVS storage keys.
+  ##
+  ## :param s: Input string to hash.
+  ## :returns: 32-bit unsigned FNV-1a hash integer.
   var hash = 2166136261'u32
   for c in s:
     hash = (hash xor uint32(ord(c))) * 16777619'u32
@@ -18,17 +21,28 @@ when defined(esphome):
 
   proc savePreference*[T](key: uint32, val: T): bool =
     ## Persists a binary copy of value `val` of type `T` into flash storage under `key`.
-    ## Returns `true` if write succeeded.
+    ##
+    ## :param key: 32-bit integer storage key.
+    ## :param val: Value of type `T` to persist.
+    ## :returns: `true` if write succeeded, `false` otherwise.
     var copyVal = val
     nim_esp_save_preference(key, addr copyVal, csize_t(sizeof(T)))
 
   proc savePreference*[T](key: string, val: T): bool =
     ## Convenience overload hashing `key` via FNV-1a and persisting `val`.
+    ##
+    ## :param key: String key hashed to a 32-bit NVS key.
+    ## :param val: Value of type `T` to persist.
+    ## :returns: `true` if write succeeded, `false` otherwise.
     savePreference(fnv1a(key), val)
 
   proc loadPreference*[T](key: uint32, defaultVal: T): T =
     ## Loads a value of type `T` from flash storage under `key`.
     ## Returns `defaultVal` if the key does not exist or size mismatch occurs.
+    ##
+    ## :param key: 32-bit integer storage key.
+    ## :param defaultVal: Fallback value returned if key is missing.
+    ## :returns: Loaded value of type `T` or `defaultVal`.
     var val: T
     if nim_esp_load_preference(key, addr val, csize_t(sizeof(T))):
       val
@@ -37,10 +51,18 @@ when defined(esphome):
 
   proc loadPreference*[T](key: string, defaultVal: T): T =
     ## Convenience overload hashing `key` via FNV-1a and loading value of type `T`.
+    ##
+    ## :param key: String key hashed to a 32-bit NVS key.
+    ## :param defaultVal: Fallback value returned if key is missing.
+    ## :returns: Loaded value of type `T` or `defaultVal`.
     loadPreference(fnv1a(key), defaultVal)
 
   proc savePreference*(key: uint32, val: string): bool =
     ## Persists a null-terminated string `val` into flash storage under `key`.
+    ##
+    ## :param key: 32-bit integer storage key.
+    ## :param val: String to persist.
+    ## :returns: `true` if write succeeded, `false` otherwise.
     var buf = newSeq[uint8](val.len + 1)
     if val.len > 0:
       copyMem(addr buf[0], unsafeAddr val[0], val.len)
@@ -49,15 +71,25 @@ when defined(esphome):
 
   proc savePreference*(key: string, val: string): bool =
     ## Convenience overload hashing `key` via FNV-1a and persisting string `val`.
+    ##
+    ## :param key: String key hashed to a 32-bit NVS key.
+    ## :param val: String to persist.
+    ## :returns: `true` if write succeeded, `false` otherwise.
     savePreference(fnv1a(key), val)
 
   proc loadPreference*(key: uint32, defaultVal: string, maxLen: int = 128): string =
     ## Loads a string from flash storage under `key` with a maximum length of `maxLen`.
     ## Returns `defaultVal` if the key does not exist.
+    ##
+    ## :param key: 32-bit integer storage key.
+    ## :param defaultVal: Fallback string returned if key is missing.
+    ## :param maxLen: Maximum allowable string buffer length.
+    ## :returns: Loaded string or `defaultVal`.
     var buf = newSeq[uint8](maxLen + 1)
     if nim_esp_load_preference(key, addr buf[0], csize_t(buf.len)):
       var strLen = 0
       while strLen < maxLen and buf[strLen] != 0'u8:
+
         inc strLen
       var res = newString(strLen)
       if strLen > 0:

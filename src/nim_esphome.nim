@@ -33,6 +33,8 @@ template esphomeSetup*(body: untyped) =
   ## The code inside `body` executes when the ESPHome `Component::setup()` lifecycle
   ## method is called, after system hardware and peripherals are initialized.
   ##
+  ## :param body: The untyped Nim code block to execute during setup.
+  ##
   ## Example:
   ## ```nim
   ## esphomeSetup:
@@ -48,6 +50,8 @@ template esphomeLoop*(body: untyped) =
   ## The code inside `body` executes on every iteration of ESPHome's `Component::loop()`
   ## method. Keep operations non-blocking and cooperative.
   ##
+  ## :param body: The untyped Nim code block to execute on every loop cycle.
+  ##
   ## Example:
   ## ```nim
   ## esphomeLoop:
@@ -60,6 +64,9 @@ template esphomeLoop*(body: untyped) =
 macro exportEsphome*(def: untyped): untyped =
   ## Decorates a procedure with `{.exportc, cdecl.}` so that ESPHome YAML lambdas
   ## and C++ components can invoke it directly via standard C ABI linkage.
+  ##
+  ## :param def: The procedure definition AST node to decorate.
+  ## :returns: The modified AST node with exportc and cdecl pragmas attached.
   ##
   ## Example:
   ## ```nim
@@ -74,6 +81,7 @@ macro exportEsphome*(def: untyped): untyped =
   ##   return computeTargetLevel(50);
   ## ```
   result = def
+
   var hasExportc = false
   var hasCdecl = false
   var pragmas = result.pragma

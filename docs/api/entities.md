@@ -50,6 +50,14 @@ proc newSensor*(id: string): Sensor
 ```
 Creates a new `Sensor` handle corresponding to the entity with YAML ID `id`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The entity ID defined in ESPHome YAML. |
+
+**Returns:**
+- `Sensor`: A new `Sensor` handle.
+
 ---
 
 ### `newBinarySensor`
@@ -57,6 +65,14 @@ Creates a new `Sensor` handle corresponding to the entity with YAML ID `id`.
 proc newBinarySensor*(id: string): BinarySensor
 ```
 Creates a new `BinarySensor` handle corresponding to the entity with YAML ID `id`.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The entity ID defined in ESPHome YAML. |
+
+**Returns:**
+- `BinarySensor`: A new `BinarySensor` handle.
 
 ---
 
@@ -66,6 +82,14 @@ proc newSwitch*(id: string): Switch
 ```
 Creates a new `Switch` handle corresponding to the entity with YAML ID `id`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The entity ID defined in ESPHome YAML. |
+
+**Returns:**
+- `Switch`: A new `Switch` handle.
+
 ---
 
 ### `newTextSensor`
@@ -73,6 +97,14 @@ Creates a new `Switch` handle corresponding to the entity with YAML ID `id`.
 proc newTextSensor*(id: string): TextSensor
 ```
 Creates a new `TextSensor` handle corresponding to the entity with YAML ID `id`.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `id` | `string` | The entity ID defined in ESPHome YAML. |
+
+**Returns:**
+- `TextSensor`: A new `TextSensor` handle.
 
 ---
 
@@ -82,7 +114,16 @@ Creates a new `TextSensor` handle corresponding to the entity with YAML ID `id`.
 ```nim
 proc publishState*(s: Sensor, val: float32): bool {.discardable.}
 ```
-Publishes a numerical float state `val` to the sensor identified by `s.id`. Returns `true` if the entity was found and the state update was dispatched.
+Publishes a numerical float state `val` to the sensor identified by `s.id`.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `s` | `Sensor` | Target `Sensor` handle. |
+| `val` | `float32` | 32-bit floating point state to publish. |
+
+**Returns:**
+- `bool`: `true` if entity was located and state was dispatched.
 
 ---
 
@@ -92,6 +133,15 @@ proc publishState*(bs: BinarySensor, val: bool): bool {.discardable.}
 ```
 Publishes a boolean state `val` (`true` / `false`) to the binary sensor identified by `bs.id`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `bs` | `BinarySensor` | Target `BinarySensor` handle. |
+| `val` | `bool` | Boolean state to publish. |
+
+**Returns:**
+- `bool`: `true` if entity was located and state was dispatched.
+
 ---
 
 ### `publishState (Switch)`
@@ -100,6 +150,15 @@ proc publishState*(sw: Switch, val: bool): bool {.discardable.}
 ```
 Publishes a boolean state `val` (`true` / `false`) to the switch identified by `sw.id`.
 
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `sw` | `Switch` | Target `Switch` handle. |
+| `val` | `bool` | Boolean switch state to publish. |
+
+**Returns:**
+- `bool`: `true` if entity was located and state was dispatched.
+
 ---
 
 ### `publishState (TextSensor)`
@@ -107,6 +166,15 @@ Publishes a boolean state `val` (`true` / `false`) to the switch identified by `
 proc publishState*(ts: TextSensor, val: string): bool {.discardable.}
 ```
 Publishes a text string state `val` to the text sensor identified by `ts.id`.
+
+**Parameters:**
+| Name | Type | Description |
+|---|---|---|
+| `ts` | `TextSensor` | Target `TextSensor` handle. |
+| `val` | `string` | String message or state to publish. |
+
+**Returns:**
+- `bool`: `true` if entity was located and state was dispatched.
 
 ---
 
