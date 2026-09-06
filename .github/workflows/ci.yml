@@ -8,12 +8,27 @@ on:
 
 jobs:
   test:
-    name: Test on Linux (Nim 2.2 & Stable)
+    name: Test Nim ${{ matrix.nim-version }} on Linux
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - nim-version: latest:2.2
+          - nim-version: latest
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Install Nim
+        uses: asdf-vm/actions/install@v4
+        with:
+          tool_versions: |
+            nim ${{ matrix.nim-version }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,21 +40,8 @@ jobs:
           pip install -r docs-requirements.txt
           pip install esphome
 
-      - name: Set up Nim 2.2
-        uses: jiro4989/setup-nim-action@v2
-        with:
-          nim-version: '2.2.8'
-
-      - name: Run Build and Test Suite (Nim 2.2)
+      - name: Run Build and Test Suite
         run: |
+          asdf set nim ${{ matrix.nim-version }}
           chmod +x scripts/build.sh
-          ./scripts/build.sh
-
-      - name: Set up Nim Stable
-        uses: jiro4989/setup-nim-action@v2
-        with:
-          nim-version: 'stable'
-
-      - name: Run Build and Test Suite (Nim Stable)
-        run: |
           ./scripts/build.sh
