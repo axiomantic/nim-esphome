@@ -311,6 +311,47 @@ proc generateManifest*(installer: InstallerDefinition): string =
 
   result = pretty(root, 2)
 
+proc renderFieldBody(html: var seq[string], field: InstallerField, installer: InstallerDefinition) =
+  case field.kind
+  of ifkFile:
+    html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\">")
+    if field.accept.contains(".wav") or field.partition == "sound_data":
+      html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max 256 KB.<br>Flashed to safe dedicated partition at 0x370000, 100% safe from OTA firmware updates.</div>")
+    html.add("        <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
+  of ifkSelect:
+    html.add("        <select id=\"field_" & field.name & "\">")
+    for opt in field.options:
+      let selected = if opt == field.defaultVal: " selected" else: ""
+      html.add("          <option value=\"" & opt & "\"" & selected & ">" & opt & "</option>")
+    html.add("        </select>")
+    if field.optionDetails.len > 0:
+      html.add("        <div class=\"preset-card\" id=\"presetCard_" & field.name & "\">")
+      html.add("          <div class=\"preset-header\">")
+      html.add("            <span class=\"preset-title\" id=\"presetTitle_" & field.name & "\">Preset Details</span>")
+      html.add("            <span class=\"preset-badge\" id=\"presetCadence_" & field.name & "\"></span>")
+      html.add("          </div>")
+      html.add("          <p class=\"preset-desc\" id=\"presetDesc_" & field.name & "\"></p>")
+      for child in installer.fields:
+        if child.dependsOnField == field.name:
+          let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\""
+          html.add("          <div class=\"nested-field\" id=\"group_" & child.name & "\" data-field=\"" & child.name & "\"" & extraAttrs & ">")
+          html.add("            <label for=\"field_" & child.name & "\">" & child.label & "</label>")
+          html.renderFieldBody(child, installer)
+          if child.description.len > 0:
+            html.add("            <div class=\"hint\">" & child.description & "</div>")
+          html.add("          </div>")
+      html.add("          <div class=\"preview-actions\">")
+      html.add("            <button type=\"button\" class=\"preview-btn\" id=\"previewBtn_" & field.name & "\">▶ Preview Sound</button>")
+      html.add("          </div>")
+      html.add("        </div>")
+  of ifkText:
+    html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\">")
+  of ifkNumber:
+    html.add("        <input type=\"number\" id=\"field_" & field.name & "\" min=\"" & $field.minVal & "\" max=\"" & $field.maxVal & "\" step=\"" & $field.stepVal & "\" value=\"" & field.defaultVal & "\">")
+  of ifkCheckbox:
+    let checked = if field.defaultVal == "true": " checked" else: ""
+    html.add("        <input type=\"checkbox\" id=\"field_" & field.name & "\"" & checked & ">")
+
 proc generateHtml*(installer: InstallerDefinition): string =
   ## Generates the complete HTML page with embedded reactive WebSerial flashing logic,
   ## rich preset cards, Web Audio synthesis preview, and safe partition callouts.
@@ -341,6 +382,9 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    .preset-title { font-weight: 600; color: #93c5fd; font-size: 0.95rem; }")
   html.add("    .preset-badge { font-size: 0.75rem; background: var(--accent-badge); color: var(--accent-badge-text); padding: 2px 8px; border-radius: 12px; font-weight: 500; font-family: monospace; }")
   html.add("    .preset-desc { font-size: 0.85rem; color: #cbd5e1; margin: 4px 0 10px 0; line-height: 1.4; }")
+  html.add("    .nested-field { margin: 12px 0; background: rgba(15, 23, 42, 0.6); border: 1px dashed #3b82f6; border-radius: 8px; padding: 14px; text-align: left; }")
+  html.add("    .nested-field[data-depends-on] { display: none; }")
+  html.add("    .nested-field.highlight { border-color: var(--primary); box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3); }")
   html.add("    .preview-btn { background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease; }")
   html.add("    .preview-btn:hover { background: #334155; color: #7dd3fc; }")
   html.add("    .preview-btn.playing { background: #0284c7; color: #ffffff; border-color: #0284c7; }")
@@ -362,43 +406,23 @@ proc generateHtml*(installer: InstallerDefinition): string =
   if installer.fields.len > 0:
     html.add("    <div class=\"fields-container\">")
     for field in installer.fields:
-      var extraAttrs = ""
       if field.dependsOnField.len > 0:
-        extraAttrs = " data-depends-on=\"" & field.dependsOnField & "\" data-depends-val=\"" & field.dependsOnValue & "\""
-      html.add("      <div class=\"form-group\" id=\"group_" & field.name & "\" data-field=\"" & field.name & "\"" & extraAttrs & ">")
+        continue
+      html.add("      <div class=\"form-group\" id=\"group_" & field.name & "\" data-field=\"" & field.name & "\">")
       html.add("        <label for=\"field_" & field.name & "\">" & field.label & "</label>")
-      case field.kind
-      of ifkFile:
-        html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\">")
-        if field.accept.contains(".wav") or field.partition == "sound_data":
-          html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max 256 KB.<br>Flashed to safe dedicated partition at 0x370000, 100% safe from OTA firmware updates.</div>")
-        html.add("        <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
-      of ifkSelect:
-        html.add("        <select id=\"field_" & field.name & "\">")
-        for opt in field.options:
-          let selected = if opt == field.defaultVal: " selected" else: ""
-          html.add("          <option value=\"" & opt & "\"" & selected & ">" & opt & "</option>")
-        html.add("        </select>")
-        if field.optionDetails.len > 0:
-          html.add("        <div class=\"preset-card\" id=\"presetCard_" & field.name & "\">")
-          html.add("          <div class=\"preset-header\">")
-          html.add("            <span class=\"preset-title\" id=\"presetTitle_" & field.name & "\">Preset Details</span>")
-          html.add("            <span class=\"preset-badge\" id=\"presetCadence_" & field.name & "\"></span>")
-          html.add("          </div>")
-          html.add("          <p class=\"preset-desc\" id=\"presetDesc_" & field.name & "\"></p>")
-          html.add("          <div class=\"preview-actions\">")
-          html.add("            <button type=\"button\" class=\"preview-btn\" id=\"previewBtn_" & field.name & "\">▶ Preview Sound</button>")
-          html.add("          </div>")
-          html.add("        </div>")
-      of ifkText:
-        html.add("        <input type=\"text\" id=\"field_" & field.name & "\" value=\"" & field.defaultVal & "\">")
-      of ifkNumber:
-        html.add("        <input type=\"number\" id=\"field_" & field.name & "\" min=\"" & $field.minVal & "\" max=\"" & $field.maxVal & "\" step=\"" & $field.stepVal & "\" value=\"" & field.defaultVal & "\">")
-      of ifkCheckbox:
-        let checked = if field.defaultVal == "true": " checked" else: ""
-        html.add("        <input type=\"checkbox\" id=\"field_" & field.name & "\"" & checked & ">")
+      html.renderFieldBody(field, installer)
       if field.description.len > 0:
         html.add("        <div class=\"hint\">" & field.description & "</div>")
+      if field.kind != ifkSelect or field.optionDetails.len == 0:
+        for child in installer.fields:
+          if child.dependsOnField == field.name:
+            let extraAttrs = " data-depends-on=\"" & child.dependsOnField & "\" data-depends-val=\"" & child.dependsOnValue & "\""
+            html.add("        <div class=\"nested-field\" id=\"group_" & child.name & "\" data-field=\"" & child.name & "\"" & extraAttrs & ">")
+            html.add("          <label for=\"field_" & child.name & "\">" & child.label & "</label>")
+            html.renderFieldBody(child, installer)
+            if child.description.len > 0:
+              html.add("          <div class=\"hint\">" & child.description & "</div>")
+            html.add("        </div>")
       html.add("      </div>")
     html.add("    </div>")
 
@@ -467,7 +491,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("            return;")
   html.add("          }")
   html.add("        }")
-  html.add("        alert('Please select a custom .wav audio file below first to preview.');")
+  html.add("        alert('Please select a custom .wav audio file first to preview.');")
   html.add("        stopAudioPreview();")
   html.add("        return;")
   html.add("      }")
