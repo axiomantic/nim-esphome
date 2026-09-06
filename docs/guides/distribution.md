@@ -1,6 +1,6 @@
 # Project Templating & 1-Click Distribution
 
-Writing expressive, compile-time verified embedded logic in Nim is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.
+Writing expressive, statically-typed embedded logic in Nim (and compile-time verified state machines via `nim-typestates`) is only half the battle. Getting your firmware into end users' hands—without forcing them to install Nim, PlatformIO, Python virtual environments, or edit fragile YAML lambdas—is critical for real-world adoption.
 
 `nim-esphome` establishes a standardized distribution architecture that enables:
 

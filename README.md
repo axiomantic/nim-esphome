@@ -465,7 +465,7 @@ button:
 A compile-time verified 14-state voice satellite firmware state machine for [ESPHome](https://esphome.io) and Home Assistant (analogous to Home Assistant's `wyoming-satellite`, but executing directly on the ESP32 microcontroller).
 
 - **Problem Solved**: Conventional voice satellites distribute state across asynchronous Home Assistant network events and C++ callbacks, causing split-brain race conditions: premature chime clipping, false "stop" word clobbering, audio ducking failures, and offline phantom triggers.
-- **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and `typestates`. Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
+- **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and [`nim-typestates`](https://github.com/elijahr/nim-typestates). Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
 - **Supported Hardware**: Seeed Studio ReSpeaker XVF3800, Home Assistant Voice PE, ESP32-S3-BOX-3, and any standard ESP32 voice satellite.
 
 > 📖 **Case Study**: Read the complete [Verified Voice Satellite Case Study](docs/guides/esphome-satellite.md) for architectural details and state machine diagrams.

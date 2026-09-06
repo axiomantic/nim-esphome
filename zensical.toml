@@ -6,6 +6,7 @@ site_author = "Axiomantic"
 repo_url = "https://github.com/axiomantic/nim-esphome"
 repo_name = "axiomantic/nim-esphome"
 edit_uri = "edit/main/docs/"
+extra_css = ["stylesheets/extra.css"]
 
 nav = [
   { "Overview" = "index.md" },
@@ -35,6 +36,7 @@ nav = [
 ]
 
 [project.theme]
+variant = "classic"
 language = "en"
 features = [
   "announce.dismiss",
@@ -44,12 +46,15 @@ features = [
   "content.footnote.tooltips",
   "content.tabs.link",
   "content.tooltips",
+  "navigation.expand",
   "navigation.footer",
   "navigation.indexes",
   "navigation.instant",
   "navigation.instant.prefetch",
   "navigation.path",
   "navigation.sections",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
   "navigation.top",
   "navigation.tracking",
   "search.highlight",

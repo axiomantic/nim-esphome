@@ -71,6 +71,8 @@ discard imu.writeRegister(0x1B'u8, [0x08'u8, 0x00'u8])
 Read raw bytes or register contents via combined write-read restart transactions:
 
 ```nim
+import std/strutils
+
 # Read WHO_AM_I register (0x75)
 let whoAmI: uint8 = imu.readByte(0x75'u8)
 info("IMU", "Device WHO_AM_I signature: 0x" & whoAmI.toHex(2))
