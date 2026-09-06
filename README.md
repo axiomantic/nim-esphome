@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/docs-zensical-blue.svg)](https://axiomantic.github.io/nim-esphome/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**`nim-esphome`** brings the expressive power, compile-time safety, and zero-overhead performance of [Nim](https://nim-lang.org) to [ESPHome](https://esphome.io). Write custom ESP32/ESP8266 logic, embedded state machines, filters, and device drivers in Nim that compile directly into ESPHome's PlatformIO and ESP-IDF build pipelines.
+**`nim-esphome`** lets you write ESPHome custom components and embedded logic in [Nim](https://nim-lang.org). Write clean, memory-safe code for ESP32 and ESP8266 devices that compiles directly into ESPHome's PlatformIO and ESP-IDF build pipelines.
 
 > 📚 **Complete Documentation & API Reference**: Browse the full static documentation site built with [Zensical](https://github.com/squidfunk/zensical) in [`docs/`](docs/index.md) or online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/).
 
@@ -43,20 +43,19 @@
 ESPHome is great for declaratively configuring hardware, but complex embedded logic often gets squeezed into long, unmaintainable C++ lambdas in YAML. C++ lambdas lack:
 
 - Algebraic data types and pattern matching
-- Compile-time verified state machines (e.g. via [`nim-typestates`](https://github.com/elijahr/nim-typestates))
 - High-level syntax with memory safety guarantees
 - Fast local unit testing on host machines (macOS/Linux) without flashing hardware
 
-`nim-esphome` solves this by giving you a first-class external component in ESPHome. You write idiomatic Nim code, and `nim-esphome` translates it to C++ on the fly, compiles it into your firmware binary, and links it directly against ESPHome\x27s runtime.
+`nim-esphome` solves this by giving you a first-class external component in ESPHome. You write idiomatic Nim code, and `nim-esphome` translates it to C++ on the fly, compiles it into your firmware binary, and links it directly against ESPHome's runtime.
 
 ---
 
 ## Key Features
 
-- ⚡ **Zero-Overhead Embedded Runtime**: Uses Nim\x27s deterministic ARC memory management (`--mm:arc`), `-d:useMalloc`, `--exceptions:goto`, and `--panics:on`. No heavy tracing garbage collector or thread overhead.
-- 🔌 **Seamless External Component**: Plug-and-play via ESPHome\x27s standard `external_components`. Automatically generates and compiles `.cpp` files during `esphome compile` and `esphome run`.
+- ⚡ **Zero-Overhead Embedded Runtime**: Uses Nim's deterministic ARC memory management (`--mm:arc`), `-d:useMalloc`, `--exceptions:goto`, and `--panics:on`. No heavy tracing garbage collector or thread overhead.
+- 🔌 **First-Class External Component**: Plug-and-play via ESPHome's standard `external_components`. Automatically generates and compiles `.cpp` files during `esphome compile` and `esphome run`.
 - 🪵 **ESPHome Logging & Clock Bindings**: Native Nim wrappers for `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`, `ESP_LOGD`, `millis()`, and `delay()`.
-- 🔄 **Lifecycle Hooks**: Simple `esphomeSetup` and `esphomeLoop` templates integrated directly with ESPHome\x27s main loop.
+- 🔄 **Lifecycle Hooks**: Simple `esphomeSetup` and `esphomeLoop` templates integrated directly with ESPHome's main loop.
 - 🔗 **Exporting to C++ Lambdas**: Convenient `{.exportEsphome.}` pragma to expose C ABI functions callable directly from ESPHome YAML lambdas.
 - 🧪 **Hardware-Free Local Testing**: Write unit tests for your device logic in Nim and run them instantly on macOS or Linux using standard `nim c -r`.
 
@@ -88,7 +87,7 @@ Clone `nim-esphome` to your local development machine:
 git clone https://github.com/axiomantic/nim-esphome.git ~/Development/nim-esphome
 ```
 
-Reference the `components` directory in your device\x27s ESPHome YAML:
+Reference the `components` directory in your device's ESPHome YAML:
 
 ```yaml
 external_components:
@@ -194,14 +193,14 @@ Comprehensive guides and API references are available in the [`docs/`](docs/inde
 - ⚡ [**Target Architectures & Cross-Compilation**](docs/guides/architectures.md): Multi-CPU alignment (Xtensa, RISC-V, ARM), pointer widths, and ARC memory.
 - 🎛️ [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, select, number, and button controls.
 - 📊 [**Lovelace Dashboard Surfaces DSL**](docs/guides/dashboard-dsl.md): Declaratively define and export Home Assistant Lovelace cards directly from firmware.
-- ⚡ [**Custom Actions & Services DSL**](docs/guides/actions-dsl.md): Compile-time validated, type-safe Home Assistant actions and service handlers.
+- ⚡ [**Custom Actions & Services DSL**](docs/guides/actions-dsl.md): Type-safe Home Assistant actions and service handlers.
 - ⏱️ [**RTOS Task & Schedule DSL**](docs/guides/schedule-dsl.md): Cooperative, non-blocking periodic task scheduling and one-shot delays.
 - 🖥️ [**Composite Hardware Surfaces DSL**](docs/guides/surface-dsl.md): Unified domain models combining controls, telemetry, and matched dashboard cards.
 - 🔌 [**Hardware Buses (GPIO & I2C)**](docs/guides/hardware.md): Microcontroller pin modes and I2C peripheral register transfers.
 - 💾 [**Flash Preferences (NVS)**](docs/guides/storage.md): Non-volatile parameter storage across power cycles.
 - 📈 [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
 - 🔗 [**C++ Interoperability**](docs/guides/interop.md): Exporting Nim procs to YAML lambdas and calling C++ libraries.
-- 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world 14-state verified typestate FSM for ESPHome.
+- 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world on-device state supervisor for ESPHome voice satellites.
 - 🌐 [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md): ESP-Web-Tools browser flashing, My Home Assistant import, and CI factory binary releases.
 - 📚 [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
 
@@ -238,8 +237,8 @@ nim:
 
   # Automated Nimble dependencies (installed into isolated build cache)
   requires:
-    - https://github.com/elijahr/nim-typestates
-    - zippy
+    - jsony
+    - chroma
 
   # Additional manual include paths for external packages (Optional)
   nimble_paths:
@@ -278,7 +277,7 @@ nim:
 nim:
   source: src/main.nim
   requires:
-    - https://github.com/elijahr/nim-typestates
+    - jsony
     - chroma
 ```
 
@@ -354,7 +353,7 @@ When compiled for embedded firmware, `publishState` looks up registered entities
 
 ### Domain-Specific Languages (DSLs) for Home Assistant Surfaces
 
-`nim-esphome` includes a suite of compile-time verified DSLs (`nim_esphome/dsl`) that bridge low-level microcontroller silicon to high-level Home Assistant surfaces:
+`nim-esphome` includes a suite of declarative DSLs (`nim_esphome/dsl`) that bridge low-level microcontroller silicon to high-level Home Assistant surfaces:
 
 #### 1. Declarative Controls DSL (`esphomeControls`)
 Declare `select`, `number`, `switch`, and `button` controls with automatic flash NVS persistence:
@@ -588,7 +587,7 @@ button:
 
 ### [esphome-satellite](https://github.com/axiomantic/esphome-satellite)
 
-A compile-time verified 14-state voice satellite firmware state machine for [ESPHome](https://esphome.io) and Home Assistant (analogous to Home Assistant's `wyoming-satellite`, but executing directly on the ESP32 microcontroller).
+A 14-state voice satellite firmware state machine for [ESPHome](https://esphome.io) and Home Assistant (analogous to Home Assistant's `wyoming-satellite`, but executing directly on the ESP32 microcontroller).
 
 - **Problem Solved**: Conventional voice satellites distribute state across asynchronous Home Assistant network events and C++ callbacks, causing split-brain race conditions: premature chime clipping, false "stop" word clobbering, audio ducking failures, and offline phantom triggers.
 - **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and [`nim-typestates`](https://github.com/elijahr/nim-typestates). Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
@@ -609,27 +608,16 @@ external_components:
       ref: main
     components: [nim]
 
+# Include the pre-packaged esphome-satellite FSM
 packages:
-  satellite_fsm:
-    url: https://github.com/axiomantic/esphome-satellite
-    file: packages/satellite_nim_fsm.yaml
-    ref: main
-```
-
-Or configure the Nim entrypoint directly:
-
-```yaml
-nim:
-  source: /path/to/esphome-satellite/src/nim_esphome_satellite.nim
-  requires:
-    - https://github.com/elijahr/nim-typestates
+  satellite_fsm: github://axiomantic/esphome-satellite/packages/satellite_nim_fsm.yaml
 ```
 
 ---
 
 ## Project Templating & 1-Click Distribution
 
-`nim-esphome` establishes a production-grade distribution template for any embedded Nim project, enabling end-users to flash hardware without compiling code or editing YAML:
+`nim-esphome` establishes a standard distribution template for embedded Nim projects, enabling end-users to flash hardware without compiling code or editing YAML:
 
 1. **In-Browser Web Flashing (ESP-Web-Tools)**: Host a zero-install WebSerial installer on GitHub Pages. Users plug in their ESP32 via USB and flash factory binaries directly from Chrome or Edge.
 2. **One-Click Home Assistant Import**: Provide "My Home Assistant" dashboard import badges in your repository. Users click the badge to automatically adopt remote packages into their local ESPHome Dashboard.

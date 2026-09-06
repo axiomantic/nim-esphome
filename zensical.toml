@@ -1,7 +1,7 @@
 [project]
 site_url = "https://axiomantic.github.io/nim-esphome/"
 site_name = "nim-esphome"
-site_description = "Embedded Nim runtime, hardware abstractions, and typestate DSL for ESPHome"
+site_description = "Embedded Nim runtime, hardware abstractions, and Home Assistant DSLs for ESPHome"
 site_author = "Axiomantic"
 repo_url = "https://github.com/axiomantic/nim-esphome"
 repo_name = "axiomantic/nim-esphome"

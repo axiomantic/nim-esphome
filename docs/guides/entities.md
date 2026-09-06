@@ -145,7 +145,7 @@ type ProcessingSoundStyle* = enum
   psSonar      = "Sonar"
 
 esphomeControls:
-  # 1. Type-safe Select with compile-time enum parsing
+  # 1. Type-safe Select with enum mapping
   select[ProcessingSoundStyle]("processing_sound"):
     name = "Processing Sound Style"
     default = psSpinner

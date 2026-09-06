@@ -1,6 +1,6 @@
 # Case Study: Verified Voice Satellites (esphome-satellite)
 
-This case study demonstrates how `nim-esphome` powers **[`esphome-satellite`](https://github.com/axiomantic/esphome-satellite)**—a compile-time verified voice satellite state machine for ESPHome and Home Assistant.
+This case study demonstrates how `nim-esphome` powers **[`esphome-satellite`](https://github.com/axiomantic/esphome-satellite)**—an on-device voice satellite state machine for ESPHome and Home Assistant.
 
 ---
 
@@ -21,7 +21,7 @@ This loose architecture leads to well-known race conditions:
 
 `esphome-satellite` eliminates these bugs entirely by implementing a formal **14-state typestate Finite State Machine (FSM)** in Nim using `nim-esphome` and the `typestates` package.
 
-With typestates, states are represented as unique compile-time types. State transitions are defined as type transformations. If code attempts an illegal transition (such as triggering a wake word while in the `Muted` or `Updating` state), the Nim compiler rejects the build at compile time!
+With typestates, states are represented as unique compile-time types. State transitions are defined as type transformations. If code attempts an illegal transition (such as triggering a wake word while in the `Muted` or `Updating` state), the Nim compiler rejects the build at compile time.
 
 ```mermaid
 stateDiagram-v2
@@ -89,7 +89,7 @@ cd esphome-satellite
 ./scripts/build.sh
 ```
 
-All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware!
+All 21 integration test suites—including happy paths, stop word interrupts, silence dismissals, audio ducking cycles, and compile-time rejection of illegal transitions—run in under a second without flashing hardware.
 
 ---
 

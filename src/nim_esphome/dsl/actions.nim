@@ -4,7 +4,7 @@
 ## directly in Nim with full parameter typing and validation.
 ##
 ## Features:
-## - Compile-time and runtime validation for service arguments (`string`, `int`, `float`, `bool`).
+## - Typed validation for service arguments (`string`, `int`, `float`, `bool`).
 ## - Type-safe parameter getters (`getString`, `getInt`, `getFloat`, `getBool`).
 ## - Generates standard ESPHome `api.services` YAML configurations.
 ## - Mock invocation hooks for unit testing on host machines (`triggerServiceCall`).

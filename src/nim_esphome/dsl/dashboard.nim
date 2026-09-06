@@ -4,7 +4,7 @@
 ## Lovelace dashboard cards directly within their embedded Nim code.
 ##
 ## Features:
-## - Compile-time construction of Lovelace `entities`, `tile`, `glance`, `grid`, and `button` cards.
+## - Declarative construction of Lovelace `entities`, `tile`, `glance`, `grid`, and `button` cards.
 ## - Direct export to JSON and YAML formats compatible with Home Assistant Raw Dashboard Config.
 ## - Easy integration with ESPHome web servers or diagnostic configuration sensors.
 ##

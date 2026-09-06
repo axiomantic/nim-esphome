@@ -4,7 +4,7 @@ In Home Assistant, **Actions** (historically called **Services**) allow users, a
 
 Implementing custom services in native ESPHome C++ requires managing untyped argument maps, manual string parsing, and verbose lambda bindings.
 
-The **Custom Actions DSL** (`nim_esphome/dsl/actions`) enables firmware authors to declare compile-time and runtime type-safe Home Assistant actions directly in Nim.
+The **Custom Actions DSL** (`nim_esphome/dsl/actions`) enables firmware authors to declare typed Home Assistant actions directly in Nim.
 
 ---
 

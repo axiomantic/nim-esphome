@@ -12,7 +12,7 @@ ESPHome is an exceptional declarative platform for IoT hardware configuration. H
 
 Writing C++ in YAML lambdas presents serious drawbacks:
 
-- ❌ **No compile-time state guarantees**: Asynchronous network events and callbacks easily cause race conditions and invalid state transitions.
+- ❌ **Fragile YAML lambdas**: Multi-line C++ strings embedded in YAML without IDE assistance, refactoring tools, or proper syntax highlighting.
 - ❌ **Difficult host testing**: Verifying logic requires repeatedly compiling PlatformIO firmware and flashing physical microcontrollers.
 - ❌ **C++ verbosity & memory hazards**: Pointer arithmetic and unmanaged state introduce subtle memory corruptions.
 
@@ -29,7 +29,7 @@ flowchart LR
 - ⚡ **Zero-Overhead Embedded C++ Transpilation**: Nim compiles to clean, standard C++ without an interpreter or heavy runtime.
 - 🧠 **ARC Deterministic Memory**: Memory is managed deterministically via ARC (`--mm:arc`) and FreeRTOS heap (`-d:useMalloc`) with zero GC pause times.
 - 🧪 **Hardware-Free Host Unit Testing**: Run automated test suites instantly on macOS and Linux (`nim c -r`) without needing physical hardware attached.
-- 🛡️ **Compile-Time Typestates (with [`nim-typestates`](https://github.com/elijahr/nim-typestates))**: Model complex state machines where illegal transitions (e.g. triggering wake words during OTA updates) are rejected at compile time. See the [Verified Voice Satellite Case Study](guides/esphome-satellite.md) for an in-depth implementation.
+- 🛠️ **Declarative Home Assistant DSLs**: Build Lovelace dashboards, custom actions/services, non-blocking background schedules, and web installers directly in Nim.
 
 ---
 
@@ -47,7 +47,7 @@ Explore the comprehensive guides and API references:
 - [**Flash Preferences (NVS)**](guides/storage.md): Persist calibration values, counters, and configurations across power cycles.
 - [**DSP & Closed-Loop Control**](guides/dsp-control.md): Use stack-allocated PID controllers, moving average/median filters, and switch debouncers.
 - [**C++ Interoperability**](guides/interop.md): Export Nim procedures to ESPHome YAML lambdas using `{.exportEsphome.}`.
-- [**Verified Voice Satellite (Case Study)**](guides/esphome-satellite.md): Explore `esphome-satellite`, a real-world 14-state verified typestate voice assistant.
+- [**Verified Voice Satellite (Case Study)**](guides/esphome-satellite.md): Explore `esphome-satellite`, a real-world on-device state supervisor for ESPHome voice satellites.
 - [**Project Templating & 1-Click Distribution**](guides/distribution.md): Set up ESP-Web-Tools browser flashing, My Home Assistant dashboard import, and automated CI factory binary releases.
 
 ### 📚 API Reference

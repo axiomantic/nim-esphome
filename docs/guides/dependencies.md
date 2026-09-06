@@ -18,7 +18,7 @@ nim:
     - chroma
 
     # 2. Direct Git repository URL
-    - https://github.com/elijahr/nim-typestates
+    - https://github.com/treeform/jsony
 
     # 3. Specific branch, tag, or commit hash
     - https://github.com/nim-lang/zip#v0.3.1
@@ -32,7 +32,7 @@ To prevent polluting your global host environment and avoid permission conflicts
 
 ```mermaid
 flowchart TD
-    YAML["ESPHome YAML<br/>requires: [typestates, chroma]"] --> Resolver["nim-esphome Dependency Resolver"]
+    YAML["ESPHome YAML<br/>requires: [jsony, chroma]"] --> Resolver["nim-esphome Dependency Resolver"]
     Resolver --> Check{"Already cached in<br/>.esphome/build/<node>/.nimble?"}
     Check -->|No| Install["nimble install -y --nimbleDir:<br/>.esphome/build/<node>/.nimble"]
     Check -->|Yes| Skip["Skip network download<br/>(instant build)"]
@@ -62,4 +62,4 @@ nim:
     - /Users/username/Development/my_dsp_filters/src
 ```
 
-These paths are passed directly to `nim cpp` as `--path:...` search flags, allowing you to `import` your modules seamlessly.
+These paths are passed directly to `nim cpp` as `--path:...` search flags, allowing you to `import` your modules directly.

@@ -2,18 +2,18 @@
 
 Firmware developers frequently face a disconnect between embedded hardware capabilities and user interfaces in Home Assistant. When a device exposes multiple controls—such as volume sliders, mode selectors, switches, or status sensors—users typically have to construct custom Lovelace dashboard cards manually.
 
-The **Lovelace Dashboard Surface DSL** (`nim_esphome/dsl/dashboard`) allows you to define, style, and generate production-ready Home Assistant dashboard cards directly alongside your firmware code.
+The **Lovelace Dashboard Surface DSL** (`nim_esphome/dsl/dashboard`) allows you to define, style, and generate Home Assistant dashboard cards directly alongside your firmware code.
 
 ---
 
 ## Core Concepts
 
-The dashboard DSL operates at compile time to construct structured representations of Lovelace card components:
+The dashboard DSL constructs structured representations of Lovelace card components:
 
 - **[`DashboardCard`](../api/dsl.md)**: Encapsulates card types (`entities`, `tile`, `glance`, `grid`, `button`, `custom`), card headers, icons, column counts, and entity rows.
 - **[`DashboardEntity`](../api/dsl.md)**: Represents an individual entity row, supporting custom display names, icons, and secondary info (`last-changed`, `last-updated`).
 - **[`LovelaceDashboard`](../api/dsl.md)**: A complete multi-view dashboard specification.
-- **Serialization**: Instant compilation to **JSON** (`toJson()`) and **YAML** (`toYaml()`) matching Home Assistant's dashboard schema.
+- **Serialization**: Direct export to **JSON** (`toJson()`) and **YAML** (`toYaml()`) matching Home Assistant's dashboard schema.
 
 ---
 

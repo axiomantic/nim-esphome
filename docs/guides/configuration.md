@@ -15,7 +15,7 @@ nim:
 
   # External Nimble packages or Git repositories (Optional)
   requires:
-    - https://github.com/elijahr/nim-typestates
+    - jsony
     - chroma
 
   # Additional include directories for manual libraries (Optional)
