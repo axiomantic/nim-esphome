@@ -1,7 +1,18 @@
+## `nim_esphome/dsp`: Embedded Digital Signal Processing and Closed-Loop Control.
+##
+## Provides deterministic, stack-allocated algorithms designed specifically for microcontrollers:
+## - `PIDController`: Closed-loop feedback controller with anti-windup clamping.
+## - `MovingAverage`: Stack-allocated O(1) circular buffer sliding mean filter.
+## - `MovingMedian`: Stack-allocated sliding median filter for outlier rejection.
+## - `LowPassFilter`: Single-pole exponential IIR smoothing filter.
+## - `Debouncer`: Time-based edge-detecting debouncer for mechanical contacts.
+
 import std/algorithm
 
 type
   PIDController* = object
+    ## Closed-loop Proportional-Integral-Derivative (PID) controller.
+    ## All calculations use 32-bit floating point math with anti-windup clamping.
     kp*, ki*, kd*: float32
     minOutput*, maxOutput*: float32
     integral*: float32
@@ -13,6 +24,8 @@ proc newPIDController*(
     minOutput: float32 = -1.0e9'f32,
     maxOutput: float32 = 1.0e9'f32
 ): PIDController =
+  ## Initializes a new PIDController with tuning gains `kp`, `ki`, `kd`
+  ## and optional saturation limits `minOutput` and `maxOutput`.
   PIDController(
     kp: kp,
     ki: ki,
@@ -25,11 +38,14 @@ proc newPIDController*(
   )
 
 proc reset*(pid: var PIDController) =
+  ## Resets accumulated integral error and previous derivative state to zero.
   pid.integral = 0.0'f32
   pid.prevError = 0.0'f32
   pid.hasPrev = false
 
 proc update*(pid: var PIDController, setpoint, measured, dt: float32): float32 =
+  ## Computes the control effort given target `setpoint`, current `measured` value,
+  ## and elapsed time `dt` in seconds. Automatically applies anti-windup clamping.
   let error = setpoint - measured
   let pTerm = pid.kp * error
 
@@ -57,20 +73,26 @@ proc update*(pid: var PIDController, setpoint, measured, dt: float32): float32 =
 
 type
   MovingAverage*[N: static int] = object
+    ## Stack-allocated moving average filter with a fixed window size of `N` samples.
+    ## Performs insertions and updates in constant O(1) time without heap allocations.
     buffer: array[N, float32]
     head: int
     count: int
     sum: float32
 
 proc newMovingAverage*[N: static int](): MovingAverage[N] =
+  ## Creates a new, empty moving average filter with window size `N`.
   MovingAverage[N](head: 0, count: 0, sum: 0.0'f32)
 
 proc reset*[N: static int](ma: var MovingAverage[N]) =
+  ## Clears the moving average buffer and resets the cumulative sum.
   ma.head = 0
   ma.count = 0
   ma.sum = 0.0'f32
 
+
 proc update*[N: static int](ma: var MovingAverage[N], val: float32): float32 =
+  ## Inserts sample `val` into the circular buffer and returns the updated average.
   if ma.count < N:
     ma.buffer[ma.head] = val
     ma.sum += val
@@ -84,23 +106,30 @@ proc update*[N: static int](ma: var MovingAverage[N], val: float32): float32 =
   ma.sum / float32(ma.count)
 
 proc value*[N: static int](ma: MovingAverage[N]): float32 =
+  ## Returns the current arithmetic average of samples in the buffer without modifying state.
   if ma.count == 0: 0.0'f32
   else: ma.sum / float32(ma.count)
 
 type
   MovingMedian*[N: static int] = object
+    ## Stack-allocated moving median filter with a fixed window of `N` samples.
+    ## Excellent for rejecting impulse noise and outliers from ultrasonic or ADC sensors.
     buffer: array[N, float32]
     head: int
     count: int
 
 proc newMovingMedian*[N: static int](): MovingMedian[N] =
+  ## Creates a new, empty moving median filter with window size `N`.
   MovingMedian[N](head: 0, count: 0)
 
 proc reset*[N: static int](mm: var MovingMedian[N]) =
+  ## Clears all samples in the moving median buffer.
   mm.head = 0
   mm.count = 0
 
 proc value*[N: static int](mm: MovingMedian[N]): float32 =
+  ## Computes and returns the median of the current samples using an in-place stack sort.
+  ## Does not allocate heap memory.
   if mm.count == 0:
     return 0.0'f32
   var sortedVals: array[N, float32]
@@ -121,6 +150,7 @@ proc value*[N: static int](mm: MovingMedian[N]): float32 =
     (sortedVals[(mm.count div 2) - 1] + sortedVals[mm.count div 2]) * 0.5'f32
 
 proc update*[N: static int](mm: var MovingMedian[N], val: float32): float32 =
+  ## Inserts sample `val` into the buffer and returns the updated median value.
   mm.buffer[mm.head] = val
   if mm.count < N:
     inc mm.count
@@ -129,18 +159,24 @@ proc update*[N: static int](mm: var MovingMedian[N], val: float32): float32 =
 
 type
   LowPassFilter* = object
+    ## Single-pole exponential Infinite Impulse Response (IIR) low-pass filter.
+    ## Formula: `y[n] = alpha * x[n] + (1.0 - alpha) * y[n-1]`
     alpha*: float32
     currentVal*: float32
     initialized*: bool
 
 proc newLowPassFilter*(alpha: float32, initialVal: float32 = 0.0'f32): LowPassFilter =
+  ## Initializes a low-pass filter with smoothing factor `alpha` in range `[0.0, 1.0]`.
+  ## Lower `alpha` provides stronger smoothing at the cost of higher phase lag.
   LowPassFilter(alpha: clamp(alpha, 0.0'f32, 1.0'f32), currentVal: initialVal, initialized: false)
 
 proc reset*(lpf: var LowPassFilter, initialVal: float32 = 0.0'f32) =
+  ## Resets the filter state to `initialVal` and clears the initialization flag.
   lpf.currentVal = initialVal
   lpf.initialized = false
 
 proc update*(lpf: var LowPassFilter, val: float32): float32 =
+  ## Applies the low-pass filter formula to sample `val` and returns the smoothed output.
   if not lpf.initialized:
     lpf.currentVal = val
     lpf.initialized = true
@@ -149,10 +185,12 @@ proc update*(lpf: var LowPassFilter, val: float32): float32 =
   lpf.currentVal
 
 proc value*(lpf: LowPassFilter): float32 =
+  ## Returns the most recent smoothed output value.
   lpf.currentVal
 
 type
   Debouncer* = object
+    ## Time-based software debouncer for mechanical buttons, switches, and reed sensors.
     debounceTimeMs*: uint32
     stableState*: bool
     lastRawState*: bool
@@ -161,6 +199,8 @@ type
     justFell*: bool
 
 proc newDebouncer*(debounceTimeMs: uint32, initialVal: bool = false): Debouncer =
+  ## Initializes a new Debouncer requiring input to stay stable for `debounceTimeMs`
+  ## milliseconds before switching states.
   Debouncer(
     debounceTimeMs: debounceTimeMs,
     stableState: initialVal,
@@ -171,6 +211,8 @@ proc newDebouncer*(debounceTimeMs: uint32, initialVal: bool = false): Debouncer 
   )
 
 proc update*(d: var Debouncer, rawVal: bool, nowMs: uint32): bool =
+  ## Updates the debouncer with the latest `rawVal` and current timestamp `nowMs`.
+  ## Returns the debounced stable state.
   d.justRose = false
   d.justFell = false
 
@@ -189,10 +231,14 @@ proc update*(d: var Debouncer, rawVal: bool, nowMs: uint32): bool =
   d.stableState
 
 proc state*(d: Debouncer): bool =
+  ## Returns the current stable debounced state.
   d.stableState
 
 proc rose*(d: Debouncer): bool =
+  ## Returns `true` if the signal had a rising edge (Low -> High) on the most recent `update`.
   d.justRose
 
 proc fell*(d: Debouncer): bool =
+  ## Returns `true` if the signal had a falling edge (High -> Low) on the most recent `update`.
   d.justFell
+
