@@ -103,16 +103,19 @@ def find_nimble_binary(nim_bin: str) -> str:
 def detect_target_cpu(configured_cpu: str = None) -> str:
     if configured_cpu:
         return configured_cpu
-    if getattr(CORE, "is_rp2040", False):
-        return "arm"
-    if getattr(CORE, "is_esp8266", False):
-        return "esp"
-    if getattr(CORE, "is_esp32", False):
-        board = str(getattr(CORE, "board", "")).lower()
-        riscv_boards = ["-c2", "-c3", "-c6", "-h2", "-p4", "esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32p4"]
-        if any(r in board for r in riscv_boards):
-            return "riscv32"
-        return "esp"
+    try:
+        if getattr(CORE, "is_rp2040", False) or getattr(CORE, "is_rp2", False):
+            return "arm"
+        if getattr(CORE, "is_esp8266", False):
+            return "esp"
+        if getattr(CORE, "is_esp32", False):
+            board = str(getattr(CORE, "board", "")).lower()
+            riscv_boards = ["-c2", "-c3", "-c6", "-h2", "-p4", "esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32p4"]
+            if any(r in board for r in riscv_boards):
+                return "riscv32"
+            return "esp"
+    except Exception:
+        pass
     return "esp"
 
 

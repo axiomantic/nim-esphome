@@ -37,6 +37,20 @@ let satelliteInstaller = esphomeInstaller("voice-satellite"):
   installer.description = "Flash verified voice satellite firmware and customize audio assets."
   installer.factoryBinPath = "firmware-factory.bin"
 
+  # Define hardware board targets
+  installer.addTarget(
+    name = "Seeed ReSpeaker XVF3800",
+    binPath = "firmware-factory.bin",
+    chipFamily = "ESP32-S3",
+    description = "4-mic array with hardware acoustic echo cancellation"
+  )
+  installer.addTarget(
+    name = "Home Assistant Voice PE",
+    binPath = "firmware-voice-pe.bin",
+    chipFamily = "ESP32-S3",
+    description = "Official Nabu Casa smart speaker satellite"
+  )
+
   # Define custom file upload to a dedicated flash partition
   installer.addFileField(
     name = "custom_audio",
@@ -45,6 +59,15 @@ let satelliteInstaller = esphomeInstaller("voice-satellite"):
     partition = "sound_data",
     maxSize = 262144, # 256 KB
     description = "Custom PCM WAV audio loop played during voice processing"
+  )
+
+  # Text field with phonetic spelling guidance callout
+  installer.addTextField(
+    name = "wake_word_phrase",
+    label = "Phonetic Wake Word Phrase",
+    placeholder = "okay see three pee oh",
+    calloutHtml = "Spell words phonetically (e.g., <code>ok c3p0</code> &rarr; <strong>okay see three pee oh</strong>).",
+    description = "Phonetic representation used by the wake word model engine"
   )
 
   # Define firmware behavior configuration

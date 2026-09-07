@@ -3,15 +3,24 @@ import nim_esphome
 
 suite "nim-esphome embedded DSP and control utilities":
   test "pid controller":
-    var pid = newPIDController(kp = 2.0'f32, ki = 0.5'f32, kd = 0.1'f32, minOutput = -10.0'f32, maxOutput = 10.0'f32)
-    # Setpoint 100, measured 90 -> error 10, dt 0.1
-    # P = 2 * 10 = 20
-    # I = 0.5 * (10 * 0.1) = 0.5
-    # Total = 20.5 -> clamped to maxOutput (10.0)
-    let out1 = pid.update(100.0'f32, 90.0'f32, 0.1'f32)
-    check out1 == 10.0'f32
+    var pid = newPIDController(kp = 2.0'f32, ki = 0.5'f32, kd = 0.1'f32, minOutput = -50.0'f32, maxOutput = 50.0'f32)
 
-    # Test reset
+    # Step 1: Unclamped P + I calculation (error = 2.0, dt = 0.5)
+    # P = 2.0 * 2.0 = 4.0; I = 0.5 * (2.0 * 0.5) = 0.5; D = 0.0 -> Total = 4.5
+    let out1 = pid.update(10.0'f32, 8.0'f32, 0.5'f32)
+    check out1 == 4.5'f32
+
+    # Step 2: Unclamped P + I + D calculation with previous error state
+    # error = 1.0, delta error = -1.0, dt = 0.5
+    # P = 2.0; I = 0.5 * (1.0 + 0.5) = 0.75; D = 0.1 * (-1.0 / 0.5) = -0.2 -> Total = 2.55
+    let out2 = pid.update(10.0'f32, 9.0'f32, 0.5'f32)
+    check abs(out2 - 2.55'f32) < 1e-5
+
+    # Step 3: Actuator saturation clamping on upper and lower bounds
+    check pid.update(100.0'f32, 0.0'f32, 1.0'f32) == 50.0'f32
+    check pid.update(0.0'f32, 100.0'f32, 1.0'f32) == -50.0'f32
+
+    # Step 4: Test reset
     pid.reset()
     check pid.integral == 0.0'f32
     check pid.hasPrev == false

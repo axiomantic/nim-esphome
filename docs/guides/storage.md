@@ -78,15 +78,23 @@ discard savePreference("temp_cal", cal)
 
 ## Storing Strings
 
-Null-terminated strings can be saved and loaded with a configurable maximum buffer size (default 128 bytes):
+Strings can be saved and loaded with a configurable fixed buffer size (`maxLen: int = 128` by default):
 
 ```nim
 import nim_esphome
 
-# Save string
+# Save string with standard 128-byte slot
 discard savePreference("wifi_ssid", "HomeAutomation-IoT")
 
 # Load string (fallback if missing)
-let currentSsid = loadPreference("wifi_ssid", "DefaultFallbackSSID", maxLen = 64)
+let currentSsid = loadPreference("wifi_ssid", "DefaultFallbackSSID")
 info("WiFi", "Configured SSID: " & currentSsid)
+
+# For compact or oversized strings, specify maxLen consistently:
+discard savePreference("short_code", "A1B2", maxLen = 16)
+let code = loadPreference("short_code", "", maxLen = 16)
 ```
+
+!!! note "Matching Slot Sizes"
+    ESPHome's flash preference backend validates that the requested read size exactly matches the allocated storage slot size. Always ensure `savePreference` and `loadPreference` use the same `maxLen` (default 128 bytes) for a given key.
+

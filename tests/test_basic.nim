@@ -24,22 +24,30 @@ suite "nim-esphome core":
     check u1 >= u0
 
   test "system and hardware APIs":
-    check getFreeHeap() > 0
+    let heap = getFreeHeap()
+    check heap >= 1024'u32 * 1024'u32
     feedWatchdog()
     yieldToScheduler()
     reboot()
-    check true
+    check getFreeHeap() == heap
 
   test "logging templates":
     info("TestTag", "Info message")
     warn("TestTag", "Warning message")
     error("TestTag", "Error message")
     debug("TestTag", "Debug message")
-    check true
+    check true # Logging outputs to host stdout or ESP32 log buffer without throwing
 
   test "lifecycle templates":
+    var setupExecuted = false
+    var loopExecuted = false
     esphomeSetup:
-      discard
+      setupExecuted = true
     esphomeLoop:
-      discard
-    check true
+      loopExecuted = true
+
+    nim_on_setup()
+    check setupExecuted == true
+
+    nim_on_loop()
+    check loopExecuted == true

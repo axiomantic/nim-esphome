@@ -377,10 +377,14 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "sound_data, data, 0x82, 0x370000, 0x040000," in csv4Mb
 
     # 2. Manifest verification
-    let manifest = myInstaller.generateManifest()
-    check "\"name\": \"voice-satellite\"" in manifest
-    check "\"chipFamily\": \"ESP32-S3\"" in manifest
-    check "\"path\": \"firmware-factory.bin\"" in manifest
+    let manifestStr = myInstaller.generateManifest()
+    let manifestJson = parseJson(manifestStr)
+    check manifestJson["name"].getStr() == "voice-satellite"
+    check manifestJson["builds"].len == 1
+    check manifestJson["builds"][0]["chipFamily"].getStr() == "ESP32-S3"
+    check manifestJson["builds"][0]["parts"].len == 1
+    check manifestJson["builds"][0]["parts"][0]["path"].getStr() == "firmware-factory.bin"
+    check manifestJson["builds"][0]["parts"][0]["offset"].getInt() == 0
 
     # 3. HTML & JavaScript client abstraction verification
     let html = myInstaller.generateHtml()
