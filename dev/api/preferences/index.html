@@ -2829,7 +2829,7 @@ and state machines across reboots without filesystem overhead.</p>
 
   
     <div class="doc-signature highlight">
-      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
 </code></pre>
     </div>
   
@@ -2837,7 +2837,7 @@ and state machines across reboots without filesystem overhead.</p>
   <div class="doc doc-contents first">
     
       <div class="doc-description">
-        <p>Persists a null-terminated string <code>val</code> into flash storage under <code>key</code>.</p>
+        <p>Persists a string <code>val</code> into flash storage under <code>key</code> within a fixed buffer of <code>maxLen + 1</code>.</p>
       </div>
     
 
@@ -2856,6 +2856,12 @@ and state machines across reboots without filesystem overhead.</p>
               <code>val</code>
               (<code>string</code>)
                – String to persist.
+            </li>
+          
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+               – Fixed buffer capacity (must match `loadPreference`).
             </li>
           
         </ul>
@@ -2898,7 +2904,7 @@ and state machines across reboots without filesystem overhead.</p>
 
   
     <div class="doc-signature highlight">
-      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
 </code></pre>
     </div>
   
@@ -2927,6 +2933,12 @@ and state machines across reboots without filesystem overhead.</p>
                – String to persist.
             </li>
           
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+               – Fixed buffer capacity (must match `loadPreference`).
+            </li>
+          
         </ul>
       </div>
     
@@ -2944,7 +2956,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:72</code>
+          <code>src/nim_esphome/preferences.nim:74</code>
         
       </div>
     
@@ -3020,7 +3032,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:80</code>
+          <code>src/nim_esphome/preferences.nim:83</code>
         
       </div>
     
@@ -3095,7 +3107,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:101</code>
+          <code>src/nim_esphome/preferences.nim:103</code>
         
       </div>
     
@@ -3129,7 +3141,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:107</code>
+          <code>src/nim_esphome/preferences.nim:109</code>
         
       </div>
     
@@ -3194,7 +3206,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:109</code>
+          <code>src/nim_esphome/preferences.nim:111</code>
         
       </div>
     
@@ -3259,7 +3271,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:117</code>
+          <code>src/nim_esphome/preferences.nim:119</code>
         
       </div>
     
@@ -3324,7 +3336,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:120</code>
+          <code>src/nim_esphome/preferences.nim:122</code>
         
       </div>
     
@@ -3389,7 +3401,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:129</code>
+          <code>src/nim_esphome/preferences.nim:131</code>
         
       </div>
     
@@ -3412,7 +3424,7 @@ and state machines across reboots without filesystem overhead.</p>
 
   
     <div class="doc-signature highlight">
-      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="n">uint32</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
 </code></pre>
     </div>
   
@@ -3437,6 +3449,12 @@ and state machines across reboots without filesystem overhead.</p>
               
             </li>
           
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+              
+            </li>
+          
         </ul>
       </div>
     
@@ -3454,7 +3472,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:132</code>
+          <code>src/nim_esphome/preferences.nim:134</code>
         
       </div>
     
@@ -3477,7 +3495,7 @@ and state machines across reboots without filesystem overhead.</p>
 
   
     <div class="doc-signature highlight">
-      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">savePreference</span><span class="p">(</span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">val</span><span class="p">:</span><span class="w"> </span><span class="nb">string</span><span class="p">;</span><span class="w"> </span><span class="n">maxLen</span><span class="p">:</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">):</span><span class="w"> </span><span class="nb">bool</span>
 </code></pre>
     </div>
   
@@ -3502,6 +3520,12 @@ and state machines across reboots without filesystem overhead.</p>
               
             </li>
           
+            <li>
+              <code>maxLen</code>
+              (<code>int</code>)
+              
+            </li>
+          
         </ul>
       </div>
     
@@ -3519,7 +3543,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:139</code>
+          <code>src/nim_esphome/preferences.nim:143</code>
         
       </div>
     
@@ -3590,7 +3614,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:142</code>
+          <code>src/nim_esphome/preferences.nim:146</code>
         
       </div>
     
@@ -3661,7 +3685,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:152</code>
+          <code>src/nim_esphome/preferences.nim:159</code>
         
       </div>
     
