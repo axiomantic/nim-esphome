@@ -51,9 +51,10 @@ inline bool entity_matches_id(const esphome::EntityBase *entity, const char *ent
 
 }  // namespace
 
+// When Nim compiles with 'nim cpp', NimMain has C++ linkage (_Z7NimMainv)
+void NimMain(void) __attribute__((weak));
+
 extern "C" {
-  void NimMain(void) __attribute__((weak));
-  void nim_init_runtime(void) __attribute__((weak));
   void nim_on_setup(void) __attribute__((weak));
   void nim_on_loop(void) __attribute__((weak));
 
@@ -311,9 +312,7 @@ namespace nim {
 void NimComponent::setup() {
   ESP_LOGI(TAG, "Initializing Nim runtime...");
 
-  if (nim_init_runtime) {
-    nim_init_runtime();
-  } else if (NimMain) {
+  if (NimMain) {
     NimMain();
   }
 
