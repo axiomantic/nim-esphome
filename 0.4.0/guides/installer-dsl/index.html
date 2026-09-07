@@ -1059,6 +1059,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#hardware-considerations-esp32-s3-native-usb-improv-wi-fi-serial" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Hardware Considerations: ESP32-S3 Native USB &amp; Improv Wi-Fi Serial
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Considerations: ESP32-S3 Native USB &amp; Improv Wi-Fi Serial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-bootloader-quirk" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The Bootloader Quirk
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-flow-provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        User Flow &amp; Provisioning
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1503,6 +1542,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#hardware-considerations-esp32-s3-native-usb-improv-wi-fi-serial" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Hardware Considerations: ESP32-S3 Native USB &amp; Improv Wi-Fi Serial
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Considerations: ESP32-S3 Native USB &amp; Improv Wi-Fi Serial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-bootloader-quirk" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The Bootloader Quirk
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-flow-provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        User Flow &amp; Provisioning
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1771,6 +1849,24 @@
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">partitions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partitions.csv</span>
 </span></code></pre></div>
 <p>In your Nim firmware code, you can read from the dedicated partition using ESP-IDF partition APIs or standard flash memory mappers to access the uploaded user assets directly.</p>
+<hr />
+<h2 id="hardware-considerations-esp32-s3-native-usb-improv-wi-fi-serial">Hardware Considerations: ESP32-S3 Native USB &amp; Improv Wi-Fi Serial<a class="headerlink" href="#hardware-considerations-esp32-s3-native-usb-improv-wi-fi-serial" title="Permanent link">&para;</a></h2>
+<p>When building installers for ESP32-S3 boards with native USB (e.g. Seeed ReSpeaker Lite XVF3800, ESP32-S3-DevKitC-1 native USB port), the microcontroller uses its internal USB-Serial-JTAG controller rather than an external CP2102/CH340 USB-to-UART bridge.</p>
+<h3 id="the-bootloader-quirk">The Bootloader Quirk<a class="headerlink" href="#the-bootloader-quirk" title="Permanent link">&para;</a></h3>
+<ol>
+<li>When WebSerial flashes or erases the device, the chip enters and stays halted in the <strong>ROM Bootloader</strong>.</li>
+<li>Because native USB does not have hardware RTS/DTR strapping reset circuits, software reset signals issued by browser flashers (<code>esp-web-tools</code> or <code>esptool-js</code>) cannot trigger a clean Power-On Reset.</li>
+<li>Immediately after flashing completes, <strong>the board is still in bootloader mode and ESPHome has not booted yet</strong>.</li>
+</ol>
+<h3 id="user-flow-provisioning">User Flow &amp; Provisioning<a class="headerlink" href="#user-flow-provisioning" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The board <strong>must be power-cycled</strong> (unplug and replug the USB-C cable) or have its hardware <strong>RST</strong> button tapped once after flashing.</li>
+<li>If a user attempts to click <strong>Configure Wi-Fi</strong> while still in the bootloader, the browser receives 0 serial bytes and displays:
+  <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>⚠️ An error occurred. Improv Wi-Fi Serial not detected
+</span></code></pre></div></li>
+<li>Once power-cycled, ESPHome performs a cold boot, initializes native USB, and starts <code>improv_serial</code> as well as its fallback AP (<code>Satellite Fallback Hotspot</code>). Clicking <strong>Configure Wi-Fi</strong> immediately detects Improv Serial and presents the Wi-Fi credentials prompt.</li>
+</ul>
+<p>The <code>nim-esphome</code> installer DSL automatically includes this guidance in the on-page setup guide and the interactive post-install modal.</p>
 
 
 
