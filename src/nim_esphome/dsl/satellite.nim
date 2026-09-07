@@ -20,6 +20,7 @@ type
     psPulse = "Pulse"
     psSonar = "Sonar"
     psTick = "Tick"
+    psTypewriter = "Typewriter"
     psCustom = "Custom"
 
   WakeChimeSound* = enum

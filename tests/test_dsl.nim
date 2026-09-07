@@ -435,6 +435,9 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
           optionDetail("Subtle Beep", "600Hz 80ms", "Discreet blip"),
           optionDetail("Silent", "No sound", "Completely silent wake"),
           optionDetail("Custom Chime Audio", "User audio", "Custom audio from flash")
+        ],
+        presetAudios = @[
+          ("Typewriter", "sounds/typewriter.mp3", "sounds/typewriter.wav")
         ]
       )
 
@@ -459,6 +462,9 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "select-cached-model" in html
     check "download-model-btn" in html
     check "upload-download-btn" in html
+    check "PRESET_AUDIO" in html
+    check "Typewriter" in html
+    check "sounds/typewriter.mp3" in html
 
 
 

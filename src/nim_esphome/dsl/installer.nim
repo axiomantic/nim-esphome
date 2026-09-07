@@ -83,6 +83,7 @@ type
     maxSlots*: int
     slotOffsets*: seq[uint32]
     presetModels*: seq[(string, string)]
+    presetAudios*: seq[(string, string, string)]
     # Select / Text specific fields
     options*: seq[string]
     optionDetails*: seq[OptionDetail]
@@ -208,7 +209,8 @@ proc addSelectField*(
     defaultVal: string = "",
     description: string = "",
     optionDetails: seq[OptionDetail] = @[],
-    hasAudioPreview: bool = false
+    hasAudioPreview: bool = false,
+    presetAudios: seq[(string, string, string)] = @[]
 ) =
   ## Adds a dropdown selector to the installer with optional rich preset metadata.
   installer.fields.add(InstallerField(
@@ -219,7 +221,8 @@ proc addSelectField*(
     optionDetails: optionDetails,
     defaultVal: defaultVal,
     description: description,
-    hasAudioPreview: hasAudioPreview
+    hasAudioPreview: hasAudioPreview,
+    presetAudios: presetAudios
   ))
 
 proc addTextField*(
@@ -638,6 +641,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    let activeAudioTimer = null;")
   html.add("    let activeAudioElement = null;")
   html.add("    const PRESET_MODELS = {};")
+  html.add("    const PRESET_AUDIO = {};")
   html.add("    let WAKE_OFFSETS = [];")
   html.add("")
   html.add("    function stopAudioPreview() {")
@@ -668,6 +672,14 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      if (styleName.startsWith('Silent')) {")
   html.add("        alert('Silent mode: no acoustic cues will be emitted.');")
   html.add("        stopAudioPreview();")
+  html.add("        return;")
+  html.add("      }")
+  html.add("      if (typeof PRESET_AUDIO !== 'undefined' && PRESET_AUDIO[styleName]) {")
+  html.add("        const audioUrl = PRESET_AUDIO[styleName].preview || PRESET_AUDIO[styleName].flash;")
+  html.add("        const audio = new Audio(audioUrl);")
+  html.add("        activeAudioElement = audio;")
+  html.add("        audio.onended = () => stopAudioPreview();")
+  html.add("        audio.play().catch(() => stopAudioPreview());")
   html.add("        return;")
   html.add("      }")
   html.add("      if (styleName.startsWith('Custom')) {")
@@ -724,20 +736,49 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("          if (++ticks > 6) { stopAudioPreview(); return; }")
   html.add("          playToneBurst(ctx, 1200, 0.025, 'triangle', 0.3);")
   html.add("        }, 500);")
+  html.add("      } else if (styleName === 'Typewriter') {")
+  html.add("        const audio = new Audio('sounds/typewriter.mp3');")
+  html.add("        activeAudioElement = audio;")
+  html.add("        audio.onended = () => stopAudioPreview();")
+  html.add("        audio.play().catch(() => {")
+  html.add("          activeAudioTimer = setInterval(() => {")
+  html.add("            if (++ticks > 24) { stopAudioPreview(); return; }")
+  html.add("            playToneBurst(ctx, 1200 + Math.random() * 400, 0.02, 'triangle', 0.2);")
+  html.add("          }, 110);")
+  html.add("        });")
   html.add("      }")
   html.add("    }")
   html.add("")
   html.add("    function updateDynamicManifest() {")
   html.add("      const manifest = JSON.parse(JSON.stringify(BASE_MANIFEST));")
-  if installer.targets.len > 0:
-    html.add("      const targetSelect = document.getElementById('field_hardware_target');")
-    html.add("      if (targetSelect && typeof TARGET_MAP !== 'undefined') {")
-    html.add("        const info = TARGET_MAP[targetSelect.value];")
-    html.add("        if (info) {")
-    html.add("          manifest.builds[0].parts[0].path = info.bin;")
-    html.add("          if (info.chip) manifest.builds[0].chipFamily = info.chip;")
-    html.add("        }")
-    html.add("      }")
+  html.add("      const targetSelect = document.getElementById('field_hardware_target');")
+  html.add("      if (targetSelect && typeof TARGET_MAP !== 'undefined') {")
+  html.add("        const info = TARGET_MAP[targetSelect.value];")
+  html.add("        if (info) {")
+  html.add("          manifest.builds[0].parts[0].path = info.bin;")
+  html.add("          if (info.chip) manifest.builds[0].chipFamily = info.chip;")
+  html.add("        }")
+  html.add("      }")
+  html.add("      if (typeof PRESET_AUDIO !== 'undefined') {")
+  html.add("        for (const [key, info] of Object.entries(PRESET_AUDIO)) {")
+  html.add("          if (!info || !info.flash) continue;")
+  html.add("          for (const sel of document.querySelectorAll('select')) {")
+  html.add("            if (sel.value === key) {")
+  html.add("              let isOverridden = false;")
+  html.add("              for (const [upKey, _] of uploadedParts.entries()) {")
+  html.add("                if (upKey.includes('sound') || upKey.includes('audio') || upKey.includes('chime')) {")
+  html.add("                  isOverridden = true;")
+  html.add("                  break;")
+  html.add("                }")
+  html.add("              }")
+  html.add("              if (!isOverridden) {")
+  html.add("                const off = info.offset || 0x370000;")
+  html.add("                manifest.builds[0].parts.push({ path: info.flash, offset: off });")
+  html.add("              }")
+  html.add("            }")
+  html.add("          }")
+  html.add("        }")
+  html.add("      }")
   html.add("      for (const [name, part] of uploadedParts.entries()) {")
   html.add("        const group = document.getElementById('group_' + name);")
   html.add("        if (group) {")
@@ -1118,6 +1159,15 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("      createSlotCard(1);")
       html.add("    })();")
       html.add("")
+
+    if field.kind == ifkSelect and field.presetAudios.len > 0:
+      var audObj = newJObject()
+      for item in field.presetAudios:
+        var it = newJObject()
+        it["preview"] = %item[1]
+        it["flash"] = %item[2]
+        audObj[item[0]] = it
+      html.add("    Object.assign(PRESET_AUDIO, " & $audObj & ");")
 
     if field.kind == ifkSelect and field.optionDetails.len > 0:
       var detailsObj = newJObject()
