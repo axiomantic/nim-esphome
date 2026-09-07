@@ -160,3 +160,25 @@ esp32:
 ```
 
 In your Nim firmware code, you can read from the dedicated partition using ESP-IDF partition APIs or standard flash memory mappers to access the uploaded user assets directly.
+
+---
+
+## Hardware Considerations: ESP32-S3 Native USB & Improv Wi-Fi Serial
+
+When building installers for ESP32-S3 boards with native USB (e.g. Seeed ReSpeaker Lite XVF3800, ESP32-S3-DevKitC-1 native USB port), the microcontroller uses its internal USB-Serial-JTAG controller rather than an external CP2102/CH340 USB-to-UART bridge.
+
+### The Bootloader Quirk
+1. When WebSerial flashes or erases the device, the chip enters and stays halted in the **ROM Bootloader**.
+2. Because native USB does not have hardware RTS/DTR strapping reset circuits, software reset signals issued by browser flashers (`esp-web-tools` or `esptool-js`) cannot trigger a clean Power-On Reset.
+3. Immediately after flashing completes, **the board is still in bootloader mode and ESPHome has not booted yet**.
+
+### User Flow & Provisioning
+- The board **must be power-cycled** (unplug and replug the USB-C cable) or have its hardware **RST** button tapped once after flashing.
+- If a user attempts to click **Configure Wi-Fi** while still in the bootloader, the browser receives 0 serial bytes and displays:
+  ```
+  ⚠️ An error occurred. Improv Wi-Fi Serial not detected
+  ```
+- Once power-cycled, ESPHome performs a cold boot, initializes native USB, and starts `improv_serial` as well as its fallback AP (`Satellite Fallback Hotspot`). Clicking **Configure Wi-Fi** immediately detects Improv Serial and presents the Wi-Fi credentials prompt.
+
+The `nim-esphome` installer DSL automatically includes this guidance in the on-page setup guide and the interactive post-install modal.
+
