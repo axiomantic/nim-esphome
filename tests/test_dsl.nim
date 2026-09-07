@@ -409,4 +409,50 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "phonetic-callout" in html
     check "okay see three pee oh" in html
 
+  test "esphomeInstaller with multi-slot wake words and chime sounds":
+    let slotInstaller = esphomeInstaller("slot-satellite"):
+      installer.title = "Multi-Slot Satellite Web Installer"
+      installer.chipFamily = "ESP32-S3"
+
+      installer.addWakeWordSlotsField(
+        name = "active_wake_words",
+        label = "Active Wake Word Models (Up to 3 Concurrent)",
+        options = @["Okay Nabu (Default)", "Hey Jarvis", "Alexa"],
+        maxSlots = 3,
+        slotOffsets = @[0x3B0000'u32, 0x3F0000'u32, 0x430000'u32]
+      )
+
+      installer.addSelectField(
+        name = "wake_chime_sound",
+        label = "Wake Chime Sound",
+        options = @["Bell Ping (Default)", "Modern Chime", "Marimba", "Subtle Beep", "Silent", "Custom Chime Audio"],
+        defaultVal = "Bell Ping (Default)",
+        hasAudioPreview = true,
+        optionDetails = @[
+          optionDetail("Bell Ping (Default)", "880Hz single tone", "Clean bell ping"),
+          optionDetail("Modern Chime", "587Hz -> 880Hz", "Harmonic chime"),
+          optionDetail("Marimba", "523Hz-659Hz-784Hz", "Warm acoustic marimba triad"),
+          optionDetail("Subtle Beep", "600Hz 80ms", "Discreet blip"),
+          optionDetail("Silent", "No sound", "Completely silent wake"),
+          optionDetail("Custom Chime Audio", "User audio", "Custom audio from flash")
+        ]
+      )
+
+    check slotInstaller.fields.len == 2
+    check slotInstaller.customPartitions.len == 3 # wake_model_1, wake_model_2, wake_model_3
+
+    let html = slotInstaller.generateHtml()
+    check "wakeSlotsContainer_active_wake_words" in html
+    check "btnAddSlot_active_wake_words" in html
+    check "BrowserWakeTrainer" in html
+    check "synthesizeAcousticFeatures" in html
+    check "packageToTflite" in html
+    check "checkInstallReadiness" in html
+    check "installWarningNotice" in html
+    check "Bell Ping" in html
+    check "Modern Chime" in html
+    check "Marimba" in html
+    check "Subtle Beep" in html
+
+
 

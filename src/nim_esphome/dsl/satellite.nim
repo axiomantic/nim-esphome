@@ -22,6 +22,14 @@ type
     psTick = "Tick"
     psCustom = "Custom"
 
+  WakeChimeSound* = enum
+    wcBell = "Bell Ping"
+    wcModern = "Modern Chime"
+    wcMarimba = "Marimba"
+    wcSubtle = "Subtle Beep"
+    wcSilent = "Silent"
+    wcCustom = "Custom"
+
   ProcessingTickCallback* = proc(style: ProcessingSoundStyle, volume: float32, tickCount: int)
   StateChangeCallback* = proc(oldState, newState: SatelliteState)
 
@@ -38,6 +46,7 @@ type
     state*: SatelliteState
     processingLoop*: ProcessingLoop
     wakeChimeEnabled*: bool
+    wakeChimeSound*: WakeChimeSound
     wakeChimeVolume*: float32
     lastDoaAngle*: float32
     lastWakeWord*: string
@@ -68,6 +77,7 @@ proc newSatellitePipeline*(): SatellitePipeline =
     state: ssIdle,
     processingLoop: newProcessingLoop(),
     wakeChimeEnabled: true,
+    wakeChimeSound: wcBell,
     wakeChimeVolume: 0.8'f32,
     lastDoaAngle: 0.0'f32,
     lastWakeWord: "",
