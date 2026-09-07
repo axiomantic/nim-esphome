@@ -16,6 +16,12 @@ suite "nim-esphome flash preferences storage":
     check savePreference("wifi_ssid", "HomeIoT")
     check loadPreference("wifi_ssid", "") == "HomeIoT"
 
+    # Custom maxLen slot
+    check savePreference("token", "secret123", maxLen = 64)
+    check loadPreference("token", "", maxLen = 64) == "secret123"
+    # Mismatched slot size returns defaultVal (simulating ESPHome NVS size check)
+    check loadPreference("token", "fallback", maxLen = 128) == "fallback"
+
   test "default fallback on missing keys":
     check loadPreference("nonexistent_int", 99'i32) == 99'i32
     check loadPreference("nonexistent_str", "default_val") == "default_val"

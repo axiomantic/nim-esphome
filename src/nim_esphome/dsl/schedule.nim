@@ -179,14 +179,14 @@ proc tickSchedules*(currentMs: uint64, registry: ScheduleRegistry = defaultSched
       if not task.initialized:
         task.initialized = true
         task.lastRunMs = currentMs
-      elif currentMs >= task.lastRunMs + task.intervalMs:
+      elif currentMs - task.lastRunMs >= task.intervalMs:
         task.lastRunMs = currentMs
         task.action()
     of stOneShot:
       if not task.initialized:
         task.initialized = true
         task.startMs = currentMs
-      elif not task.hasRun and currentMs >= task.startMs + task.delayMs:
+      elif not task.hasRun and currentMs - task.startMs >= task.delayMs:
         task.hasRun = true
         task.active = false
         task.action()

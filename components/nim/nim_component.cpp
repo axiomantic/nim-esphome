@@ -293,6 +293,10 @@ namespace nim {
 void NimComponent::setup() {
   ESP_LOGI(TAG, "Initializing Nim runtime...");
 
+  if (NimMain) {
+    NimMain();
+  }
+
 #ifdef USE_SELECT
   for (auto *s : esphome::App.get_selects()) {
     if (s != nullptr) {
@@ -339,9 +343,6 @@ void NimComponent::setup() {
   }
 #endif
 
-  if (NimMain) {
-    NimMain();
-  }
   if (nim_on_setup) {
     nim_on_setup();
   }

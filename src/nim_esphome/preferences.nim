@@ -57,25 +57,28 @@ when defined(esphome):
     ## :returns: Loaded value of type `T` or `defaultVal`.
     loadPreference(fnv1a(key), defaultVal)
 
-  proc savePreference*(key: uint32, val: string): bool =
-    ## Persists a null-terminated string `val` into flash storage under `key`.
+  proc savePreference*(key: uint32, val: string, maxLen: int = 128): bool =
+    ## Persists a string `val` into flash storage under `key` within a fixed buffer of `maxLen + 1`.
     ##
     ## :param key: 32-bit integer storage key.
     ## :param val: String to persist.
+    ## :param maxLen: Fixed buffer capacity (must match `loadPreference`).
     ## :returns: `true` if write succeeded, `false` otherwise.
-    var buf = newSeq[uint8](val.len + 1)
-    if val.len > 0:
-      copyMem(addr buf[0], unsafeAddr val[0], val.len)
-    buf[val.len] = 0'u8
+    var buf = newSeq[uint8](maxLen + 1)
+    let copyLen = min(val.len, maxLen)
+    if copyLen > 0:
+      copyMem(addr buf[0], unsafeAddr val[0], copyLen)
+    buf[copyLen] = 0'u8
     nim_esp_save_preference(key, addr buf[0], csize_t(buf.len))
 
-  proc savePreference*(key: string, val: string): bool =
+  proc savePreference*(key: string, val: string, maxLen: int = 128): bool =
     ## Convenience overload hashing `key` via FNV-1a and persisting string `val`.
     ##
     ## :param key: String key hashed to a 32-bit NVS key.
     ## :param val: String to persist.
+    ## :param maxLen: Fixed buffer capacity (must match `loadPreference`).
     ## :returns: `true` if write succeeded, `false` otherwise.
-    savePreference(fnv1a(key), val)
+    savePreference(fnv1a(key), val, maxLen)
 
   proc loadPreference*(key: uint32, defaultVal: string, maxLen: int = 128): string =
     ## Loads a string from flash storage under `key` with a maximum length of `maxLen`.
@@ -89,7 +92,6 @@ when defined(esphome):
     if nim_esp_load_preference(key, addr buf[0], csize_t(buf.len)):
       var strLen = 0
       while strLen < maxLen and buf[strLen] != 0'u8:
-
         inc strLen
       var res = newString(strLen)
       if strLen > 0:
@@ -129,25 +131,30 @@ else:
   proc loadPreference*[T](key: string, defaultVal: T): T =
     loadPreference(fnv1a(key), defaultVal)
 
-  proc savePreference*(key: uint32, val: string): bool =
-    var buf = newSeq[byte](val.len)
-    if val.len > 0:
-      copyMem(addr buf[0], unsafeAddr val[0], val.len)
+  proc savePreference*(key: uint32, val: string, maxLen: int = 128): bool =
+    var buf = newSeq[byte](maxLen + 1)
+    let copyLen = min(val.len, maxLen)
+    if copyLen > 0:
+      copyMem(addr buf[0], unsafeAddr val[0], copyLen)
+    buf[copyLen] = 0'u8
     mockPreferences[key] = buf
     true
 
-  proc savePreference*(key: string, val: string): bool =
-    savePreference(fnv1a(key), val)
+  proc savePreference*(key: string, val: string, maxLen: int = 128): bool =
+    savePreference(fnv1a(key), val, maxLen)
 
   proc loadPreference*(key: uint32, defaultVal: string, maxLen: int = 128): string =
     if mockPreferences.hasKey(key):
       let buf = mockPreferences[key]
-      var res = newString(buf.len)
-      if buf.len > 0:
-        copyMem(addr res[0], unsafeAddr buf[0], buf.len)
-      res
-    else:
-      defaultVal
+      if buf.len == maxLen + 1:
+        var strLen = 0
+        while strLen < maxLen and buf[strLen] != 0'u8:
+          inc strLen
+        var res = newString(strLen)
+        if strLen > 0:
+          copyMem(addr res[0], unsafeAddr buf[0], strLen)
+        return res
+    defaultVal
 
   proc loadPreference*(key: string, defaultVal: string, maxLen: int = 128): string =
     loadPreference(fnv1a(key), defaultVal, maxLen)
