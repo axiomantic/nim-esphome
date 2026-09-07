@@ -168,7 +168,7 @@ proc addFileField*(
     installer: InstallerDefinition,
     name: string,
     label: string,
-    accept: string = ".wav",
+    accept: string = ".wav,.mp3,.ogg,.flac,.m4a,audio/*",
     partition: string = "custom_data",
     maxSize: int = 262144, # 256 KB default
     flashOffset: uint32 = 0x370000'u32,
@@ -205,6 +205,33 @@ proc addFileField*(
       offset: flashOffset,
       size: uint32(maxSize)
     ))
+
+proc addCustomAudioField*(
+    installer: InstallerDefinition,
+    name: string,
+    label: string,
+    accept: string = ".wav,.mp3,.ogg,.flac,.m4a,audio/*",
+    partition: string = "custom_audio",
+    maxSize: int = 262144, # 256 KB default
+    flashOffset: uint32 = 0x370000'u32,
+    required: bool = false,
+    description: string = "Upload custom audio (.wav, .mp3, .ogg, .flac, .m4a). The web installer automatically resamples to 16kHz mono 16-bit PCM WAV, applies light dynamic range compression, and normalizes peak volume to -1.0 dBFS directly in your browser before flashing.",
+    dependsOnField: string = "",
+    dependsOnValue: string = ""
+) =
+  ## Adds a custom audio upload field that automatically transcodes, compresses, and normalizes audio in-browser before flashing.
+  installer.addFileField(
+    name = name,
+    label = label,
+    accept = accept,
+    partition = partition,
+    maxSize = maxSize,
+    flashOffset = flashOffset,
+    required = required,
+    description = description,
+    dependsOnField = dependsOnField,
+    dependsOnValue = dependsOnValue
+  )
 
 proc addTarget*(
     installer: InstallerDefinition,
@@ -489,10 +516,10 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
   case field.kind
   of ifkFile:
     html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\"" & disabledAttr & ">")
-    if field.accept.contains(".wav") or field.partition.contains("sound") or field.partition.contains("chime"):
+    if field.accept.contains(".wav") or field.accept.contains("audio") or field.partition.contains("sound") or field.partition.contains("chime") or field.partition.contains("audio"):
       let hexOffset = "0x" & field.flashOffset.toHex(6).toLowerAscii
       let kbSize = field.maxSize div 1024
-      html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max " & $kbSize & " KB.<br>Flashed to safe dedicated <code>" & field.partition & "</code> partition at " & hexOffset & ", 100% safe from OTA firmware updates.</div>")
+      html.add("        <div class=\"format-callout\"><strong>Audio Auto-Processing:</strong> Custom audio (.wav, .mp3, .ogg, .flac, .m4a) is automatically resampled to 16kHz mono 16-bit PCM WAV with dynamic range compression and peak normalization (-1.0 dBFS) directly in your browser before flashing.<br>Target partition: safe dedicated <code>" & field.partition & "</code> partition at " & hexOffset & " (max " & $kbSize & " KB, 100% safe from OTA firmware updates).</div>")
     html.add("        <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
   of ifkAudioShowcase:
     html.add("        <div class=\"showcase-card\" id=\"showcaseCard_" & field.name & "\">")
@@ -557,10 +584,10 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
           case child.kind
           of ifkFile:
             html.add("            <input type=\"file\" id=\"field_" & child.name & "\" accept=\"" & child.accept & "\" data-offset=\"" & $child.flashOffset & "\" data-maxsize=\"" & $child.maxSize & "\" disabled>")
-            if child.accept.contains(".wav") or child.partition.contains("sound") or child.partition.contains("chime"):
+            if child.accept.contains(".wav") or child.accept.contains("audio") or child.partition.contains("sound") or child.partition.contains("chime") or child.partition.contains("audio"):
               let hexOffset = "0x" & child.flashOffset.toHex(6).toLowerAscii
               let kbSize = child.maxSize div 1024
-              html.add("            <div class=\"format-callout\"><strong>Custom Audio:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max " & $kbSize & " KB.<br>Flashed to dedicated " & child.partition & " partition at " & hexOffset & ".</div>")
+              html.add("            <div class=\"format-callout\"><strong>Audio Auto-Processing:</strong> Custom audio (.wav, .mp3, .ogg, .flac, .m4a) is resampled to 16kHz mono 16-bit PCM WAV with dynamic compression and normalization (-1.0 dBFS) in your browser.<br>Target partition: dedicated <code>" & child.partition & "</code> partition at " & hexOffset & " (max " & $kbSize & " KB).</div>")
             html.add("            <div class=\"file-status\" id=\"status_" & child.name & "\"></div>")
           else:
             html.renderFieldBody(child, installer)
@@ -1032,6 +1059,79 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      return combined;")
   html.add("    }")
   html.add("")
+  html.add("    async function processCustomAudio(arrayBuffer, targetSampleRate) {")
+  html.add("      targetSampleRate = targetSampleRate || 16000;")
+  html.add("      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;")
+  html.add("      if (!AudioCtxClass) {")
+  html.add("        throw new Error('Web Audio API is not supported in this browser');")
+  html.add("      }")
+  html.add("      const tempCtx = new AudioCtxClass();")
+  html.add("      let decodedBuffer;")
+  html.add("      try {")
+  html.add("        decodedBuffer = await tempCtx.decodeAudioData(arrayBuffer.slice(0));")
+  html.add("      } finally {")
+  html.add("        if (tempCtx.state !== 'closed' && typeof tempCtx.close === 'function') {")
+  html.add("          try { await tempCtx.close(); } catch (_) {}")
+  html.add("        }")
+  html.add("      }")
+  html.add("      const numTargetSamples = Math.max(1, Math.round(decodedBuffer.duration * targetSampleRate));")
+  html.add("      const OfflineCtxClass = window.OfflineAudioContext || window.webkitOfflineAudioContext;")
+  html.add("      if (!OfflineCtxClass) {")
+  html.add("        throw new Error('OfflineAudioContext is not supported in this browser');")
+  html.add("      }")
+  html.add("      const offlineCtx = new OfflineCtxClass(1, numTargetSamples, targetSampleRate);")
+  html.add("      const source = offlineCtx.createBufferSource();")
+  html.add("      source.buffer = decodedBuffer;")
+  html.add("      const compressor = offlineCtx.createDynamicsCompressor();")
+  html.add("      compressor.threshold.setValueAtTime(-12, 0);")
+  html.add("      compressor.ratio.setValueAtTime(2.5, 0);")
+  html.add("      compressor.attack.setValueAtTime(0.005, 0);")
+  html.add("      compressor.release.setValueAtTime(0.080, 0);")
+  html.add("      compressor.knee.setValueAtTime(3.0, 0);")
+  html.add("      const makeupGain = offlineCtx.createGain();")
+  html.add("      makeupGain.gain.setValueAtTime(Math.pow(10, 1.5 / 20), 0);")
+  html.add("      source.connect(compressor);")
+  html.add("      compressor.connect(makeupGain);")
+  html.add("      makeupGain.connect(offlineCtx.destination);")
+  html.add("      source.start(0);")
+  html.add("      const renderedBuffer = await offlineCtx.startRendering();")
+  html.add("      const channelData = renderedBuffer.getChannelData(0);")
+  html.add("      const targetPeak = Math.pow(10, -1.0 / 20);")
+  html.add("      let currentPeak = 0;")
+  html.add("      for (let i = 0; i < channelData.length; i++) {")
+  html.add("        const absVal = Math.abs(channelData[i]);")
+  html.add("        if (absVal > currentPeak) currentPeak = absVal;")
+  html.add("      }")
+  html.add("      const normFactor = currentPeak > 0.00001 ? (targetPeak / currentPeak) : 1.0;")
+  html.add("      const numSamples = channelData.length;")
+  html.add("      const pcmBytes = numSamples * 2;")
+  html.add("      const wavBuffer = new ArrayBuffer(44 + pcmBytes);")
+  html.add("      const view = new DataView(wavBuffer);")
+  html.add("      view.setUint8(0, 0x52); view.setUint8(1, 0x49); view.setUint8(2, 0x46); view.setUint8(3, 0x46);")
+  html.add("      view.setUint32(4, 36 + pcmBytes, true);")
+  html.add("      view.setUint8(8, 0x57); view.setUint8(9, 0x41); view.setUint8(10, 0x56); view.setUint8(11, 0x45);")
+  html.add("      view.setUint8(12, 0x66); view.setUint8(13, 0x6D); view.setUint8(14, 0x74); view.setUint8(15, 0x20);")
+  html.add("      view.setUint32(16, 16, true);")
+  html.add("      view.setUint16(20, 1, true);")
+  html.add("      view.setUint16(22, 1, true);")
+  html.add("      view.setUint32(24, targetSampleRate, true);")
+  html.add("      view.setUint32(28, targetSampleRate * 2, true);")
+  html.add("      view.setUint16(32, 2, true);")
+  html.add("      view.setUint16(34, 16, true);")
+  html.add("      view.setUint8(36, 0x64); view.setUint8(37, 0x61); view.setUint8(38, 0x74); view.setUint8(39, 0x61);")
+  html.add("      view.setUint32(40, pcmBytes, true);")
+  html.add("      let byteOffset = 44;")
+  html.add("      for (let i = 0; i < numSamples; i++) {")
+  html.add("        let s = channelData[i] * normFactor;")
+  html.add("        if (s > 1.0) s = 1.0;")
+  html.add("        else if (s < -1.0) s = -1.0;")
+  html.add("        const val16 = s < 0 ? Math.round(s * 32768) : Math.round(s * 32767);")
+  html.add("        view.setInt16(byteOffset, Math.max(-32768, Math.min(32767, val16)), true);")
+  html.add("        byteOffset += 2;")
+  html.add("      }")
+  html.add("      return wavBuffer;")
+  html.add("    }")
+  html.add("")
   html.add("    function getSavedInstallerState() {")
   html.add("      try {")
   html.add("        return JSON.parse(localStorage.getItem(FORM_STORAGE_KEY) || '{}');")
@@ -1096,8 +1196,25 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("          uploadedParts.set(key, { url: blobUrl, offset: f.offset, name: f.name, size: f.size });")
   html.add("          const fileStatus = document.getElementById('status_' + key);")
   html.add("          if (fileStatus) {")
+  html.add("            const isWav = (f.name && f.name.toLowerCase().endsWith('.wav')) || f.type === 'audio/wav';")
+  html.add("            let playBtnHtml = '';")
+  html.add("            if (isWav) playBtnHtml = ' <button type=\"button\" class=\"preview-btn btn-play-uploaded\" style=\"margin-left: 8px; padding: 2px 8px; font-size: 0.72rem;\">' + ICONS.play + ' <span>Preview</span></button>';")
+  html.add("            const audioBadge = isWav ? ' <span style=\"display: inline-block; background: #0c4a6e; color: #38bdf8; border: 1px solid #0284c7; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; margin-left: 6px;\">16kHz PCM &bull; Compressed &bull; Normalized</span>' : '';")
   html.add("            fileStatus.style.display = 'block';")
-  html.add("            fileStatus.innerHTML = ICONS.check + ' <span>Saved file restored: ' + f.name + ' (' + Math.round(f.size / 1024) + ' KB at 0x' + f.offset.toString(16).toUpperCase() + ')</span> <button type=\"button\" class=\"btn-clear-restored-file\" data-file-key=\"' + key + '\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+  html.add("            fileStatus.innerHTML = ICONS.check + ' <span>Saved file restored: ' + f.name + ' (' + Math.round(f.size / 1024) + ' KB at 0x' + f.offset.toString(16).toUpperCase() + ')' + audioBadge + '</span>' + playBtnHtml + ' <button type=\"button\" class=\"btn-clear-restored-file\" data-file-key=\"' + key + '\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+  html.add("            const playBtn = fileStatus.querySelector('.btn-play-uploaded');")
+  html.add("            if (playBtn) {")
+  html.add("              playBtn.addEventListener('click', () => {")
+  html.add("                if (playBtn.classList.contains('playing')) { stopAudioPreview(); return; }")
+  html.add("                stopAudioPreview();")
+  html.add("                playBtn.classList.add('playing');")
+  html.add("                playBtn.innerHTML = ICONS.stop + ' <span>Stop</span>';")
+  html.add("                const audio = new Audio(blobUrl);")
+  html.add("                activeAudioElement = audio;")
+  html.add("                audio.onended = () => stopAudioPreview();")
+  html.add("                audio.play().catch(() => stopAudioPreview());")
+  html.add("              });")
+  html.add("            }")
   html.add("            const rmBtn = fileStatus.querySelector('.btn-clear-restored-file');")
   html.add("            if (rmBtn) {")
   html.add("              rmBtn.addEventListener('click', () => {")
@@ -1932,10 +2049,46 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("    const fileInput_" & field.name & " = document.getElementById('field_" & field.name & "');")
       html.add("    const status_" & field.name & " = document.getElementById('status_" & field.name & "');")
       html.add("    if (fileInput_" & field.name & ") {")
-      html.add("      fileInput_" & field.name & ".addEventListener('change', (e) => {")
+      html.add("      fileInput_" & field.name & ".addEventListener('change', async (e) => {")
       html.add("        stopAudioPreview();")
       html.add("        const file = e.target.files[0];")
       html.add("        if (!file) {")
+      html.add("          uploadedParts.delete('" & field.name & "');")
+      html.add("          delete cachedFileStore['" & field.name & "'];")
+      html.add("          if (status_" & field.name & ") status_" & field.name & ".style.display = 'none';")
+      html.add("          updateDynamicManifest();")
+      html.add("          checkInstallReadiness();")
+      html.add("          saveInstallerState();")
+      html.add("          return;")
+      html.add("        }")
+      html.add("        const isAudio = (file.type && file.type.startsWith('audio/')) || /\\.(wav|mp3|ogg|flac|m4a|aac|opus|wma)$/i.test(file.name);")
+      html.add("        const maxSizeBytes = parseInt(fileInput_" & field.name & ".dataset.maxsize || '" & $field.maxSize & "', 10);")
+      html.add("        const offset = parseInt(fileInput_" & field.name & ".dataset.offset || '" & $field.flashOffset & "', 10);")
+      html.add("        if (status_" & field.name & ") {")
+      html.add("          status_" & field.name & ".style.display = 'block';")
+      html.add("          if (isAudio) {")
+      html.add("            status_" & field.name & ".innerHTML = '<span class=\"spinner\"></span> Transcoding audio (16kHz mono, dynamic compression, -1.0 dBFS peak)...';")
+      html.add("          }")
+      html.add("        }")
+      html.add("        let finalBuffer = null;")
+      html.add("        let finalName = file.name;")
+      html.add("        let finalType = file.type || 'application/octet-stream';")
+      html.add("        try {")
+      html.add("          const rawBuf = await file.arrayBuffer();")
+      html.add("          if (isAudio) {")
+      html.add("            finalBuffer = await processCustomAudio(rawBuf, 16000);")
+      html.add("            finalName = file.name.replace(/\\.[^/.]+$/, '') + '.wav';")
+      html.add("            finalType = 'audio/wav';")
+      html.add("          } else {")
+      html.add("            finalBuffer = rawBuf;")
+      html.add("          }")
+      html.add("        } catch (err) {")
+      html.add("          console.error('File processing error:', err);")
+      html.add("          if (status_" & field.name & ") {")
+      html.add("            status_" & field.name & ".style.display = 'block';")
+      html.add("            status_" & field.name & ".innerHTML = '<span style=\"color: #ef4444;\">Error processing audio file: ' + (err.message || err) + '</span>';")
+      html.add("          }")
+      html.add("          fileInput_" & field.name & ".value = '';")
       html.add("          uploadedParts.delete('" & field.name & "');")
       html.add("          delete cachedFileStore['" & field.name & "'];")
       html.add("          updateDynamicManifest();")
@@ -1943,21 +2096,27 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("          saveInstallerState();")
       html.add("          return;")
       html.add("        }")
-      html.add("        const maxSizeBytes = parseInt(fileInput_" & field.name & ".dataset.maxsize || '262144', 10);")
-      html.add("        if (file.size > maxSizeBytes) {")
-      html.add("          alert('File exceeds maximum allowed size of ' + Math.round(maxSizeBytes / 1024) + ' KB');")
+      html.add("        if (finalBuffer.byteLength > maxSizeBytes) {")
+      html.add("          alert('File exceeds maximum allowed size of ' + Math.round(maxSizeBytes / 1024) + ' KB (processed size: ' + Math.round(finalBuffer.byteLength / 1024) + ' KB)');")
       html.add("          fileInput_" & field.name & ".value = '';")
+      html.add("          if (status_" & field.name & ") status_" & field.name & ".style.display = 'none';")
+      html.add("          uploadedParts.delete('" & field.name & "');")
+      html.add("          delete cachedFileStore['" & field.name & "'];")
+      html.add("          updateDynamicManifest();")
+      html.add("          checkInstallReadiness();")
+      html.add("          saveInstallerState();")
       html.add("          return;")
       html.add("        }")
-      html.add("        const offset = parseInt(fileInput_" & field.name & ".dataset.offset || '0', 10);")
-      html.add("        const blobUrl = URL.createObjectURL(file);")
-      html.add("        uploadedParts.set('" & field.name & "', { url: blobUrl, offset: offset, name: file.name, size: file.size });")
+      html.add("        const blob = new Blob([finalBuffer], { type: finalType });")
+      html.add("        const blobUrl = URL.createObjectURL(blob);")
+      html.add("        uploadedParts.set('" & field.name & "', { url: blobUrl, offset: offset, name: finalName, size: finalBuffer.byteLength });")
       html.add("        if (status_" & field.name & ") {")
-      html.add("          const isWav = file.name.toLowerCase().endsWith('.wav');")
+      html.add("          const isWav = finalName.toLowerCase().endsWith('.wav') || finalType === 'audio/wav';")
       html.add("          let playBtnHtml = '';")
       html.add("          if (isWav) playBtnHtml = ' <button type=\"button\" class=\"preview-btn btn-play-uploaded\" style=\"margin-left: 8px; padding: 2px 8px; font-size: 0.72rem;\">' + ICONS.play + ' <span>Preview</span></button>';")
+      html.add("          const audioBadge = isAudio ? ' <span style=\"display: inline-block; background: #0c4a6e; color: #38bdf8; border: 1px solid #0284c7; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; margin-left: 6px;\">16kHz PCM &bull; Compressed &bull; Normalized</span>' : '';")
       html.add("          status_" & field.name & ".style.display = 'block';")
-      html.add("          status_" & field.name & ".innerHTML = ICONS.check + ' <span>Ready to flash: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB at safe partition 0x' + offset.toString(16).toUpperCase() + ')</span>' + playBtnHtml + ' <button type=\"button\" class=\"btn-clear-file\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+      html.add("          status_" & field.name & ".innerHTML = ICONS.check + ' <span>Ready to flash: ' + finalName + ' (' + Math.round(finalBuffer.byteLength / 1024) + ' KB at safe partition 0x' + offset.toString(16).toUpperCase() + ')' + audioBadge + '</span>' + playBtnHtml + ' <button type=\"button\" class=\"btn-clear-file\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
       html.add("          const playBtn = status_" & field.name & ".querySelector('.btn-play-uploaded');")
       html.add("          if (playBtn) {")
       html.add("            playBtn.addEventListener('click', () => {")
@@ -1985,24 +2144,19 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("            });")
       html.add("          }")
       html.add("        }")
-      html.add("        const reader = new FileReader();")
-      html.add("        reader.onload = function(evt) {")
-      html.add("          try {")
-      html.add("            const arrBuf = evt.target.result;")
-      html.add("            const u8 = new Uint8Array(arrBuf);")
-      html.add("            cachedFileStore['" & field.name & "'] = {")
-      html.add("              name: file.name,")
-      html.add("              size: file.size,")
-      html.add("              type: file.type || 'audio/wav',")
-      html.add("              offset: offset,")
-      html.add("              b64: uint8ToBase64(u8)")
-      html.add("            };")
-      html.add("            saveInstallerState();")
-      html.add("          } catch (err) {")
-      html.add("            console.warn('Could not cache file:', err);")
-      html.add("          }")
-      html.add("        };")
-      html.add("        reader.readAsArrayBuffer(file);")
+      html.add("        try {")
+      html.add("          const u8 = new Uint8Array(finalBuffer);")
+      html.add("          cachedFileStore['" & field.name & "'] = {")
+      html.add("            name: finalName,")
+      html.add("            size: finalBuffer.byteLength,")
+      html.add("            type: finalType,")
+      html.add("            offset: offset,")
+      html.add("            b64: uint8ToBase64(u8)")
+      html.add("          };")
+      html.add("          saveInstallerState();")
+      html.add("        } catch (err) {")
+      html.add("          console.warn('Could not cache file:', err);")
+      html.add("        }")
       if field.dependsOnField.len > 0 and field.dependsOnValue.len > 0:
         html.add("        const depSelect = document.getElementById('field_" & field.dependsOnField & "');")
         html.add("        if (depSelect) {")
