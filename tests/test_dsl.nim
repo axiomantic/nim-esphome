@@ -444,9 +444,11 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     let html = slotInstaller.generateHtml()
     check "wakeSlotsContainer_active_wake_words" in html
     check "btnAddSlot_active_wake_words" in html
-    check "BrowserWakeTrainer" in html
-    check "synthesizeAcousticFeatures" in html
-    check "packageToTflite" in html
+    check "custom-wake-guide" in html
+    check "microWakeWord_model_training.ipynb" in html
+    check "https://github.com/kahrendt/microWakeWord" in html
+    check "BrowserWakeTrainer" notin html
+    check "synthesizeAcousticFeatures" notin html
     check "checkInstallReadiness" in html
     check "installWarningNotice" in html
     check "Bell Ping" in html
