@@ -408,6 +408,12 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "Home Assistant Voice PE" in html
     check "phonetic-callout" in html
     check "okay see three pee oh" in html
+    check "terminal-drawer" in html
+    check "deviceInfoBanner" in html
+    check "btnTermConnect" in html
+    check "btnTermToggle" in html
+    check "btnTermClear" in html
+    check "disconnectTerminal" in html
 
   test "esphomeInstaller with multi-slot wake words and chime sounds":
     let slotInstaller = esphomeInstaller("slot-satellite"):
@@ -475,6 +481,8 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
       installer.enableImprovWifi = false
       installer.enableSuccessModal = false
       installer.enableSetupGuide = false
+      installer.enableTerminalConsole = false
+      installer.enableDeviceInspector = false
       installer.fallbackApSsid = "Custom-Fallback-AP"
 
       installer.addTarget(
@@ -496,6 +504,8 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check modularInstaller.enableImprovWifi == false
     check modularInstaller.enableSuccessModal == false
     check modularInstaller.enableSetupGuide == false
+    check modularInstaller.enableTerminalConsole == false
+    check modularInstaller.enableDeviceInspector == false
     check modularInstaller.fallbackApSsid == "Custom-Fallback-AP"
     check modularInstaller.targets[0].nativeUsb == true
     check modularInstaller.targets[1].nativeUsb == false
@@ -505,6 +515,8 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "<improv-wifi-serial-launch-button>" notin html
     check "<div class=\"setup-guide-card\">" notin html
     check "id=\"installSuccessModal\"" notin html
+    check "class=\"terminal-drawer\"" notin html
+    check "id=\"deviceInfoBanner\"" notin html
     check "TARGET_MAP" in html
     check "\"nativeUsb\":true" in html
     check "\"nativeUsb\":false" in html
