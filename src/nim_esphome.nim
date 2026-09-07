@@ -29,6 +29,15 @@ export preferences
 export dsp
 export dsl
 
+proc NimMain*() {.importc: "NimMain", cdecl.}
+
+var nimRuntimeInitialized {.global.} = false
+
+proc nim_init_runtime*() {.exportc: "nim_init_runtime", cdecl.} =
+  if not nimRuntimeInitialized:
+    nimRuntimeInitialized = true
+    NimMain()
+
 template esphomeSetup*(body: untyped) =
   ## Registers initialization logic invoked once during ESPHome's setup phase.
   ##
@@ -44,6 +53,9 @@ template esphomeSetup*(body: untyped) =
   ##   pinMode(2, Output)
   ## ```
   proc nim_on_setup() {.exportc: "nim_on_setup", cdecl.} =
+    if not nimRuntimeInitialized:
+      nimRuntimeInitialized = true
+      NimMain()
     body
 
 template esphomeLoop*(body: untyped) =

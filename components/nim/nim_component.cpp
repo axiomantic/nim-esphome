@@ -53,6 +53,7 @@ inline bool entity_matches_id(const esphome::EntityBase *entity, const char *ent
 
 extern "C" {
   void NimMain(void) __attribute__((weak));
+  void nim_init_runtime(void) __attribute__((weak));
   void nim_on_setup(void) __attribute__((weak));
   void nim_on_loop(void) __attribute__((weak));
 
@@ -310,7 +311,9 @@ namespace nim {
 void NimComponent::setup() {
   ESP_LOGI(TAG, "Initializing Nim runtime...");
 
-  if (NimMain) {
+  if (nim_init_runtime) {
+    nim_init_runtime();
+  } else if (NimMain) {
     NimMain();
   }
 
