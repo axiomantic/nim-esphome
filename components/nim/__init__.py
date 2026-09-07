@@ -162,6 +162,7 @@ async def to_code(config):
         "-d:danger",
         "-d:useMalloc",
         "-d:esphome",
+        "-d:noSignalHandler",
         "--os:any",
         "--exceptions:goto",
         "--panics:on",

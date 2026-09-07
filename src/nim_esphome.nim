@@ -31,11 +31,10 @@ export dsl
 
 proc NimMain*() {.importc: "NimMain", cdecl.}
 
-var nimRuntimeInitialized {.global.} = false
-
 proc nim_init_runtime*() {.exportc: "nim_init_runtime", cdecl.} =
-  if not nimRuntimeInitialized:
-    nimRuntimeInitialized = true
+  var initialized {.global.} = false
+  if not initialized:
+    initialized = true
     NimMain()
 
 template esphomeSetup*(body: untyped) =
@@ -53,9 +52,7 @@ template esphomeSetup*(body: untyped) =
   ##   pinMode(2, Output)
   ## ```
   proc nim_on_setup() {.exportc: "nim_on_setup", cdecl.} =
-    if not nimRuntimeInitialized:
-      nimRuntimeInitialized = true
-      NimMain()
+    nim_init_runtime()
     body
 
 template esphomeLoop*(body: untyped) =
