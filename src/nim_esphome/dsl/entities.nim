@@ -73,14 +73,17 @@ macro esphomeControls*(body: untyped): untyped =
 
       if callbackBody != nil:
         if persistVal and defaultVal != nil:
+          let applyProc = genSym(nskProc, "applyVal")
           setupCode.add quote do:
+            proc `applyProc`(`callbackParam`: `enumType`) =
+              `callbackBody`
             proc `cbProc`(`callbackParam`: `enumType`) =
               discard savePreference(`entityId`, `callbackParam`)
-              `callbackBody`
+              `applyProc`(`callbackParam`)
             `entityVar`.onState(`cbProc`)
             let initialVal = loadPreference(`entityId`, `defaultVal`)
             `entityVar`.publishState(initialVal)
-            `cbProc`(initialVal)
+            `applyProc`(initialVal)
         else:
           setupCode.add quote do:
             `entityVar`.onState(proc(`callbackParam`: `enumType`) =
@@ -101,14 +104,17 @@ macro esphomeControls*(body: untyped): untyped =
 
       if callbackBody != nil:
         if persistVal and defaultVal != nil:
+          let applyProc = genSym(nskProc, "applyVal")
           setupCode.add quote do:
+            proc `applyProc`(`callbackParam`: float32) =
+              `callbackBody`
             proc `cbProc`(`callbackParam`: float32) =
               discard savePreference(`entityId`, `callbackParam`)
-              `callbackBody`
+              `applyProc`(`callbackParam`)
             `entityVar`.onState(`cbProc`)
             let initialVal = loadPreference(`entityId`, float32(`defaultVal`))
             `entityVar`.publishState(initialVal)
-            `cbProc`(initialVal)
+            `applyProc`(initialVal)
         else:
           setupCode.add quote do:
             `entityVar`.onState(proc(`callbackParam`: float32) =
@@ -129,14 +135,17 @@ macro esphomeControls*(body: untyped): untyped =
 
       if callbackBody != nil:
         if persistVal and defaultVal != nil:
+          let applyProc = genSym(nskProc, "applyVal")
           setupCode.add quote do:
+            proc `applyProc`(`callbackParam`: bool) =
+              `callbackBody`
             proc `cbProc`(`callbackParam`: bool) =
               discard savePreference(`entityId`, `callbackParam`)
-              `callbackBody`
+              `applyProc`(`callbackParam`)
             `entityVar`.onState(`cbProc`)
             let initialVal = loadPreference(`entityId`, bool(`defaultVal`))
             `entityVar`.publishState(initialVal)
-            `cbProc`(initialVal)
+            `applyProc`(initialVal)
         else:
           setupCode.add quote do:
             `entityVar`.onState(proc(`callbackParam`: bool) =
