@@ -466,5 +466,63 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "Typewriter" in html
     check "sounds/typewriter.mp3" in html
 
+  test "esphomeInstaller modular toggles, hardware quirks, and ESPHome snippet generation":
+    let modularInstaller = esphomeInstaller("minimal-flasher"):
+      installer.title = "Minimal Flasher"
+      installer.chipFamily = "ESP32-S3"
+      installer.nativeUsb = true
+      installer.enableEraseButton = false
+      installer.enableImprovWifi = false
+      installer.enableSuccessModal = false
+      installer.enableSetupGuide = false
+      installer.fallbackApSsid = "Custom-Fallback-AP"
 
+      installer.addTarget(
+        name = "ESP32-S3 Custom Board",
+        binPath = "custom-s3.bin",
+        chipFamily = "ESP32-S3",
+        description = "ESP32-S3 board with native USB",
+        nativeUsb = true
+      )
+      installer.addTarget(
+        name = "ESP32-WROOM Classic",
+        binPath = "classic-esp32.bin",
+        chipFamily = "ESP32",
+        description = "Standard UART ESP32",
+        nativeUsb = false
+      )
 
+    check modularInstaller.enableEraseButton == false
+    check modularInstaller.enableImprovWifi == false
+    check modularInstaller.enableSuccessModal == false
+    check modularInstaller.enableSetupGuide == false
+    check modularInstaller.fallbackApSsid == "Custom-Fallback-AP"
+    check modularInstaller.targets[0].nativeUsb == true
+    check modularInstaller.targets[1].nativeUsb == false
+
+    let html = modularInstaller.generateHtml()
+    check "id=\"btnEraseDevice\"" notin html
+    check "<improv-wifi-serial-launch-button>" notin html
+    check "<div class=\"setup-guide-card\">" notin html
+    check "id=\"installSuccessModal\"" notin html
+    check "TARGET_MAP" in html
+    check "\"nativeUsb\":true" in html
+    check "\"nativeUsb\":false" in html
+
+    # Verify ESPHome snippet generation
+    let snippet = modularInstaller.generateEsphomeSnippet(
+      name = "my-custom-satellite",
+      friendlyName = "My Custom Satellite"
+    )
+    check "name: my-custom-satellite" in snippet
+    check "friendly_name: \"My Custom Satellite\"" in snippet
+    check "board: esp32-s3-devkitc-1" in snippet
+    check "hardware_uart: USB_SERIAL_JTAG" in snippet
+    check "ssid: \"Custom-Fallback-AP\"" in snippet
+    check "captive_portal:" in snippet
+    check "improv_serial:" notin snippet
+
+    # Verify snippet with improv_serial enabled
+    modularInstaller.enableImprovWifi = true
+    let snippetWithImprov = modularInstaller.generateEsphomeSnippet()
+    check "improv_serial:" in snippetWithImprov

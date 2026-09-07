@@ -104,6 +104,7 @@ type
     binPath*: string
     chipFamily*: string
     description*: string
+    nativeUsb*: bool
 
   InstallerDefinition* = ref object
     ## Complete definition of an ESP-Web-Tools web installer.
@@ -115,6 +116,12 @@ type
     homeAssistantDomain*: string
     fundingUrl*: string
     factoryBinPath*: string
+    nativeUsb*: bool
+    enableEraseButton*: bool
+    enableImprovWifi*: bool
+    enableSuccessModal*: bool
+    enableSetupGuide*: bool
+    fallbackApSsid*: string
     fields*: seq[InstallerField]
     targets*: seq[InstallerTarget]
     customPartitions*: seq[FlashPartition]
@@ -139,10 +146,17 @@ proc newInstallerDefinition*(
     homeAssistantDomain: "esphome",
     fundingUrl: "",
     factoryBinPath: "firmware-factory.bin",
+    nativeUsb: chipFamily == "ESP32-S3",
+    enableEraseButton: true,
+    enableImprovWifi: true,
+    enableSuccessModal: true,
+    enableSetupGuide: true,
+    fallbackApSsid: "Satellite Fallback Hotspot",
     fields: @[],
     targets: @[],
     customPartitions: @[]
   )
+
 
 proc addFileField*(
     installer: InstallerDefinition,
@@ -191,15 +205,19 @@ proc addTarget*(
     name: string,
     binPath: string,
     chipFamily: string = "ESP32-S3",
-    description: string = ""
+    description: string = "",
+    nativeUsb: bool = false
 ) =
   ## Registers a hardware board target with its corresponding factory binary.
+  let isNative = if nativeUsb: true elif chipFamily == "ESP32-S3": true else: false
   installer.targets.add(InstallerTarget(
     name: name,
     binPath: binPath,
     chipFamily: chipFamily,
-    description: description
+    description: description,
+    nativeUsb: isNative
   ))
+
 
 proc addSelectField*(
     installer: InstallerDefinition,
@@ -467,7 +485,8 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("  <meta http-equiv=\"Expires\" content=\"0\">")
   html.add("  <title>" & installer.title & "</title>")
   html.add("  <script type=\"module\" src=\"https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module\"></script>")
-  html.add("  <script type=\"module\" src=\"https://unpkg.com/improv-wifi-serial-sdk@2.5.0/dist/web/serial-launch-button.js?module\"></script>")
+  if installer.enableImprovWifi:
+    html.add("  <script type=\"module\" src=\"https://unpkg.com/improv-wifi-serial-sdk@2.5.0/dist/web/serial-launch-button.js?module\"></script>")
   html.add("  <style>")
   html.add("    :root { --primary: #3b82f6; --primary-hover: #2563eb; --bg: #0b0f19; --card: #151e2e; --card-inner: #0d1524; --text: #f8fafc; --muted: #94a3b8; --border: #24324a; --accent-badge: rgba(16, 185, 129, 0.15); --accent-badge-text: #34d399; }")
   html.add("    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; padding: 24px; display: flex; align-items: center; justify-content: center; }")
@@ -635,70 +654,77 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("          <button slot=\"activate\" class=\"install-btn\">Install Firmware</button>")
   html.add("          <span slot=\"unsupported\">WebSerial is not supported in this browser. Please use Chrome or Edge on desktop.</span>")
   html.add("        </esp-web-install-button>")
-  html.add("        <improv-wifi-serial-launch-button>")
-  html.add("          <button slot=\"activate\" class=\"wifi-btn\" title=\"Configure Wi-Fi credentials directly over USB without re-flashing\">")
-  html.add("            <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
-  html.add("            <span>Configure Wi-Fi</span>")
-  html.add("          </button>")
-  html.add("          <span slot=\"unsupported\"></span>")
-  html.add("        </improv-wifi-serial-launch-button>")
-  html.add("        <button type=\"button\" id=\"btnEraseDevice\" class=\"erase-btn\" title=\"Completely wipe all flash partitions, cached Wi-Fi credentials, and NVS settings\">")
-  html.add("          <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>")
-  html.add("          <span>Erase Device</span>")
-  html.add("        </button>")
+  if installer.enableImprovWifi:
+    html.add("        <improv-wifi-serial-launch-button>")
+    html.add("          <button slot=\"activate\" class=\"wifi-btn\" title=\"Configure Wi-Fi credentials directly over USB without re-flashing\">")
+    html.add("            <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
+    html.add("            <span>Configure Wi-Fi</span>")
+    html.add("          </button>")
+    html.add("          <span slot=\"unsupported\"></span>")
+    html.add("        </improv-wifi-serial-launch-button>")
+  if installer.enableEraseButton:
+    html.add("        <button type=\"button\" id=\"btnEraseDevice\" class=\"erase-btn\" title=\"Completely wipe all flash partitions, cached Wi-Fi credentials, and NVS settings\">")
+    html.add("          <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 6h18\"></path><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"></path></svg>")
+    html.add("          <span>Erase Device</span>")
+    html.add("        </button>")
   html.add("      </div>")
   html.add("      <div id=\"eraseStatus\" class=\"erase-status\" style=\"display: none;\"></div>")
   html.add("    </div>")
   html.add("")
-  html.add("    <!-- Next Steps: Connecting to Home Assistant Guide -->")
-  html.add("    <div class=\"setup-guide-card\">")
-  html.add("      <div class=\"guide-header\">")
-  html.add("        <span class=\"guide-badge\">WHAT TO DO NEXT</span>")
-  html.add("        <h3>Next Steps: Connecting to Home Assistant</h3>")
-  html.add("      </div>")
-  html.add("      <div class=\"guide-steps\">")
-  html.add("        <div class=\"guide-step\">")
-  html.add("          <div class=\"step-number\">1</div>")
-  html.add("          <div class=\"step-content\">")
-  html.add("            <h4>Reboot Board &amp; Connect to Wi-Fi</h4>")
-  html.add("            <div class=\"step-tip\" style=\"background: rgba(234, 179, 8, 0.15); border-left: 3px solid #eab308; margin-bottom: 10px;\"><strong>⚠️ Essential for ESP32-S3 (ReSpeaker Lite):</strong> Because this board uses native USB, software resets cannot exit the ROM bootloader after flashing or erasing. <strong>Unplug and reconnect the USB-C cable</strong> (or tap the <strong>RST</strong> button) once before configuring Wi-Fi! If you click before rebooting, it will report <em>\"Improv Wi-Fi Serial not detected\"</em> because ESPHome has not booted yet.</div>")
-  html.add("            <p>Once replugged, connect your satellite to Wi-Fi using either method below:</p>")
-  html.add("            <div style=\"display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0;\">")
-  html.add("              <improv-wifi-serial-launch-button>")
-  html.add("                <button slot=\"activate\" class=\"btn-guide-wifi\">")
-  html.add("                  <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
-  html.add("                  <span>Configure Wi-Fi via USB (Improv)</span>")
-  html.add("                </button>")
-  html.add("              </improv-wifi-serial-launch-button>")
-  html.add("            </div>")
-  html.add("            <div class=\"step-tip\"><strong>Method B (Fallback Hotspot):</strong> Connect your phone or laptop to the open Wi-Fi network <code>Satellite Fallback Hotspot</code>. The captive portal at <code>http://192.168.4.1</code> opens automatically to enter your Wi-Fi credentials.</div>")
-  html.add("          </div>")
-  html.add("        </div>")
-  html.add("        <div class=\"guide-step\">")
-  html.add("          <div class=\"step-number\">2</div>")
-  html.add("          <div class=\"step-content\">")
-  html.add("            <h4>Add in Home Assistant</h4>")
-  html.add("            <p>Open Home Assistant and navigate to <strong>Settings &rarr; Devices &amp; Services</strong>. Your new <strong>Voice Satellite</strong> will appear highlighted at the top under <strong>Discovered</strong>.</p>")
-  html.add("            <p>Click <strong>Configure</strong>, then click <strong>Submit</strong> (no encryption key required).</p>")
-  html.add("          </div>")
-  html.add("        </div>")
-  html.add("        <div class=\"guide-step\">")
-  html.add("          <div class=\"step-number\">3</div>")
-  html.add("          <div class=\"step-content\">")
-  html.add("            <h4>Configure Voice Assistant &amp; Audio Presets</h4>")
-  html.add("            <p>Go to <strong>Settings &rarr; Voice Assistants</strong> to link the satellite to your Assist pipeline (Cloud, Whisper/Piper, or Ollama).</p>")
-  html.add("            <p>On the device card, you can customize your <strong>Wake Chime</strong> (<em>Modern Chime</em>, <em>Crystal Glass</em>, <em>Warm Kalimba</em>, <em>Meditation Bell</em>) and <strong>Processing Sound</strong> (<em>Typewriter</em>, <em>Clockwork</em>, <em>Water Droplets</em>) anytime!</p>")
-  html.add("          </div>")
-  html.add("        </div>")
-  html.add("        <div class=\"guide-step\">")
-  html.add("          <div class=\"step-number\">&#8635;</div>")
-  html.add("          <div class=\"step-content\">")
-  html.add("            <h4>Testing Clean Flow / Factory Reset</h4>")
-  html.add("            <p>If your device previously had another Wi-Fi network or an old encryption key saved in NVS memory, click <strong>Erase Device (Factory Reset)</strong> above or run <code>esptool.py erase_flash</code> in terminal before clicking Install Firmware.</p>")
-  html.add("          </div>")
-  html.add("        </div>")
-  html.add("      </div>")
-  html.add("    </div>")
+  if installer.enableSetupGuide:
+    let initialNative = if installer.targets.len > 0: installer.targets[0].nativeUsb else: installer.nativeUsb
+    let nativeWarningStyle = if initialNative: "" else: " style=\"display: none;\""
+    html.add("    <!-- Next Steps: Connecting to Home Assistant Guide -->")
+    html.add("    <div class=\"setup-guide-card\">")
+    html.add("      <div class=\"guide-header\">")
+    html.add("        <span class=\"guide-badge\">WHAT TO DO NEXT</span>")
+    html.add("        <h3>Next Steps: Connecting to Home Assistant</h3>")
+    html.add("      </div>")
+    html.add("      <div class=\"guide-steps\">")
+    html.add("        <div class=\"guide-step\">")
+    html.add("          <div class=\"step-number\">1</div>")
+    html.add("          <div class=\"step-content\">")
+    html.add("            <h4>Reboot Board &amp; Connect to Wi-Fi</h4>")
+    html.add("            <div class=\"step-tip native-usb-warning\"" & nativeWarningStyle & " style=\"background: rgba(234, 179, 8, 0.15); border-left: 3px solid #eab308; margin-bottom: 10px;\"><strong>⚠️ Essential for ESP32-S3 Native USB:</strong> Because this board uses native USB, software resets cannot exit the ROM bootloader after flashing or erasing. <strong>Unplug and reconnect the USB-C cable</strong> (or tap the <strong>RST</strong> button) once before configuring Wi-Fi! If you click before rebooting, it will report <em>\"Improv Wi-Fi Serial not detected\"</em> because ESPHome has not booted yet.</div>")
+    html.add("            <p>Once replugged, connect your device to Wi-Fi using either method below:</p>")
+    if installer.enableImprovWifi:
+      html.add("            <div style=\"display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0;\">")
+      html.add("              <improv-wifi-serial-launch-button>")
+      html.add("                <button slot=\"activate\" class=\"btn-guide-wifi\">")
+      html.add("                  <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
+      html.add("                  <span>Configure Wi-Fi via USB (Improv)</span>")
+      html.add("                </button>")
+      html.add("              </improv-wifi-serial-launch-button>")
+      html.add("            </div>")
+    if installer.fallbackApSsid.len > 0:
+      html.add("            <div class=\"step-tip\"><strong>Method B (Fallback Hotspot):</strong> Connect your phone or laptop to the open Wi-Fi network <code>" & installer.fallbackApSsid & "</code>. The captive portal at <code>http://192.168.4.1</code> opens automatically to enter your Wi-Fi credentials.</div>")
+    html.add("          </div>")
+    html.add("        </div>")
+    html.add("        <div class=\"guide-step\">")
+    html.add("          <div class=\"step-number\">2</div>")
+    html.add("          <div class=\"step-content\">")
+    html.add("            <h4>Add in Home Assistant</h4>")
+    html.add("            <p>Open Home Assistant and navigate to <strong>Settings &rarr; Devices &amp; Services</strong>. Your new <strong>" & installer.title & "</strong> will appear highlighted at the top under <strong>Discovered</strong>.</p>")
+    html.add("            <p>Click <strong>Configure</strong>, then click <strong>Submit</strong> (no encryption key required).</p>")
+    html.add("          </div>")
+    html.add("        </div>")
+    html.add("        <div class=\"guide-step\">")
+    html.add("          <div class=\"step-number\">3</div>")
+    html.add("          <div class=\"step-content\">")
+    html.add("            <h4>Customize Device &amp; Audio Presets</h4>")
+    html.add("            <p>On the device card, you can customize your feedback styles, wake chimes, and runtime settings anytime directly from Home Assistant.</p>")
+    html.add("          </div>")
+    html.add("        </div>")
+    if installer.enableEraseButton:
+      html.add("        <div class=\"guide-step\">")
+      html.add("          <div class=\"step-number\">&#8635;</div>")
+      html.add("          <div class=\"step-content\">")
+      html.add("            <h4>Testing Clean Flow / Factory Reset</h4>")
+      html.add("            <p>If your device previously had another Wi-Fi network or an old encryption key saved in NVS memory, click <strong>Erase Device (Factory Reset)</strong> above or run <code>esptool.py erase_flash</code> in terminal before clicking Install Firmware.</p>")
+      html.add("          </div>")
+      html.add("        </div>")
+    html.add("      </div>")
+    html.add("    </div>")
   html.add("    <div class=\"footer\">Powered by <a href=\"https://github.com/axiomantic/nim-esphome\" target=\"_blank\" style=\"color: #60a5fa;\">nim-esphome</a> &amp; ESP-Web-Tools</div>")
   html.add("  </div>")
 
@@ -733,6 +759,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
       to["bin"] = %t.binPath
       to["chip"] = %t.chipFamily
       to["desc"] = %t.description
+      to["nativeUsb"] = %t.nativeUsb
       targetObj[t.name] = to
     html.add("    const TARGET_MAP = " & $targetObj & ";")
     html.add("    const targetSelect = document.getElementById('field_hardware_target');")
@@ -742,10 +769,14 @@ proc generateHtml*(installer: InstallerDefinition): string =
     html.add("        const info = TARGET_MAP[targetSelect.value];")
     html.add("        if (info) {")
     html.add("          if (targetDesc && info.desc) targetDesc.textContent = info.desc;")
+    html.add("          document.querySelectorAll('.native-usb-warning').forEach(el => {")
+    html.add("            el.style.display = info.nativeUsb ? '' : 'none';")
+    html.add("          });")
     html.add("          updateDynamicManifest();")
     html.add("        }")
     html.add("      });")
     html.add("    }")
+
   html.add("    const installBtn = document.getElementById('installBtn');")
   html.add("    const uploadedParts = new Map();")
   html.add("    let activeManifestUrl = null;")
@@ -1402,122 +1433,184 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    updateFieldDependencies();")
   html.add("    checkInstallReadiness();")
   html.add("")
-  html.add("    // Success Modal Logic")
-  html.add("    const installBtnEl = document.getElementById('installBtn');")
-  html.add("    const successModal = document.getElementById('installSuccessModal');")
-  html.add("    const btnCloseModal = document.getElementById('btnCloseSuccessModal');")
-  html.add("    if (installBtnEl && successModal) {")
-  html.add("      installBtnEl.addEventListener('state-changed', (ev) => {")
-  html.add("        if (ev && ev.detail && (ev.detail.state === 'success' || ev.detail.state === 'DONE')) {")
-  html.add("          successModal.style.display = 'flex';")
-  html.add("        }")
-  html.add("      });")
-  html.add("    }")
-  html.add("    if (btnCloseModal && successModal) {")
-  html.add("      btnCloseModal.addEventListener('click', () => { successModal.style.display = 'none'; });")
-  html.add("      successModal.addEventListener('click', (e) => { if (e.target === successModal) successModal.style.display = 'none'; });")
-  html.add("    }")
-  html.add("")
-  html.add("    // Factory Reset / Erase Device Button")
-  html.add("    const btnErase = document.getElementById('btnEraseDevice');")
-  html.add("    const eraseStatus = document.getElementById('eraseStatus');")
-  html.add("    if (btnErase && eraseStatus) {")
-  html.add("      btnErase.addEventListener('click', async () => {")
-  html.add("        if (!navigator.serial) {")
-  html.add("          alert('WebSerial is not supported in this browser. Please use Google Chrome or Microsoft Edge on desktop.');")
-  html.add("          return;")
-  html.add("        }")
-  html.add("        if (!confirm('This will completely wipe all flash partitions, cached Wi-Fi credentials, and NVS settings on your ESP32 device.\\n\\nAre you sure you want to proceed with a factory reset?')) {")
-  html.add("          return;")
-  html.add("        }")
-  html.add("        eraseStatus.style.display = 'block';")
-  html.add("        eraseStatus.className = 'erase-status in-progress';")
-  html.add("        eraseStatus.innerHTML = '<span class=\"spinner\"></span> Requesting serial port... Please select your ESP32 device in the browser prompt.';")
-  html.add("        try {")
-  html.add("          const port = await navigator.serial.requestPort();")
-  html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Loading WebSerial flasher engine...';")
-  html.add("          const { ESPLoader, Transport } = await import('https://unpkg.com/esptool-js@0.6.1/bundle.js');")
-  html.add("          const transport = new Transport(port, true);")
-  html.add("          const esploader = new ESPLoader({")
-  html.add("            transport: transport,")
-  html.add("            baudrate: 115200,")
-  html.add("            terminal: { clean() {}, writeLine(d) { console.log('[esptool]', d); }, write(d) { console.log('[esptool]', d); } }")
-  html.add("          });")
-  html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Connecting to ESP32 bootloader...';")
-  html.add("          await esploader.main();")
-  html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Erasing entire flash memory (wiping NVS, credentials, partitions)...';")
-  html.add("          await esploader.eraseFlash();")
-  html.add("          await transport.disconnect();")
-  html.add("          eraseStatus.className = 'erase-status success';")
-  html.add("          eraseStatus.innerHTML = ICONS.check + ' <strong>Flash erased successfully!</strong> All cached Wi-Fi credentials, NVS keys, and data have been wiped clean. You can now click <strong>Install Firmware</strong> above for a pristine out-of-the-box install.';")
-  html.add("        } catch (err) {")
-  html.add("          console.error('Erase error:', err);")
-  html.add("          eraseStatus.className = 'erase-status error';")
-  html.add("          eraseStatus.innerHTML = ICONS.alert + ' <strong>Erase failed:</strong> ' + (err.message || err) + '. If the port was busy, unplug and replug the USB cable and try again.';")
-  html.add("        }")
-  html.add("      });")
-  html.add("    }")
+  if installer.enableSuccessModal:
+    html.add("    // Success Modal Logic")
+    html.add("    const installBtnEl = document.getElementById('installBtn');")
+    html.add("    const successModal = document.getElementById('installSuccessModal');")
+    html.add("    const btnCloseModal = document.getElementById('btnCloseSuccessModal');")
+    html.add("    if (installBtnEl && successModal) {")
+    html.add("      installBtnEl.addEventListener('state-changed', (ev) => {")
+    html.add("        if (ev && ev.detail && (ev.detail.state === 'success' || ev.detail.state === 'DONE')) {")
+    html.add("          successModal.style.display = 'flex';")
+    html.add("        }")
+    html.add("      });")
+    html.add("    }")
+    html.add("    if (btnCloseModal && successModal) {")
+    html.add("      btnCloseModal.addEventListener('click', () => { successModal.style.display = 'none'; });")
+    html.add("      successModal.addEventListener('click', (e) => { if (e.target === successModal) successModal.style.display = 'none'; });")
+    html.add("    }")
+    html.add("")
+  if installer.enableEraseButton:
+    html.add("    // Factory Reset / Erase Device Button")
+    html.add("    const btnErase = document.getElementById('btnEraseDevice');")
+    html.add("    const eraseStatus = document.getElementById('eraseStatus');")
+    html.add("    if (btnErase && eraseStatus) {")
+    html.add("      btnErase.addEventListener('click', async () => {")
+    html.add("        if (!navigator.serial) {")
+    html.add("          alert('WebSerial is not supported in this browser. Please use Google Chrome or Microsoft Edge on desktop.');")
+    html.add("          return;")
+    html.add("        }")
+    html.add("        if (!confirm('This will completely wipe all flash partitions, cached Wi-Fi credentials, and NVS settings on your ESP32 device.\\n\\nAre you sure you want to proceed with a factory reset?')) {")
+    html.add("          return;")
+    html.add("        }")
+    html.add("        eraseStatus.style.display = 'block';")
+    html.add("        eraseStatus.className = 'erase-status in-progress';")
+    html.add("        eraseStatus.innerHTML = '<span class=\"spinner\"></span> Requesting serial port... Please select your ESP32 device in the browser prompt.';")
+    html.add("        try {")
+    html.add("          const port = await navigator.serial.requestPort();")
+    html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Loading WebSerial flasher engine...';")
+    html.add("          const { ESPLoader, Transport } = await import('https://unpkg.com/esptool-js@0.6.1/bundle.js');")
+    html.add("          const transport = new Transport(port, true);")
+    html.add("          const esploader = new ESPLoader({")
+    html.add("            transport: transport,")
+    html.add("            baudrate: 115200,")
+    html.add("            terminal: { clean() {}, writeLine(d) { console.log('[esptool]', d); }, write(d) { console.log('[esptool]', d); } }")
+    html.add("          });")
+    html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Connecting to ESP32 bootloader...';")
+    html.add("          await esploader.main();")
+    html.add("          eraseStatus.innerHTML = '<span class=\"spinner\"></span> Erasing entire flash memory (wiping NVS, credentials, partitions)...';")
+    html.add("          await esploader.eraseFlash();")
+    html.add("          await transport.disconnect();")
+    html.add("          eraseStatus.className = 'erase-status success';")
+    html.add("          eraseStatus.innerHTML = ICONS.check + ' <strong>Flash erased successfully!</strong> All cached Wi-Fi credentials, NVS keys, and data have been wiped clean. You can now click <strong>Install Firmware</strong> above for a pristine out-of-the-box install.';")
+    html.add("        } catch (err) {")
+    html.add("          console.error('Erase error:', err);")
+    html.add("          eraseStatus.className = 'erase-status error';")
+    html.add("          eraseStatus.innerHTML = ICONS.alert + ' <strong>Erase failed:</strong> ' + (err.message || err) + '. If the port was busy, unplug and replug the USB cable and try again.';")
+    html.add("        }")
+    html.add("      });")
+    html.add("    }")
   html.add("  </script>")
   html.add("")
-  html.add("  <!-- Post-Install Success Modal with Next Steps -->")
-  html.add("  <div id=\"installSuccessModal\" class=\"modal-overlay\" style=\"display: none;\">")
-  html.add("    <div class=\"modal-card\">")
-  html.add("      <div class=\"modal-header\">")
-  html.add("        <div class=\"modal-icon-success\">&#10003;</div>")
-  html.add("        <div>")
-  html.add("          <h2>Firmware Installed Successfully!</h2>")
-  html.add("          <div class=\"modal-subtitle\">Follow these next steps to connect to Home Assistant</div>")
-  html.add("        </div>")
-  html.add("      </div>")
-  html.add("      <div class=\"modal-body\">")
-  html.add("        <p class=\"modal-intro\">Your ESP32-S3 voice satellite firmware has been flashed.</p>")
-  html.add("        <div style=\"background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.35); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; line-height: 1.45; color: #fef08a;\">")
-  html.add("          <strong>🔌 Action Required (ESP32-S3):</strong><br/>")
-  html.add("          Because this board uses native USB, it stays in bootloader mode after flashing. <strong>Unplug and re-plug the USB-C cable</strong> (or press the board's <strong>RST</strong> button) right now to start ESPHome before clicking <em>Configure Wi-Fi</em>.")
-  html.add("        </div>")
-  html.add("        <div class=\"next-steps-list\">")
-  html.add("          <div class=\"next-step-item\">")
-  html.add("            <span class=\"num\">1</span>")
-  html.add("            <div>")
-  html.add("              <strong>Connect Wi-Fi:</strong> Once power-cycled, click below to send credentials over USB:")
-  html.add("              <div style=\"margin: 6px 0;\">")
-  html.add("                <improv-wifi-serial-launch-button>")
-  html.add("                  <button slot=\"activate\" class=\"modal-wifi-btn\">")
-  html.add("                    <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
-  html.add("                    <span>Configure Wi-Fi via USB</span>")
-  html.add("                  </button>")
-  html.add("                </improv-wifi-serial-launch-button>")
-  html.add("              </div>")
-  html.add("              <div class=\"subtext\"><strong>Or via Hotspot:</strong> Connect your phone or PC to <code>Satellite Fallback Hotspot</code> and open <code>http://192.168.4.1</code>.</div>")
-  html.add("            </div>")
-  html.add("          </div>")
-  html.add("          <div class=\"next-step-item\">")
-  html.add("            <span class=\"num\">2</span>")
-  html.add("            <div>")
-  html.add("              <strong>Add in Home Assistant:</strong> Open Home Assistant &rarr; <strong>Settings &rarr; Devices &amp; Services</strong>. Look under <strong>Discovered</strong> for <strong>Voice Satellite</strong>. Click <strong>Configure &rarr; Submit</strong> (no encryption key needed).")
-  html.add("            </div>")
-  html.add("          </div>")
-  html.add("          <div class=\"next-step-item\">")
-  html.add("            <span class=\"num\">3</span>")
-  html.add("            <div>")
-  html.add("              <strong>Voice &amp; Audio Presets:</strong> Link your Assist pipeline in <strong>Settings &rarr; Voice Assistants</strong>, and choose your favorite wake chime and processing loop right on the device card!")
-  html.add("            </div>")
-  html.add("          </div>")
-  html.add("        </div>")
-  html.add("      </div>")
-  html.add("      <div class=\"modal-actions\">")
-  html.add("        <a href=\"https://my.home-assistant.io/redirect/config_flow_start?domain=esphome\" target=\"_blank\" class=\"btn-ha-link\">")
-  html.add("          <span>Open Home Assistant</span>")
-  html.add("          <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg>")
-  html.add("        </a>")
-  html.add("        <button type=\"button\" class=\"btn-modal-close\" id=\"btnCloseSuccessModal\">Close</button>")
-  html.add("      </div>")
-  html.add("    </div>")
-  html.add("  </div>")
+
+  if installer.enableSuccessModal:
+    let initialNative = if installer.targets.len > 0: installer.targets[0].nativeUsb else: installer.nativeUsb
+    let nativeWarningStyle = if initialNative: "" else: " style=\"display: none;\""
+    html.add("  <!-- Post-Install Success Modal with Next Steps -->")
+    html.add("  <div id=\"installSuccessModal\" class=\"modal-overlay\" style=\"display: none;\">")
+    html.add("    <div class=\"modal-card\">")
+    html.add("      <div class=\"modal-header\">")
+    html.add("        <div class=\"modal-icon-success\">&#10003;</div>")
+    html.add("        <div>")
+    html.add("          <h2>Firmware Installed Successfully!</h2>")
+    html.add("          <div class=\"modal-subtitle\">Follow these next steps to connect to Home Assistant</div>")
+    html.add("        </div>")
+    html.add("      </div>")
+    html.add("      <div class=\"modal-body\">")
+    html.add("        <p class=\"modal-intro\">Your " & installer.chipFamily & " firmware has been flashed.</p>")
+    html.add("        <div class=\"native-usb-warning\"" & nativeWarningStyle & " style=\"background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.35); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; line-height: 1.45; color: #fef08a;\">")
+    html.add("          <strong>🔌 Action Required (ESP32-S3):</strong><br/>")
+    html.add("          Because this board uses native USB, it stays in bootloader mode after flashing. <strong>Unplug and re-plug the USB-C cable</strong> (or press the board's <strong>RST</strong> button) right now to start ESPHome before clicking <em>Configure Wi-Fi</em>.")
+    html.add("        </div>")
+    html.add("        <div class=\"next-steps-list\">")
+    html.add("          <div class=\"next-step-item\">")
+    html.add("            <span class=\"num\">1</span>")
+    html.add("            <div>")
+    html.add("              <strong>Connect Wi-Fi:</strong> Once power-cycled, connect your device:")
+    if installer.enableImprovWifi:
+      html.add("              <div style=\"margin: 6px 0;\">")
+      html.add("                <improv-wifi-serial-launch-button>")
+      html.add("                  <button slot=\"activate\" class=\"modal-wifi-btn\">")
+      html.add("                    <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>")
+      html.add("                    <span>Configure Wi-Fi via USB</span>")
+      html.add("                  </button>")
+      html.add("                </improv-wifi-serial-launch-button>")
+      html.add("              </div>")
+    if installer.fallbackApSsid.len > 0:
+      html.add("              <div class=\"subtext\"><strong>Or via Hotspot:</strong> Connect your phone or PC to <code>" & installer.fallbackApSsid & "</code> and open <code>http://192.168.4.1</code>.</div>")
+    html.add("            </div>")
+    html.add("          </div>")
+    html.add("          <div class=\"next-step-item\">")
+    html.add("            <span class=\"num\">2</span>")
+    html.add("            <div>")
+    html.add("              <strong>Add in Home Assistant:</strong> Open Home Assistant &rarr; <strong>Settings &rarr; Devices &amp; Services</strong>. Look under <strong>Discovered</strong> for <strong>" & installer.title & "</strong>. Click <strong>Configure &rarr; Submit</strong> (no encryption key needed).")
+    html.add("            </div>")
+    html.add("          </div>")
+    html.add("          <div class=\"next-step-item\">")
+    html.add("            <span class=\"num\">3</span>")
+    html.add("            <div>")
+    html.add("              <strong>Customize Device Settings:</strong> Configure your entity options and runtime presets directly from the device card in Home Assistant.")
+    html.add("            </div>")
+    html.add("          </div>")
+    html.add("        </div>")
+    html.add("      </div>")
+    html.add("      <div class=\"modal-actions\">")
+    html.add("        <a href=\"https://my.home-assistant.io/redirect/config_flow_start?domain=" & installer.homeAssistantDomain & "\" target=\"_blank\" class=\"btn-ha-link\">")
+    html.add("          <span>Open Home Assistant</span>")
+    html.add("          <svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg>")
+    html.add("        </a>")
+    html.add("        <button type=\"button\" class=\"btn-modal-close\" id=\"btnCloseSuccessModal\">Close</button>")
+    html.add("      </div>")
+    html.add("    </div>")
+    html.add("  </div>")
+
   html.add("</body>")
   html.add("</html>\n")
 
   result = html.join("\n")
+
+proc generateEsphomeSnippet*(
+    installer: InstallerDefinition,
+    name: string = "",
+    friendlyName: string = ""
+): string =
+  ## Generates a verified ESPHome YAML snippet matching the installer's
+  ## hardware quirks, partition table, Improv Wi-Fi, and captive portal setup.
+  var lines: seq[string] = @[]
+  let devName = if name.len > 0: name else: installer.name
+  let fName = if friendlyName.len > 0: friendlyName else: installer.title
+
+  lines.add("# ESPHome configuration generated by nim-esphome installer DSL")
+  lines.add("esphome:")
+  lines.add("  name: " & devName)
+  lines.add("  friendly_name: \"" & fName & "\"")
+  lines.add("  name_add_mac_suffix: true")
+  lines.add("  project:")
+  lines.add("    name: \"" & installer.name & "\"")
+  lines.add("    version: \"" & installer.version & "\"")
+  lines.add("")
+  lines.add("esp32:")
+  let defaultBoard = if installer.chipFamily == "ESP32-S3": "esp32-s3-devkitc-1" else: "esp32dev"
+  lines.add("  board: " & defaultBoard)
+  lines.add("  framework:")
+  lines.add("    type: esp-idf")
+  if installer.customPartitions.len > 0:
+    lines.add("  partitions: partitions.csv")
+  lines.add("")
+  lines.add("logger:")
+  let hasNative = if installer.targets.len > 0: installer.targets[0].nativeUsb else: installer.nativeUsb
+  if hasNative:
+    lines.add("  hardware_uart: USB_SERIAL_JTAG")
+  lines.add("  level: DEBUG")
+  lines.add("")
+  if installer.enableImprovWifi:
+    lines.add("improv_serial:")
+    lines.add("")
+  if installer.fallbackApSsid.len > 0:
+    lines.add("wifi:")
+    lines.add("  ap:")
+    lines.add("    ssid: \"" & installer.fallbackApSsid & "\"")
+    lines.add("    ap_timeout: 90s")
+    lines.add("")
+    lines.add("captive_portal:")
+    lines.add("")
+  lines.add("api:")
+  lines.add("")
+  lines.add("ota:")
+  lines.add("  - platform: esphome")
+  lines.add("")
+
+  result = lines.join("\n")
 
 template esphomeInstaller*(installerName: string, body: untyped): untyped =
   ## Declarative builder template for an ESP-Web-Tools web installer.
@@ -1525,3 +1618,4 @@ template esphomeInstaller*(installerName: string, body: untyped): untyped =
     var installer {.inject.} = newInstallerDefinition(installerName)
     body
     installer
+
