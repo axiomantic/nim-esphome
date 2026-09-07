@@ -52,6 +52,8 @@ type
     ifkNumber = "number"
     ifkCheckbox = "checkbox"
     ifkWakeWordSlots = "wake_word_slots"
+    ifkAudioShowcase = "audio_showcase"
+    ifkCustomWakeWord = "custom_wake_word"
 
   FlashPartition* = object
     ## Definition of a custom data partition in ESP32 flash.
@@ -348,6 +350,71 @@ proc addWakeWordSlotsField*(
         size: 262144'u32
       ))
 
+proc addAudioShowcase*(
+    installer: InstallerDefinition,
+    name: string,
+    label: string,
+    options: seq[string],
+    defaultVal: string = "",
+    description: string = "",
+    optionDetails: seq[OptionDetail] = @[],
+    presetAudios: seq[(string, string, string)] = @[]
+) =
+  ## Registers an interactive Audio Showcase for browsing and previewing pre-compiled sounds.
+  installer.fields.add(InstallerField(
+    name: name,
+    kind: ifkAudioShowcase,
+    label: label,
+    options: options,
+    optionDetails: optionDetails,
+    defaultVal: if defaultVal.len > 0: defaultVal elif options.len > 0: options[0] else: "",
+    description: description,
+    hasAudioPreview: true,
+    presetAudios: presetAudios
+  ))
+
+proc addCustomWakeWordField*(
+    installer: InstallerDefinition,
+    name: string = "custom_wake_word",
+    label: string = "Custom Wake Word Model (.tflite)",
+    partition: string = "wake_model",
+    flashOffset: uint32 = 0x510000'u32,
+    maxSize: int = 524288, # 512 KB
+    defaultPhrase: string = "",
+    defaultCutoff: float = 0.40,
+    required: bool = false,
+    description: string = "Upload an optional microWakeWord .tflite model to flash into the dedicated wake_model partition."
+) =
+  ## Adds a custom wake word model upload field that packs a 64-byte header and flashes to flashOffset.
+  installer.fields.add(InstallerField(
+    name: name,
+    kind: ifkCustomWakeWord,
+    label: label,
+    accept: ".tflite",
+    partition: partition,
+    flashOffset: flashOffset,
+    maxSize: maxSize,
+    defaultVal: defaultPhrase,
+    minVal: 0.0,
+    maxVal: 1.0,
+    stepVal: 0.01,
+    required: required,
+    description: description
+  ))
+  var found = false
+  for p in installer.customPartitions:
+    if p.name == partition:
+      found = true
+      break
+  if not found:
+    installer.customPartitions.add(FlashPartition(
+      name: partition,
+      partType: "data",
+      subType: "0x83",
+      offset: flashOffset,
+      size: uint32(maxSize)
+    ))
+
 proc generatePartitionsCsv*(installer: InstallerDefinition, flashSizeMb: int = 4): string =
   ## Generates an ESP-IDF / ESPHome compliant partition table CSV.
   ## Calculates `app0` and `app1` sizes to ensure custom user partitions never overlap OTA slots.
@@ -422,9 +489,53 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
   case field.kind
   of ifkFile:
     html.add("        <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\"" & disabledAttr & ">")
-    if field.accept.contains(".wav") or field.partition == "sound_data":
-      html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max 256 KB.<br>Flashed to safe dedicated partition at 0x370000, 100% safe from OTA firmware updates.</div>")
+    if field.accept.contains(".wav") or field.partition.contains("sound") or field.partition.contains("chime"):
+      let hexOffset = "0x" & field.flashOffset.toHex(6).toLowerAscii
+      let kbSize = field.maxSize div 1024
+      html.add("        <div class=\"format-callout\"><strong>Format:</strong> 16-bit Mono PCM WAV (.wav), 16kHz recommended, max " & $kbSize & " KB.<br>Flashed to safe dedicated <code>" & field.partition & "</code> partition at " & hexOffset & ", 100% safe from OTA firmware updates.</div>")
     html.add("        <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
+  of ifkAudioShowcase:
+    html.add("        <div class=\"showcase-card\" id=\"showcaseCard_" & field.name & "\">")
+    html.add("          <div class=\"showcase-header\">")
+    html.add("            <span class=\"showcase-tag\">Included in Firmware</span>")
+    html.add("          </div>")
+    html.add("          <select id=\"field_" & field.name & "\">")
+    for opt in field.options:
+      let selected = if opt == field.defaultVal: " selected" else: ""
+      html.add("            <option value=\"" & opt & "\"" & selected & ">" & opt & "</option>")
+    html.add("          </select>")
+    if field.optionDetails.len > 0:
+      html.add("          <div class=\"preset-card\" id=\"presetCard_" & field.name & "\">")
+      html.add("            <div class=\"preset-view\" id=\"presetView_" & field.name & "\">")
+      html.add("              <div class=\"preset-header\">")
+      html.add("                <span class=\"preset-badge\" id=\"presetCadence_" & field.name & "\"></span>")
+      html.add("              </div>")
+      html.add("              <p class=\"preset-desc\" id=\"presetDesc_" & field.name & "\"></p>")
+      html.add("            </div>")
+      html.add("            <div class=\"preview-actions\">")
+      html.add("              <button type=\"button\" class=\"preview-btn\" id=\"previewBtn_" & field.name & "\"><svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"currentColor\"><polygon points=\"6 4 20 12 6 20 6 4\"></polygon></svg> <span>Preview Sound</span></button>")
+      html.add("            </div>")
+      html.add("          </div>")
+    html.add("          <div class=\"showcase-note\">Pre-compiled in firmware. Selectable anytime in Home Assistant without reflashing.</div>")
+    html.add("        </div>")
+  of ifkCustomWakeWord:
+    let hexOffset = "0x" & field.flashOffset.toHex(6).toLowerAscii
+    let kbSize = field.maxSize div 1024
+    html.add("        <div class=\"custom-wake-box\" id=\"wakeBox_" & field.name & "\">")
+    html.add("          <input type=\"file\" id=\"field_" & field.name & "\" accept=\"" & field.accept & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\">")
+    html.add("          <div class=\"custom-wake-inputs\" style=\"display: flex; gap: 10px; margin-top: 8px;\">")
+    html.add("            <div style=\"flex: 2;\">")
+    html.add("              <label style=\"font-size: 0.76rem; color: #94a3b8; display: block; margin-bottom: 4px;\">Wake Word Name / Phrase</label>")
+    html.add("              <input type=\"text\" id=\"field_" & field.name & "_phrase\" placeholder=\"e.g. Hey Jarvis or Marvin\" value=\"" & field.defaultVal & "\">")
+    html.add("            </div>")
+    html.add("            <div style=\"flex: 1;\">")
+    html.add("              <label style=\"font-size: 0.76rem; color: #94a3b8; display: block; margin-bottom: 4px;\">Probability Cutoff</label>")
+    html.add("              <input type=\"number\" id=\"field_" & field.name & "_cutoff\" min=\"0.05\" max=\"0.99\" step=\"0.01\" value=\"0.40\">")
+    html.add("            </div>")
+    html.add("          </div>")
+    html.add("          <div class=\"format-callout\"><strong>Dedicated Partition:</strong> Flashed to <code>" & field.partition & "</code> at " & hexOffset & " (" & $kbSize & " KB). Automatic 64-byte header is prepended before flashing so firmware dynamically registers the wake word in Home Assistant.</div>")
+    html.add("          <div class=\"file-status\" id=\"status_" & field.name & "\"></div>")
+    html.add("        </div>")
   of ifkSelect:
     html.add("        <select id=\"field_" & field.name & "\"" & disabledAttr & ">")
     for opt in field.options:
@@ -896,6 +1007,31 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      return u8;")
   html.add("    }")
   html.add("")
+  html.add("    function packWakeModelHeader(rawModelBuffer, phrase, cutoff) {")
+  html.add("      const HEADER_SIZE = 64;")
+  html.add("      const headerBuf = new ArrayBuffer(HEADER_SIZE);")
+  html.add("      const view = new DataView(headerBuf);")
+  html.add("      const u8Header = new Uint8Array(headerBuf);")
+  html.add("      view.setUint32(0, 0x57414B45, true);")
+  html.add("      view.setUint16(4, 1, true);")
+  html.add("      view.setUint16(6, 0, true);")
+  html.add("      view.setUint32(8, rawModelBuffer.byteLength, true);")
+  html.add("      const cutoffVal = parseFloat(cutoff);")
+  html.add("      const quantizedCutoff = isNaN(cutoffVal) ? 102 : Math.max(1, Math.min(255, Math.round(cutoffVal * 255)));")
+  html.add("      view.setUint8(12, quantizedCutoff);")
+  html.add("      view.setUint8(13, 5);")
+  html.add("      view.setUint16(14, 40, true);")
+  html.add("      const cleanPhrase = (phrase || 'Custom Wake Word').trim().slice(0, 31);")
+  html.add("      for (let i = 0; i < cleanPhrase.length; i++) {")
+  html.add("        u8Header[16 + i] = cleanPhrase.charCodeAt(i);")
+  html.add("      }")
+  html.add("      u8Header[16 + cleanPhrase.length] = 0;")
+  html.add("      const combined = new Uint8Array(HEADER_SIZE + rawModelBuffer.byteLength);")
+  html.add("      combined.set(u8Header, 0);")
+  html.add("      combined.set(new Uint8Array(rawModelBuffer), HEADER_SIZE);")
+  html.add("      return combined;")
+  html.add("    }")
+  html.add("")
   html.add("    function getSavedInstallerState() {")
   html.add("      try {")
   html.add("        return JSON.parse(localStorage.getItem(FORM_STORAGE_KEY) || '{}');")
@@ -1022,7 +1158,11 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      if (activeAudioElement) { activeAudioElement.pause(); activeAudioElement = null; }")
   html.add("      document.querySelectorAll('.preview-btn').forEach(btn => {")
   html.add("        btn.classList.remove('playing');")
-  html.add("        btn.innerHTML = ICONS.play + ' <span>Preview Sound</span>';")
+  html.add("        if (btn.classList.contains('btn-play-uploaded')) {")
+  html.add("          btn.innerHTML = ICONS.play + ' <span>Preview</span>';")
+  html.add("        } else {")
+  html.add("          btn.innerHTML = ICONS.play + ' <span>Preview Sound</span>';")
+  html.add("        }")
   html.add("      });")
   html.add("    }")
   html.add("")
@@ -1142,30 +1282,6 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("        if (info) {")
   html.add("          manifest.builds[0].parts[0].path = info.bin;")
   html.add("          if (info.chip) manifest.builds[0].chipFamily = info.chip;")
-  html.add("        }")
-  html.add("      }")
-  html.add("      if (typeof PRESET_AUDIO !== 'undefined') {")
-  html.add("        for (const [key, info] of Object.entries(PRESET_AUDIO)) {")
-  html.add("          if (!info || !info.flash) continue;")
-  html.add("          for (const sel of document.querySelectorAll('select')) {")
-  html.add("            if (sel.value === key) {")
-  html.add("              let isOverridden = false;")
-  html.add("              const off = info.offset || 0x370000;")
-  html.add("              for (const [upKey, _] of uploadedParts.entries()) {")
-  html.add("                const grp = document.getElementById('group_' + upKey);")
-  html.add("                if (grp && grp.dataset.dependsOn && grp.dataset.dependsVal) {")
-  html.add("                  const pEl = document.getElementById('field_' + grp.dataset.dependsOn);")
-  html.add("                  if (pEl && pEl.value === grp.dataset.dependsVal) {")
-  html.add("                    if (off >= 0x390000 && upKey.includes('chime')) { isOverridden = true; break; }")
-  html.add("                    else if (off < 0x390000 && (upKey.includes('sound') || upKey.includes('audio'))) { isOverridden = true; break; }")
-  html.add("                  }")
-  html.add("                }")
-  html.add("              }")
-  html.add("              if (!isOverridden) {")
-  html.add("                manifest.builds[0].parts.push({ path: info.flash, offset: off });")
-  html.add("              }")
-  html.add("            }")
-  html.add("          }")
   html.add("        }")
   html.add("      }")
   html.add("      for (const [name, part] of uploadedParts.entries()) {")
@@ -1625,7 +1741,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("    })();")
       html.add("")
 
-    if field.kind == ifkSelect and field.presetAudios.len > 0:
+    if (field.kind == ifkSelect or field.kind == ifkAudioShowcase) and field.presetAudios.len > 0:
       var audObj = newJObject()
       let defaultOffset = if field.name.contains("chime"): 0x390000'u32 else: 0x370000'u32
       for item in field.presetAudios:
@@ -1635,6 +1751,114 @@ proc generateHtml*(installer: InstallerDefinition): string =
         it["offset"] = %defaultOffset
         audObj[item[0]] = it
       html.add("    Object.assign(PRESET_AUDIO, " & $audObj & ");")
+
+    if field.kind == ifkAudioShowcase and field.optionDetails.len > 0:
+      var detailsObj = newJObject()
+      for opt in field.optionDetails:
+        var o = newJObject()
+        o["cadence"] = %opt.cadence
+        o["desc"] = %opt.description
+        detailsObj[opt.value] = o
+      html.add("    const OPTION_DETAILS_" & field.name & " = " & $detailsObj & ";")
+      html.add("    const select_" & field.name & " = document.getElementById('field_" & field.name & "');")
+      html.add("    const cadence_" & field.name & " = document.getElementById('presetCadence_" & field.name & "');")
+      html.add("    const desc_" & field.name & " = document.getElementById('presetDesc_" & field.name & "');")
+      html.add("    const btn_" & field.name & " = document.getElementById('previewBtn_" & field.name & "');")
+      html.add("    function updateShowcase_" & field.name & "() {")
+      html.add("      stopAudioPreview();")
+      html.add("      const val = select_" & field.name & ".value;")
+      html.add("      const info = OPTION_DETAILS_" & field.name & "[val] || { cadence: '', desc: '' };")
+      html.add("      if (cadence_" & field.name & ") cadence_" & field.name & ".textContent = info.cadence;")
+      html.add("      if (desc_" & field.name & ") desc_" & field.name & ".textContent = info.desc;")
+      html.add("    }")
+      html.add("    if (select_" & field.name & ") {")
+      html.add("      select_" & field.name & ".addEventListener('change', updateShowcase_" & field.name & ");")
+      html.add("      updateShowcase_" & field.name & "();")
+      html.add("    }")
+      html.add("    if (btn_" & field.name & ") {")
+      html.add("      btn_" & field.name & ".addEventListener('click', () => {")
+      html.add("        playPresetAudio(select_" & field.name & ".value, btn_" & field.name & ");")
+      html.add("      });")
+      html.add("    }")
+
+    if field.kind == ifkCustomWakeWord:
+      html.add("    const wakeFileInput_" & field.name & " = document.getElementById('field_" & field.name & "');")
+      html.add("    const wakePhraseInput_" & field.name & " = document.getElementById('field_" & field.name & "_phrase');")
+      html.add("    const wakeCutoffInput_" & field.name & " = document.getElementById('field_" & field.name & "_cutoff');")
+      html.add("    const wakeStatus_" & field.name & " = document.getElementById('status_" & field.name & "');")
+      html.add("    let wakeModelRawBuffer_" & field.name & " = null;")
+      html.add("    let wakeFileName_" & field.name & " = '';")
+      html.add("")
+      html.add("    function registerCustomWakeWord_" & field.name & "() {")
+      html.add("      if (!wakeModelRawBuffer_" & field.name & ") return;")
+      html.add("      const phrase = (wakePhraseInput_" & field.name & " ? wakePhraseInput_" & field.name & ".value : '') || 'Custom Wake Word';")
+      html.add("      const cutoff = (wakeCutoffInput_" & field.name & " ? wakeCutoffInput_" & field.name & ".value : '0.40');")
+      html.add("      const offset = parseInt(wakeFileInput_" & field.name & ".dataset.offset || '" & $field.flashOffset & "', 10);")
+      html.add("      const combined = packWakeModelHeader(wakeModelRawBuffer_" & field.name & ", phrase, cutoff);")
+      html.add("      const blob = new Blob([combined], { type: 'application/octet-stream' });")
+      html.add("      const blobUrl = URL.createObjectURL(blob);")
+      html.add("      uploadedParts.set('" & field.name & "', { url: blobUrl, offset: offset, name: wakeFileName_" & field.name & ", size: combined.byteLength });")
+      html.add("      if (wakeStatus_" & field.name & ") {")
+      html.add("        wakeStatus_" & field.name & ".style.display = 'block';")
+      html.add("        wakeStatus_" & field.name & ".innerHTML = ICONS.check + ' <span>Ready to flash: ' + wakeFileName_" & field.name & " + ' with phrase &ldquo;' + phrase + '&rdquo; (' + Math.round(combined.byteLength / 1024) + ' KB at dedicated partition 0x' + offset.toString(16).toUpperCase() + ')</span> <button type=\"button\" class=\"btn-clear-file\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+      html.add("        const clrBtn = wakeStatus_" & field.name & ".querySelector('.btn-clear-file');")
+      html.add("        if (clrBtn) {")
+      html.add("          clrBtn.addEventListener('click', () => {")
+      html.add("            wakeFileInput_" & field.name & ".value = '';")
+      html.add("            wakeModelRawBuffer_" & field.name & " = null;")
+      html.add("            wakeFileName_" & field.name & " = '';")
+      html.add("            uploadedParts.delete('" & field.name & "');")
+      html.add("            delete cachedFileStore['" & field.name & "'];")
+      html.add("            wakeStatus_" & field.name & ".style.display = 'none';")
+      html.add("            updateDynamicManifest();")
+      html.add("            checkInstallReadiness();")
+      html.add("            saveInstallerState();")
+      html.add("          });")
+      html.add("        }")
+      html.add("      }")
+      html.add("      updateDynamicManifest();")
+      html.add("      checkInstallReadiness();")
+      html.add("      saveInstallerState();")
+      html.add("    }")
+      html.add("")
+      html.add("    if (wakeFileInput_" & field.name & ") {")
+      html.add("      wakeFileInput_" & field.name & ".addEventListener('change', (e) => {")
+      html.add("        const file = e.target.files[0];")
+      html.add("        if (!file) {")
+      html.add("          wakeModelRawBuffer_" & field.name & " = null;")
+      html.add("          wakeFileName_" & field.name & " = '';")
+      html.add("          uploadedParts.delete('" & field.name & "');")
+      html.add("          delete cachedFileStore['" & field.name & "'];")
+      html.add("          updateDynamicManifest();")
+      html.add("          checkInstallReadiness();")
+      html.add("          saveInstallerState();")
+      html.add("          return;")
+      html.add("        }")
+      html.add("        const maxSizeBytes = parseInt(wakeFileInput_" & field.name & ".dataset.maxsize || '" & $field.maxSize & "', 10);")
+      html.add("        if (file.size > maxSizeBytes) {")
+      html.add("          alert('Model exceeds maximum allowed size of ' + Math.round(maxSizeBytes / 1024) + ' KB');")
+      html.add("          wakeFileInput_" & field.name & ".value = '';")
+      html.add("          return;")
+      html.add("        }")
+      html.add("        wakeFileName_" & field.name & " = file.name;")
+      html.add("        if (wakePhraseInput_" & field.name & " && (!wakePhraseInput_" & field.name & ".value || wakePhraseInput_" & field.name & ".value.trim() === '')) {")
+      html.add("          const rawName = file.name.replace(/\\.[^/.]+$/, '').replace(/[_-]/g, ' ');")
+      html.add("          wakePhraseInput_" & field.name & ".value = rawName.replace(/\\b\\w/g, l => l.toUpperCase());")
+      html.add("        }")
+      html.add("        const reader = new FileReader();")
+      html.add("        reader.onload = function(evt) {")
+      html.add("          wakeModelRawBuffer_" & field.name & " = evt.target.result;")
+      html.add("          registerCustomWakeWord_" & field.name & "();")
+      html.add("        };")
+      html.add("        reader.readAsArrayBuffer(file);")
+      html.add("      });")
+      html.add("    }")
+      html.add("    if (wakePhraseInput_" & field.name & ") {")
+      html.add("      wakePhraseInput_" & field.name & ".addEventListener('input', registerCustomWakeWord_" & field.name & ");")
+      html.add("    }")
+      html.add("    if (wakeCutoffInput_" & field.name & ") {")
+      html.add("      wakeCutoffInput_" & field.name & ".addEventListener('input', registerCustomWakeWord_" & field.name & ");")
+      html.add("    }")
 
     if field.kind == ifkSelect and field.optionDetails.len > 0:
       var detailsObj = newJObject()
@@ -1729,11 +1953,28 @@ proc generateHtml*(installer: InstallerDefinition): string =
       html.add("        const blobUrl = URL.createObjectURL(file);")
       html.add("        uploadedParts.set('" & field.name & "', { url: blobUrl, offset: offset, name: file.name, size: file.size });")
       html.add("        if (status_" & field.name & ") {")
+      html.add("          const isWav = file.name.toLowerCase().endsWith('.wav');")
+      html.add("          let playBtnHtml = '';")
+      html.add("          if (isWav) playBtnHtml = ' <button type=\"button\" class=\"preview-btn btn-play-uploaded\" style=\"margin-left: 8px; padding: 2px 8px; font-size: 0.72rem;\">' + ICONS.play + ' <span>Preview</span></button>';")
       html.add("          status_" & field.name & ".style.display = 'block';")
-      html.add("          status_" & field.name & ".innerHTML = ICONS.check + ' <span>Ready to flash: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB at safe partition 0x' + offset.toString(16).toUpperCase() + ')</span> <button type=\"button\" class=\"btn-clear-file\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+      html.add("          status_" & field.name & ".innerHTML = ICONS.check + ' <span>Ready to flash: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB at safe partition 0x' + offset.toString(16).toUpperCase() + ')</span>' + playBtnHtml + ' <button type=\"button\" class=\"btn-clear-file\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+      html.add("          const playBtn = status_" & field.name & ".querySelector('.btn-play-uploaded');")
+      html.add("          if (playBtn) {")
+      html.add("            playBtn.addEventListener('click', () => {")
+      html.add("              if (playBtn.classList.contains('playing')) { stopAudioPreview(); return; }")
+      html.add("              stopAudioPreview();")
+      html.add("              playBtn.classList.add('playing');")
+      html.add("              playBtn.innerHTML = ICONS.stop + ' <span>Stop</span>';")
+      html.add("              const audio = new Audio(blobUrl);")
+      html.add("              activeAudioElement = audio;")
+      html.add("              audio.onended = () => stopAudioPreview();")
+      html.add("              audio.play().catch(() => stopAudioPreview());")
+      html.add("            });")
+      html.add("          }")
       html.add("          const clrBtn = status_" & field.name & ".querySelector('.btn-clear-file');")
       html.add("          if (clrBtn) {")
       html.add("            clrBtn.addEventListener('click', () => {")
+      html.add("              stopAudioPreview();")
       html.add("              fileInput_" & field.name & ".value = '';")
       html.add("              uploadedParts.delete('" & field.name & "');")
       html.add("              delete cachedFileStore['" & field.name & "'];")

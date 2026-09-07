@@ -544,3 +544,52 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     modularInstaller.enableImprovWifi = true
     let snippetWithImprov = modularInstaller.generateEsphomeSnippet()
     check "improv_serial:" in snippetWithImprov
+
+  test "esphomeInstaller audio showcase, custom wake words, and direct asset flashing":
+    let showcaseInstaller = esphomeInstaller("respeaker-flasher"):
+      installer.title = "ReSpeaker Flasher"
+      installer.chipFamily = "ESP32-S3"
+
+      installer.addAudioShowcase(
+        name = "wake_chimes",
+        label = "Built-in Wake Chimes",
+        options = @["Bell Ping", "Modern Chime"],
+        optionDetails = @[
+          optionDetail("Bell Ping", "Single tone (880Hz)", "Clean bell"),
+          optionDetail("Modern Chime", "Two-tone chord", "Modern chord")
+        ],
+        presetAudios = @[
+          ("Bell Ping", "sounds/bell-ping.mp3", "sounds/bell-ping.wav"),
+          ("Modern Chime", "sounds/modern-chime.mp3", "sounds/modern-chime.wav")
+        ]
+      )
+
+      installer.addCustomWakeWordField(
+        name = "custom_wake_word",
+        label = "Custom Wake Word Model (.tflite)",
+        partition = "wake_model",
+        flashOffset = 0x510000'u32,
+        maxSize = 524288
+      )
+
+      installer.addFileField(
+        name = "custom_sound",
+        label = "Custom Processing Sound Loop (.wav)",
+        partition = "sound_data",
+        flashOffset = 0x490000'u32,
+        maxSize = 262144
+      )
+
+    check showcaseInstaller.fields.len == 3
+    check showcaseInstaller.customPartitions.len == 2 # wake_model and sound_data
+
+    let html = showcaseInstaller.generateHtml()
+    check "showcaseCard_wake_chimes" in html
+    check "wakeBox_custom_wake_word" in html
+    check "packWakeModelHeader" in html
+    check "field_custom_wake_word_phrase" in html
+    check "field_custom_wake_word_cutoff" in html
+    check "btn-play-uploaded" in html
+    check "0x510000" in html
+    check "0x490000" in html
+
