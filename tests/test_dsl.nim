@@ -452,7 +452,11 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "Bell Ping" in html
     check "Modern Chime" in html
     check "Marimba" in html
-    check "Subtle Beep" in html
+    check "saveMwwCache" in html
+    check "getMwwCache" in html
+    check "select-cached-model" in html
+    check "download-model-btn" in html
+    check "upload-download-btn" in html
 
 
 
