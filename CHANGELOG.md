@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-06
+
+### Added
+- Multi-slot wake word architecture in `esphomeInstaller` DSL supporting up to 3 concurrent models mapped to dedicated partitions (`wake_model_1` at `0x3B0000`, `wake_model_2` at `0x3F0000`, `wake_model_3` at `0x430000`).
+- Dedicated wake chime sound selector (`Bell Ping`, `Modern Chime`, `Marimba`, `Subtle Beep`, `Silent`, `Custom Chime Audio`) with live Web Audio API synthesis.
+- Client-side in-browser microWakeWord neural network training engine (`BrowserWakeTrainer`, `synthesizeAcousticFeatures`) and FlatBuffer TFLite model packager (`packageToTflite`).
+- Installation readiness gating with warning alerts preventing firmware flash while training is active or custom slots are unconfigured.
+- Dynamic manifest object URL cleanup revoking previous blob URLs on reactive DOM updates.
+- Processing sound loop presets (`Spinner`, `Pulse`, `Sonar`, `Tick`, `Silent`, `Custom`).
+- Declarative high-level DSL modules: `esphomeControls`, `satellitePipeline`, `haDashboard`, `haCard`, `haService`, `haAction`, `haSchedule`, `haSurface`, and `esphomeInstaller`.
+
+### Fixed
+- Early runtime initialization ensuring `NimMain()` runs before any C++ callbacks can trigger.
+- Millisecond/microsecond timer rollover safety using unsigned delta math.
+- Eliminated green mirage test assertions across PID, CPU detection, and lifecycle execution.
+
+## [0.3.1] - 2026-09-06
+
+### Fixed
+- Fixed NVS slot buffer bounds and eliminated test green mirages in CI test runner.
+
+## [0.3.0] - 2026-09-06
+
+### Added
+- Initial `esphomeInstaller` DSL with dynamic manifest generation, safe partition offsets, and Web Audio synthesis previews.
+
 ## [0.2.0] - 2026-09-06
 
 ### Added
@@ -31,6 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Real-time millisecond/microsecond timing, logging, and reboot APIs.
 - Host unit testing fallback (`when not defined(esphome)`) enabling native simulation and test suite execution.
 
-[Unreleased]: https://github.com/axiomantic/nim-esphome/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/axiomantic/nim-esphome/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/axiomantic/nim-esphome/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/axiomantic/nim-esphome/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/axiomantic/nim-esphome/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/axiomantic/nim-esphome/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/axiomantic/nim-esphome/releases/tag/v0.1.0
