@@ -765,14 +765,17 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("          for (const sel of document.querySelectorAll('select')) {")
   html.add("            if (sel.value === key) {")
   html.add("              let isOverridden = false;")
+  html.add("              const off = info.offset || 0x370000;")
   html.add("              for (const [upKey, _] of uploadedParts.entries()) {")
-  html.add("                if (upKey.includes('sound') || upKey.includes('audio') || upKey.includes('chime')) {")
+  html.add("                if (off >= 0x390000 && upKey.includes('chime')) {")
+  html.add("                  isOverridden = true;")
+  html.add("                  break;")
+  html.add("                } else if (off < 0x390000 && (upKey.includes('sound') || upKey.includes('audio'))) {")
   html.add("                  isOverridden = true;")
   html.add("                  break;")
   html.add("                }")
   html.add("              }")
   html.add("              if (!isOverridden) {")
-  html.add("                const off = info.offset || 0x370000;")
   html.add("                manifest.builds[0].parts.push({ path: info.flash, offset: off });")
   html.add("              }")
   html.add("            }")
@@ -1170,10 +1173,12 @@ proc generateHtml*(installer: InstallerDefinition): string =
 
     if field.kind == ifkSelect and field.presetAudios.len > 0:
       var audObj = newJObject()
+      let defaultOffset = if field.name.contains("chime"): 0x390000'u32 else: 0x370000'u32
       for item in field.presetAudios:
         var it = newJObject()
         it["preview"] = %item[1]
         it["flash"] = %item[2]
+        it["offset"] = %defaultOffset
         audObj[item[0]] = it
       html.add("    Object.assign(PRESET_AUDIO, " & $audObj & ");")
 
