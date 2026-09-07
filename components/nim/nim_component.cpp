@@ -51,6 +51,17 @@ inline bool entity_matches_id(const esphome::EntityBase *entity, const char *ent
 
 }  // namespace
 
+namespace esphome {
+namespace nim {
+#ifdef USE_I2C
+static i2c::I2CBus *s_i2c_bus = nullptr;
+void set_i2c_bus(i2c::I2CBus *bus) {
+  s_i2c_bus = bus;
+}
+#endif
+}  // namespace nim
+}  // namespace esphome
+
 // When Nim compiles with 'nim cpp', NimMain has C++ linkage (_Z7NimMainv)
 void NimMain(void) __attribute__((weak));
 
@@ -237,15 +248,6 @@ extern "C" {
     return false;
   #endif
   }
-
-#ifdef USE_I2C
-namespace esphome::nim {
-static i2c::I2CBus *s_i2c_bus = nullptr;
-void set_i2c_bus(i2c::I2CBus *bus) {
-  s_i2c_bus = bus;
-}
-}
-#endif
 
   bool nim_i2c_write(uint8_t address, const uint8_t *data, size_t len) {
   #ifdef USE_I2C
