@@ -1376,6 +1376,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#WakeChimeSound" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        WakeChimeSound
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ProcessingTickCallback" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2747,6 +2758,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         ProcessingSoundStyle
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#WakeChimeSound" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        WakeChimeSound
       </span>
     </span>
   </a>
@@ -6221,6 +6243,85 @@ while Home Assistant's LLM pipeline processes user speech.</p>
         <div class="doc doc-object doc-type">
   
 
+  <h3 id="WakeChimeSound" class="doc doc-heading">
+    <code class="doc-symbol doc-symbol-heading doc-symbol-type"></code>
+    <span class="doc doc-object-name doc-type-name">WakeChimeSound</span>
+  <a href="#WakeChimeSound" class="headerlink" title="Permanent link">&para;</a></h3>
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">type</span><span class="w"> </span><span class="n">WakeChimeSound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">enum</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents">
+    
+
+    
+
+    
+      <div class="doc-section doc-section-values">
+        <p class="doc-section-title">Values</p>
+        <ul class="doc-value-list">
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcBell</code>
+            <span class="doc-value-explicit"> = <code>&#34;Bell Ping&#34;</code></span>
+            
+          </li>
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcModern</code>
+            <span class="doc-value-explicit"> = <code>&#34;Modern Chime&#34;</code></span>
+            
+          </li>
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcMarimba</code>
+            <span class="doc-value-explicit"> = <code>&#34;Marimba&#34;</code></span>
+            
+          </li>
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcSubtle</code>
+            <span class="doc-value-explicit"> = <code>&#34;Subtle Beep&#34;</code></span>
+            
+          </li>
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcSilent</code>
+            <span class="doc-value-explicit"> = <code>&#34;Silent&#34;</code></span>
+            
+          </li>
+          
+          <li class="doc-value">
+            <code class="doc-value-name">wcCustom</code>
+            <span class="doc-value-explicit"> = <code>&#34;Custom&#34;</code></span>
+            
+          </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/dsl/satellite.nim:25</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-type">
+  
+
   <h3 id="ProcessingTickCallback" class="doc doc-heading">
     <code class="doc-symbol doc-symbol-heading doc-symbol-type"></code>
     <span class="doc doc-object-name doc-type-name">ProcessingTickCallback</span>
@@ -6244,7 +6345,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:25</code>
+          <code>src/nim_esphome/dsl/satellite.nim:33</code>
         
       </div>
     
@@ -6280,7 +6381,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:26</code>
+          <code>src/nim_esphome/dsl/satellite.nim:34</code>
         
       </div>
     
@@ -6382,7 +6483,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:28</code>
+          <code>src/nim_esphome/dsl/satellite.nim:36</code>
         
       </div>
     
@@ -6436,6 +6537,14 @@ while Home Assistant's LLM pipeline processes user speech.</p>
           <li class="doc-field">
             <code class="doc-field-name">wakeChimeEnabled</code>
             <code class="doc-field-type">bool</code>
+            
+            
+            
+          </li>
+          
+          <li class="doc-field">
+            <code class="doc-field-name">wakeChimeSound</code>
+            <code class="doc-field-type">WakeChimeSound</code>
             
             
             
@@ -6540,7 +6649,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:37</code>
+          <code>src/nim_esphome/dsl/satellite.nim:45</code>
         
       </div>
     
@@ -6586,7 +6695,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:55</code>
+          <code>src/nim_esphome/dsl/satellite.nim:64</code>
         
       </div>
     
@@ -6632,7 +6741,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:66</code>
+          <code>src/nim_esphome/dsl/satellite.nim:75</code>
         
       </div>
     
@@ -6692,7 +6801,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:84</code>
+          <code>src/nim_esphome/dsl/satellite.nim:94</code>
         
       </div>
     
@@ -6758,7 +6867,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:91</code>
+          <code>src/nim_esphome/dsl/satellite.nim:101</code>
         
       </div>
     
@@ -6812,7 +6921,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:98</code>
+          <code>src/nim_esphome/dsl/satellite.nim:108</code>
         
       </div>
     
@@ -6871,7 +6980,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:102</code>
+          <code>src/nim_esphome/dsl/satellite.nim:112</code>
         
       </div>
     
@@ -6935,7 +7044,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:105</code>
+          <code>src/nim_esphome/dsl/satellite.nim:115</code>
         
       </div>
     
@@ -7001,7 +7110,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:119</code>
+          <code>src/nim_esphome/dsl/satellite.nim:129</code>
         
       </div>
     
@@ -7055,7 +7164,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:131</code>
+          <code>src/nim_esphome/dsl/satellite.nim:141</code>
         
       </div>
     
@@ -7109,7 +7218,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:137</code>
+          <code>src/nim_esphome/dsl/satellite.nim:147</code>
         
       </div>
     
@@ -7163,7 +7272,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:143</code>
+          <code>src/nim_esphome/dsl/satellite.nim:153</code>
         
       </div>
     
@@ -7223,7 +7332,7 @@ while Home Assistant's LLM pipeline processes user speech.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/dsl/satellite.nim:149</code>
+          <code>src/nim_esphome/dsl/satellite.nim:159</code>
         
       </div>
     
