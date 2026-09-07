@@ -414,6 +414,12 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "btnTermToggle" in html
     check "btnTermClear" in html
     check "disconnectTerminal" in html
+    check "FORM_STORAGE_KEY" in html
+    check "esphome_installer_state_v1" in html
+    check "saveInstallerState" in html
+    check "restoreInstallerState" in html
+    check "restoreCachedFiles" in html
+    check "cachedFileStore" in html
 
   test "esphomeInstaller with multi-slot wake words and chime sounds":
     let slotInstaller = esphomeInstaller("slot-satellite"):
