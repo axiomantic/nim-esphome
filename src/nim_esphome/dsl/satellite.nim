@@ -21,11 +21,16 @@ type
     psSonar = "Sonar"
     psTick = "Tick"
     psTypewriter = "Typewriter"
+    psClockwork = "Clockwork"
+    psWaterDroplets = "Water Droplets"
     psCustom = "Custom"
 
   WakeChimeSound* = enum
     wcBell = "Bell Ping"
     wcModern = "Modern Chime"
+    wcCrystal = "Crystal Glass"
+    wcKalimba = "Warm Kalimba"
+    wcMeditation = "Meditation Bell"
     wcMarimba = "Marimba"
     wcSubtle = "Subtle Beep"
     wcSilent = "Silent"
