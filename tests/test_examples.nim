@@ -4,7 +4,7 @@
 ## 1. Each example compiles cleanly for embedded 32-bit targets.
 ## 2. Each example's host-side functions and DSL constructors execute without runtime panics.
 
-import std/[unittest, osproc, strutils]
+import std/[unittest, osproc, strutils, os]
 
 suite "Examples Compilation and Validation Suite":
 
@@ -47,7 +47,11 @@ suite "Examples Compilation and Validation Suite":
       "examples/cooperative_scheduler/scheduler.yaml",
       "examples/dashboard_surface/dashboard_surface.yaml"
     ]
+    let esphomeCmd =
+      if findExe("esphome").len > 0: "esphome config "
+      elif findExe("uv").len > 0: "uv run --python 3.11 --with esphome esphome config "
+      else: "esphome config "
     for y in yamls:
-      let (outp, code) = execCmdEx("uv run --python 3.11 --with esphome esphome config " & y)
+      let (outp, code) = execCmdEx(esphomeCmd & y)
       check code == 0
       check "Configuration is valid!" in outp

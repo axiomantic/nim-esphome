@@ -238,13 +238,19 @@ extern "C" {
   #endif
   }
 
+#ifdef USE_I2C
+namespace esphome::nim {
+static i2c::I2CBus *s_i2c_bus = nullptr;
+void set_i2c_bus(i2c::I2CBus *bus) {
+  s_i2c_bus = bus;
+}
+}
+#endif
+
   bool nim_i2c_write(uint8_t address, const uint8_t *data, size_t len) {
   #ifdef USE_I2C
-    for (auto *comp : esphome::App.get_components()) {
-      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
-      if (bus != nullptr) {
-        return bus->write(address, data, len) == esphome::i2c::ERROR_OK;
-      }
+    if (esphome::nim::s_i2c_bus != nullptr) {
+      return esphome::nim::s_i2c_bus->write(address, data, len) == esphome::i2c::ERROR_OK;
     }
   #endif
     return false;
@@ -252,11 +258,8 @@ extern "C" {
 
   bool nim_i2c_read(uint8_t address, uint8_t *data, size_t len) {
   #ifdef USE_I2C
-    for (auto *comp : esphome::App.get_components()) {
-      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
-      if (bus != nullptr) {
-        return bus->read(address, data, len) == esphome::i2c::ERROR_OK;
-      }
+    if (esphome::nim::s_i2c_bus != nullptr) {
+      return esphome::nim::s_i2c_bus->read(address, data, len) == esphome::i2c::ERROR_OK;
     }
   #endif
     return false;
@@ -264,11 +267,8 @@ extern "C" {
 
   bool nim_i2c_write_read(uint8_t address, const uint8_t *write_data, size_t write_len, uint8_t *read_data, size_t read_len) {
   #ifdef USE_I2C
-    for (auto *comp : esphome::App.get_components()) {
-      auto *bus = dynamic_cast<esphome::i2c::I2CBus *>(comp);
-      if (bus != nullptr) {
-        return bus->write_readv(address, write_data, write_len, read_data, read_len) == esphome::i2c::ERROR_OK;
-      }
+    if (esphome::nim::s_i2c_bus != nullptr) {
+      return esphome::nim::s_i2c_bus->write_readv(address, write_data, write_len, read_data, read_len) == esphome::i2c::ERROR_OK;
     }
   #endif
     return false;
