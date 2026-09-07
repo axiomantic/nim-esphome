@@ -229,3 +229,4 @@ async def to_code(config):
     # Ensure build system includes the generated headers and component bridge
     cg.add_build_flag(f"-I{out_dir}")
     cg.add_build_flag(f"-I{this_dir}")
+    cg.add_build_flag("-Wno-write-strings")

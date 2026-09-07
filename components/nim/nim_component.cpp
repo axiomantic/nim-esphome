@@ -1,3 +1,4 @@
+#include <span>
 #include "nim_component.h"
 #include "esphome/core/log.h"
 #include "esphome/core/application.h"
@@ -33,6 +34,22 @@
 #endif
 
 static const char *const TAG = "nim";
+
+namespace {
+
+inline bool entity_matches_id(const esphome::EntityBase *entity, const char *entity_id) {
+  if (entity == nullptr || entity_id == nullptr) {
+    return false;
+  }
+  if (entity->get_name() == entity_id) {
+    return true;
+  }
+  char buf[esphome::OBJECT_ID_MAX_LEN];
+  auto id_ref = entity->get_object_id_to(std::span<char, esphome::OBJECT_ID_MAX_LEN>(buf));
+  return (id_ref == entity_id);
+}
+
+}  // namespace
 
 extern "C" {
   void NimMain(void) __attribute__((weak));
@@ -95,7 +112,7 @@ extern "C" {
   bool esphome_nim_publish_sensor(const char *entity_id, float value) {
   #ifdef USE_SENSOR
     for (auto *s : esphome::App.get_sensors()) {
-      if (s != nullptr && (s->get_name() == entity_id || s->get_object_id() == entity_id)) {
+      if (entity_matches_id(s, entity_id)) {
         s->publish_state(value);
         return true;
       }
@@ -107,7 +124,7 @@ extern "C" {
   bool esphome_nim_publish_binary_sensor(const char *entity_id, bool value) {
   #ifdef USE_BINARY_SENSOR
     for (auto *bs : esphome::App.get_binary_sensors()) {
-      if (bs != nullptr && (bs->get_name() == entity_id || bs->get_object_id() == entity_id)) {
+      if (entity_matches_id(bs, entity_id)) {
         bs->publish_state(value);
         return true;
       }
@@ -119,7 +136,7 @@ extern "C" {
   bool esphome_nim_publish_switch(const char *entity_id, bool value) {
   #ifdef USE_SWITCH
     for (auto *sw : esphome::App.get_switches()) {
-      if (sw != nullptr && (sw->get_name() == entity_id || sw->get_object_id() == entity_id)) {
+      if (entity_matches_id(sw, entity_id)) {
         sw->publish_state(value);
         return true;
       }
@@ -131,7 +148,7 @@ extern "C" {
   bool esphome_nim_publish_text_sensor(const char *entity_id, const char *value) {
   #ifdef USE_TEXT_SENSOR
     for (auto *ts : esphome::App.get_text_sensors()) {
-      if (ts != nullptr && (ts->get_name() == entity_id || ts->get_object_id() == entity_id)) {
+      if (entity_matches_id(ts, entity_id)) {
         ts->publish_state(value);
         return true;
       }
@@ -143,7 +160,7 @@ extern "C" {
   bool esphome_nim_publish_select(const char *entity_id, const char *value) {
   #ifdef USE_SELECT
     for (auto *s : esphome::App.get_selects()) {
-      if (s != nullptr && (s->get_name() == entity_id || s->get_object_id() == entity_id)) {
+      if (entity_matches_id(s, entity_id)) {
         s->publish_state(value);
         return true;
       }
@@ -155,7 +172,7 @@ extern "C" {
   bool esphome_nim_publish_number(const char *entity_id, float value) {
   #ifdef USE_NUMBER
     for (auto *n : esphome::App.get_numbers()) {
-      if (n != nullptr && (n->get_name() == entity_id || n->get_object_id() == entity_id)) {
+      if (entity_matches_id(n, entity_id)) {
         n->publish_state(value);
         return true;
       }
@@ -167,7 +184,7 @@ extern "C" {
   bool esphome_nim_publish_button(const char *entity_id) {
   #ifdef USE_BUTTON
     for (auto *b : esphome::App.get_buttons()) {
-      if (b != nullptr && (b->get_name() == entity_id || b->get_object_id() == entity_id)) {
+      if (entity_matches_id(b, entity_id)) {
         b->press();
         return true;
       }
@@ -303,7 +320,9 @@ void NimComponent::setup() {
       s->add_on_state_callback([s](size_t index) {
         if (nim_dispatch_select_state) {
           const char *opt = s->option_at(index);
-          nim_dispatch_select_state(s->get_object_id().c_str(), opt != nullptr ? opt : "");
+          char id_buf[esphome::OBJECT_ID_MAX_LEN];
+          s->get_object_id_to(std::span<char, esphome::OBJECT_ID_MAX_LEN>(id_buf));
+          nim_dispatch_select_state(id_buf, opt != nullptr ? opt : "");
         }
       });
     }
@@ -314,7 +333,9 @@ void NimComponent::setup() {
     if (n != nullptr) {
       n->add_on_state_callback([n](float value) {
         if (nim_dispatch_number_state) {
-          nim_dispatch_number_state(n->get_object_id().c_str(), value);
+          char id_buf[esphome::OBJECT_ID_MAX_LEN];
+          n->get_object_id_to(std::span<char, esphome::OBJECT_ID_MAX_LEN>(id_buf));
+          nim_dispatch_number_state(id_buf, value);
         }
       });
     }
@@ -325,7 +346,9 @@ void NimComponent::setup() {
     if (sw != nullptr) {
       sw->add_on_state_callback([sw](bool state) {
         if (nim_dispatch_switch_state) {
-          nim_dispatch_switch_state(sw->get_object_id().c_str(), state);
+          char id_buf[esphome::OBJECT_ID_MAX_LEN];
+          sw->get_object_id_to(std::span<char, esphome::OBJECT_ID_MAX_LEN>(id_buf));
+          nim_dispatch_switch_state(id_buf, state);
         }
       });
     }
@@ -336,7 +359,9 @@ void NimComponent::setup() {
     if (b != nullptr) {
       b->add_on_press_callback([b]() {
         if (nim_dispatch_button_press) {
-          nim_dispatch_button_press(b->get_object_id().c_str());
+          char id_buf[esphome::OBJECT_ID_MAX_LEN];
+          b->get_object_id_to(std::span<char, esphome::OBJECT_ID_MAX_LEN>(id_buf));
+          nim_dispatch_button_press(id_buf);
         }
       });
     }
