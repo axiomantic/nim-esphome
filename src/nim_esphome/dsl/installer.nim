@@ -54,6 +54,8 @@ type
     ifkWakeWordSlots = "wake_word_slots"
     ifkAudioShowcase = "audio_showcase"
     ifkCustomWakeWord = "custom_wake_word"
+    ifkCustomWakeWordSlots = "custom_wake_word_slots"
+    ifkMultiAudio = "multi_audio"
 
   FlashPartition* = object
     ## Definition of a custom data partition in ESP32 flash.
@@ -84,6 +86,7 @@ type
     # Multi-slot specific fields
     maxSlots*: int
     slotOffsets*: seq[uint32]
+    slotPartitions*: seq[string]
     presetModels*: seq[(string, string)]
     presetAudios*: seq[(string, string, string)]
     # Select / Text specific fields
@@ -442,6 +445,81 @@ proc addCustomWakeWordField*(
       size: uint32(maxSize)
     ))
 
+proc addCustomWakeWordSlotsField*(
+    installer: InstallerDefinition,
+    name: string = "custom_wake_words",
+    label: string = "Custom Wake Word Models (.tflite)",
+    maxSlots: int = 3,
+    slotOffsets: seq[uint32] = @[0x510000'u32, 0x550000'u32, 0x590000'u32],
+    slotPartitions: seq[string] = @["wake_model", "wake_model_2", "wake_model_3"],
+    maxSize: int = 262144, # 256 KB per slot
+    description: string = "Upload up to 3 custom microWakeWord .tflite models to flash into dedicated partitions."
+) =
+  ## Registers dedicated slots for uploading custom microWakeWord models.
+  installer.fields.add(InstallerField(
+    name: name,
+    kind: ifkCustomWakeWordSlots,
+    label: label,
+    accept: ".tflite",
+    maxSlots: maxSlots,
+    slotOffsets: slotOffsets,
+    slotPartitions: slotPartitions,
+    maxSize: maxSize,
+    description: description
+  ))
+  for i in 0 ..< maxSlots:
+    let partName = if i < slotPartitions.len: slotPartitions[i] else: "wake_model_" & $(i + 1)
+    let offset = if i < slotOffsets.len: slotOffsets[i] else: uint32(0x510000 + (i * 0x40000))
+    var found = false
+    for p in installer.customPartitions:
+      if p.name == partName:
+        found = true
+        break
+    if not found:
+      installer.customPartitions.add(FlashPartition(
+        name: partName,
+        partType: "data",
+        subType: "0x83",
+        offset: offset,
+        size: uint32(maxSize)
+      ))
+
+proc addMultiCustomAudioField*(
+    installer: InstallerDefinition,
+    name: string,
+    label: string,
+    partition: string,
+    flashOffset: uint32,
+    maxSize: int = 262144, # 256 KB
+    accept: string = ".wav,.mp3,.ogg,.flac,.m4a,audio/*",
+    description: string = ""
+) =
+  ## Registers a multi-file custom audio upload container that packs transcoded 16kHz PCM WAVs
+  ## into a contiguous CAUD archive for the specified partition.
+  installer.fields.add(InstallerField(
+    name: name,
+    kind: ifkMultiAudio,
+    label: label,
+    accept: accept,
+    partition: partition,
+    flashOffset: flashOffset,
+    maxSize: maxSize,
+    description: description
+  ))
+  var found = false
+  for p in installer.customPartitions:
+    if p.name == partition:
+      found = true
+      break
+  if not found:
+    installer.customPartitions.add(FlashPartition(
+      name: partition,
+      partType: "data",
+      subType: "0x82",
+      offset: flashOffset,
+      size: uint32(maxSize)
+    ))
+
 proc generatePartitionsCsv*(installer: InstallerDefinition, flashSizeMb: int = 4): string =
   ## Generates an ESP-IDF / ESPHome compliant partition table CSV.
   ## Calculates `app0` and `app1` sizes to ensure custom user partitions never overlap OTA slots.
@@ -612,6 +690,50 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
     html.add("          <div id=\"slotsList_" & field.name & "\" class=\"slots-list\"></div>")
     html.add("          <button type=\"button\" class=\"btn-add-slot\" id=\"btnAddSlot_" & field.name & "\"><svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line><line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line></svg> <span>Add Wake Word Model Slot</span></button>")
     html.add("        </div>")
+  of ifkCustomWakeWordSlots:
+    html.add("        <div class=\"custom-wake-slots\" id=\"customWakeSlots_" & field.name & "\">")
+    html.add("          <div class=\"ha-selection-note\"><strong>Dedicated Wake Word Partitions:</strong> Flashed into dedicated slots (up to " & $field.maxSlots & " models).<br><strong>Note:</strong> Uploading and flashing custom wake words stores them in device flash memory, but does not set the active wake word. After flashing, open Home Assistant, go to your satellite's device controls page, and choose your wake word from the <em>Active Wake Word</em> dropdown.</div>")
+    html.add("          <div class=\"wake-slots-grid\" style=\"display: flex; flex-direction: column; gap: 12px;\">")
+    for i in 0 ..< field.maxSlots:
+      let partName = if i < field.slotPartitions.len: field.slotPartitions[i] else: "wake_model_" & $(i + 1)
+      let offset = if i < field.slotOffsets.len: field.slotOffsets[i] else: uint32(0x510000 + (i * 0x40000))
+      let hexOffset = "0x" & offset.toHex(6).toLowerAscii
+      let kbSize = field.maxSize div 1024
+      html.add("            <div class=\"wake-slot-card\" id=\"slotCard_" & field.name & "_" & $i & "\">")
+      html.add("              <div class=\"slot-header\">")
+      html.add("                <span class=\"slot-title\">Slot " & $(i + 1) & ": <code>" & partName & "</code> (" & hexOffset & ")</span>")
+      html.add("                <span class=\"slot-badge-num\">" & $kbSize & " KB max</span>")
+      html.add("              </div>")
+      html.add("              <input type=\"file\" id=\"slotFile_" & field.name & "_" & $i & "\" accept=\".tflite\" data-offset=\"" & $offset & "\" data-maxsize=\"" & $field.maxSize & "\">")
+      html.add("              <div class=\"custom-wake-inputs\" style=\"display: flex; gap: 10px; margin-top: 8px;\">")
+      html.add("                <div style=\"flex: 2;\">")
+      html.add("                  <label style=\"font-size: 0.76rem; color: #94a3b8; display: block; margin-bottom: 4px;\">Wake Word Name / Phrase</label>")
+      html.add("                  <input type=\"text\" id=\"slotPhrase_" & field.name & "_" & $i & "\" placeholder=\"e.g. Jarvis\">")
+      html.add("                </div>")
+      html.add("                <div style=\"flex: 1;\">")
+      html.add("                  <label style=\"font-size: 0.76rem; color: #94a3b8; display: block; margin-bottom: 4px;\">Cutoff</label>")
+      html.add("                  <input type=\"number\" id=\"slotCutoff_" & field.name & "_" & $i & "\" min=\"0.05\" max=\"0.99\" step=\"0.01\" value=\"0.40\">")
+      html.add("                </div>")
+      html.add("              </div>")
+      html.add("              <div class=\"file-status\" id=\"slotStatus_" & field.name & "_" & $i & "\"></div>")
+      html.add("            </div>")
+    html.add("          </div>")
+    html.add("        </div>")
+  of ifkMultiAudio:
+    let hexOffset = "0x" & field.flashOffset.toHex(6).toLowerAscii
+    let kbSize = field.maxSize div 1024
+    html.add("        <div class=\"multi-audio-container\" id=\"multiAudio_" & field.name & "\" data-partition=\"" & field.partition & "\" data-offset=\"" & $field.flashOffset & "\" data-maxsize=\"" & $field.maxSize & "\">")
+    html.add("          <div class=\"ha-selection-note\"><strong>Dedicated Audio Partition:</strong> Flashed into <code>" & field.partition & "</code> at " & hexOffset & " (" & $kbSize & " KB max). Audio files (.wav, .mp3, .ogg, .flac, .m4a) are automatically resampled to 16kHz mono 16-bit PCM WAV with dynamic compression and normalization (-1.0 dBFS) in your browser.<br><strong>Note:</strong> Uploading and flashing custom audio stores the sounds in device flash memory, but does not set them as active. After flashing, open Home Assistant, go to your satellite's device controls page, and select your custom sound from the dropdown.</div>")
+    html.add("          <div class=\"multi-audio-list\" id=\"audioList_" & field.name & "\"></div>")
+    html.add("          <div class=\"multi-audio-actions\" style=\"margin-top: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;\">")
+    html.add("            <label class=\"btn-add-audio\" style=\"cursor: pointer;\">")
+    html.add("              <input type=\"file\" id=\"addAudioInput_" & field.name & "\" accept=\"" & field.accept & "\" multiple style=\"display: none;\">")
+    html.add("              <span>+ Add Audio File</span>")
+    html.add("            </label>")
+    html.add("            <div class=\"audio-partition-usage\" id=\"usage_" & field.name & "\" style=\"font-size: 0.78rem; color: #94a3b8; font-family: monospace;\">0 KB / " & $kbSize & " KB used</div>")
+    html.add("          </div>")
+    html.add("          <div class=\"multi-audio-error\" id=\"error_" & field.name & "\" style=\"display: none; color: #f87171; font-size: 0.8rem; margin-top: 6px;\"></div>")
+    html.add("        </div>")
 
 proc generateHtml*(installer: InstallerDefinition): string =
   ## Generates the complete HTML page with embedded reactive WebSerial flashing logic,
@@ -691,6 +813,19 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    .icon { display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }")
   html.add("    .icon-alert { color: #f87171; vertical-align: -0.18em; margin-right: 6px; }")
   html.add("    .icon-check { color: #34d399; vertical-align: -0.15em; margin-right: 5px; }")
+  html.add("    .btn-add-audio { background: #0f172a; border: 1px dashed #3b82f6; color: #60a5fa; border-radius: 8px; padding: 8px 14px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }")
+  html.add("    .btn-add-audio:hover { background: rgba(59, 130, 246, 0.15); border-color: #60a5fa; color: #93c5fd; }")
+  html.add("    .multi-audio-item { background: #080d1a; border: 1px solid #202b3d; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }")
+  html.add("    .multi-audio-info { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 200px; }")
+  html.add("    .audio-name-input { background: #0b1329; border: 1px solid #334155; border-radius: 4px; padding: 4px 8px; color: #f8fafc; font-size: 0.85rem; flex: 1; }")
+  html.add("    .audio-badge { font-size: 0.7rem; background: #0c4a6e; color: #38bdf8; border: 1px solid #0284c7; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }")
+  html.add("    .audio-size-badge { font-size: 0.72rem; color: #94a3b8; font-family: monospace; white-space: nowrap; }")
+  html.add("    .btn-remove-audio { background: transparent; border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; }")
+  html.add("    .btn-remove-audio:hover { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; }")
+  html.add("    .ha-selection-note { margin-top: 8px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 6px; font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; }")
+  html.add("    .ha-selection-note strong { color: #60a5fa; }")
+  html.add("    .ha-selection-note em { color: #f8fafc; font-style: normal; font-weight: 600; }")
+  html.add("    .ha-selection-note code { background: #1e293b; color: #38bdf8; padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }")
   html.add("    .install-warning-notice { width: 100%; box-sizing: border-box; margin-bottom: 8px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 10px 14px; border-radius: 4px; font-size: 0.82rem; color: #fca5a5; display: none; text-align: left; }")
   html.add("    button.install-btn:disabled, button.install-btn.disabled-btn { background: #334155 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; opacity: 0.6; }")
   html.add("    .actions { margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; }")
@@ -1130,6 +1265,40 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("        byteOffset += 2;")
   html.add("      }")
   html.add("      return wavBuffer;")
+  html.add("    }")
+  html.add("")
+  html.add("    function packCustomAudioArchive(items) {")
+  html.add("      const HEADER_SIZE = 32;")
+  html.add("      const ENTRY_SIZE = 48;")
+  html.add("      const count = items.length;")
+  html.add("      let totalSize = HEADER_SIZE + (count * ENTRY_SIZE);")
+  html.add("      const alignedDataOffsets = [];")
+  html.add("      for (let i = 0; i < count; i++) {")
+  html.add("        totalSize = (totalSize + 3) & ~3;")
+  html.add("        alignedDataOffsets.push(totalSize);")
+  html.add("        totalSize += items[i].buffer.byteLength;")
+  html.add("      }")
+  html.add("      const outBuf = new ArrayBuffer(totalSize);")
+  html.add("      const view = new DataView(outBuf);")
+  html.add("      const u8 = new Uint8Array(outBuf);")
+  html.add("      view.setUint32(0, 0x44554143, true);")
+  html.add("      view.setUint16(4, 1, true);")
+  html.add("      view.setUint16(6, count, true);")
+  html.add("      let entryOffset = HEADER_SIZE;")
+  html.add("      for (let i = 0; i < count; i++) {")
+  html.add("        const item = items[i];")
+  html.add("        const dataOffset = alignedDataOffsets[i];")
+  html.add("        const cleanName = (item.name || ('Sound ' + (i + 1))).trim().slice(0, 31);")
+  html.add("        for (let c = 0; c < cleanName.length; c++) {")
+  html.add("          u8[entryOffset + c] = cleanName.charCodeAt(c);")
+  html.add("        }")
+  html.add("        u8[entryOffset + cleanName.length] = 0;")
+  html.add("        view.setUint32(entryOffset + 32, dataOffset, true);")
+  html.add("        view.setUint32(entryOffset + 36, item.buffer.byteLength, true);")
+  html.add("        u8.set(new Uint8Array(item.buffer), dataOffset);")
+  html.add("        entryOffset += ENTRY_SIZE;")
+  html.add("      }")
+  html.add("      return outBuf;")
   html.add("    }")
   html.add("")
   html.add("    function getSavedInstallerState() {")
@@ -2165,6 +2334,191 @@ proc generateHtml*(installer: InstallerDefinition): string =
         html.add("        }")
       html.add("        updateDynamicManifest();")
       html.add("        checkInstallReadiness();")
+      html.add("      });")
+      html.add("    }")
+
+    if field.kind == ifkCustomWakeWordSlots:
+      var offsetsSeq: seq[string] = @[]
+      for o in field.slotOffsets: offsetsSeq.add($o)
+      let offsetsJs = "[" & offsetsSeq.join(",") & "]"
+
+      var partsSeq: seq[string] = @[]
+      for p in field.slotPartitions: partsSeq.add(escapeJson(p))
+      let partsJs = "[" & partsSeq.join(",") & "]"
+
+      html.add("    const slotOffsets_" & field.name & " = " & offsetsJs & ";")
+      html.add("    const slotPartitions_" & field.name & " = " & partsJs & ";")
+      html.add("    const slotBuffers_" & field.name & " = [];")
+      html.add("    const slotFileNames_" & field.name & " = [];")
+      html.add("    for (let i = 0; i < " & $field.maxSlots & "; i++) { slotBuffers_" & field.name & ".push(null); slotFileNames_" & field.name & ".push(''); }")
+      html.add("")
+      html.add("    function registerWakeSlot_" & field.name & "(slotIdx) {")
+      html.add("      const buf = slotBuffers_" & field.name & "[slotIdx];")
+      html.add("      const partKey = '" & field.name & "_slot_' + slotIdx;")
+      html.add("      const statusEl = document.getElementById('slotStatus_" & field.name & "_' + slotIdx);")
+      html.add("      const fileInp = document.getElementById('slotFile_" & field.name & "_' + slotIdx);")
+      html.add("      const phraseInp = document.getElementById('slotPhrase_" & field.name & "_' + slotIdx);")
+      html.add("      const cutoffInp = document.getElementById('slotCutoff_" & field.name & "_' + slotIdx);")
+      html.add("      if (!buf) {")
+      html.add("        uploadedParts.delete(partKey);")
+      html.add("        delete cachedFileStore[partKey];")
+      html.add("        if (statusEl) statusEl.style.display = 'none';")
+      html.add("        updateDynamicManifest();")
+      html.add("        checkInstallReadiness();")
+      html.add("        saveInstallerState();")
+      html.add("        return;")
+      html.add("      }")
+      html.add("      const phrase = (phraseInp ? phraseInp.value : '') || ('Custom Wake Word ' + (slotIdx + 1));")
+      html.add("      const cutoff = (cutoffInp ? cutoffInp.value : '0.40');")
+      html.add("      const offset = slotOffsets_" & field.name & "[slotIdx];")
+      html.add("      const partName = slotPartitions_" & field.name & "[slotIdx];")
+      html.add("      const combined = packWakeModelHeader(buf, phrase, cutoff);")
+      html.add("      const blob = new Blob([combined], { type: 'application/octet-stream' });")
+      html.add("      const blobUrl = URL.createObjectURL(blob);")
+      html.add("      uploadedParts.set(partKey, { url: blobUrl, offset: offset, name: slotFileNames_" & field.name & "[slotIdx] || (partName + '.bin'), size: combined.byteLength });")
+      html.add("      if (statusEl) {")
+      html.add("        statusEl.style.display = 'block';")
+      html.add("        statusEl.innerHTML = ICONS.check + ' <span>Ready to flash: ' + (slotFileNames_" & field.name & "[slotIdx] || 'model.tflite') + ' (&ldquo;' + phrase + '&rdquo;) to ' + partName + ' (0x' + offset.toString(16).toUpperCase() + ')</span> <button type=\"button\" class=\"btn-clear-slot\" style=\"margin-left: 8px; background: transparent; border: 1px solid #64748b; color: #94a3b8; border-radius: 4px; padding: 2px 6px; font-size: 0.72rem; cursor: pointer;\">Remove</button>';")
+      html.add("        const rmBtn = statusEl.querySelector('.btn-clear-slot');")
+      html.add("        if (rmBtn) {")
+      html.add("          rmBtn.addEventListener('click', () => {")
+      html.add("            slotBuffers_" & field.name & "[slotIdx] = null;")
+      html.add("            slotFileNames_" & field.name & "[slotIdx] = '';")
+      html.add("            if (fileInp) fileInp.value = '';")
+      html.add("            registerWakeSlot_" & field.name & "(slotIdx);")
+      html.add("          });")
+      html.add("        }")
+      html.add("      }")
+      html.add("      updateDynamicManifest();")
+      html.add("      checkInstallReadiness();")
+      html.add("      saveInstallerState();")
+      html.add("    }")
+      html.add("")
+      for i in 0 ..< field.maxSlots:
+        html.add("    const sFile_" & field.name & "_" & $i & " = document.getElementById('slotFile_" & field.name & "_" & $i & "');")
+        html.add("    const sPhrase_" & field.name & "_" & $i & " = document.getElementById('slotPhrase_" & field.name & "_" & $i & "');")
+        html.add("    const sCutoff_" & field.name & "_" & $i & " = document.getElementById('slotCutoff_" & field.name & "_" & $i & "');")
+        html.add("    if (sFile_" & field.name & "_" & $i & ") {")
+        html.add("      sFile_" & field.name & "_" & $i & ".addEventListener('change', (e) => {")
+        html.add("        const file = e.target.files[0];")
+        html.add("        if (!file) {")
+        html.add("          slotBuffers_" & field.name & "[" & $i & "] = null;")
+        html.add("          slotFileNames_" & field.name & "[" & $i & "] = '';")
+        html.add("          registerWakeSlot_" & field.name & "(" & $i & ");")
+        html.add("          return;")
+        html.add("        }")
+        html.add("        const maxBytes = parseInt(sFile_" & field.name & "_" & $i & ".dataset.maxsize || '" & $field.maxSize & "', 10);")
+        html.add("        if (file.size > maxBytes) {")
+        html.add("          alert('Model exceeds maximum allowed size of ' + Math.round(maxBytes / 1024) + ' KB');")
+        html.add("          sFile_" & field.name & "_" & $i & ".value = '';")
+        html.add("          return;")
+        html.add("        }")
+        html.add("        slotFileNames_" & field.name & "[" & $i & "] = file.name;")
+        html.add("        if (sPhrase_" & field.name & "_" & $i & " && (!sPhrase_" & field.name & "_" & $i & ".value || sPhrase_" & field.name & "_" & $i & ".value.trim() === '')) {")
+        html.add("          const rawName = file.name.replace(/\\.[^/.]+$/, '').replace(/[_-]/g, ' ');")
+        html.add("          sPhrase_" & field.name & "_" & $i & ".value = rawName.replace(/\\b\\w/g, l => l.toUpperCase());")
+        html.add("        }")
+        html.add("        const reader = new FileReader();")
+        html.add("        reader.onload = function(evt) {")
+        html.add("          slotBuffers_" & field.name & "[" & $i & "] = evt.target.result;")
+        html.add("          registerWakeSlot_" & field.name & "(" & $i & ");")
+        html.add("        };")
+        html.add("        reader.readAsArrayBuffer(file);")
+        html.add("      });")
+        html.add("    }")
+        html.add("    if (sPhrase_" & field.name & "_" & $i & ") sPhrase_" & field.name & "_" & $i & ".addEventListener('input', () => registerWakeSlot_" & field.name & "(" & $i & "));")
+        html.add("    if (sCutoff_" & field.name & "_" & $i & ") sCutoff_" & field.name & "_" & $i & ".addEventListener('input', () => registerWakeSlot_" & field.name & "(" & $i & "));")
+
+    if field.kind == ifkMultiAudio:
+      html.add("    const multiAudioStore_" & field.name & " = [];")
+      html.add("    const addAudioInp_" & field.name & " = document.getElementById('addAudioInput_" & field.name & "');")
+      html.add("    const listEl_" & field.name & " = document.getElementById('audioList_" & field.name & "');")
+      html.add("    const usageEl_" & field.name & " = document.getElementById('usage_" & field.name & "');")
+      html.add("    const errEl_" & field.name & " = document.getElementById('error_" & field.name & "');")
+      html.add("    const maxSizeBytes_" & field.name & " = parseInt('" & $field.maxSize & "', 10);")
+      html.add("    const offset_" & field.name & " = parseInt('" & $field.flashOffset & "', 10);")
+      html.add("")
+      html.add("    function renderAudioList_" & field.name & "() {")
+      html.add("      if (!listEl_" & field.name & ") return;")
+      html.add("      listEl_" & field.name & ".innerHTML = '';")
+      html.add("      multiAudioStore_" & field.name & ".forEach((item, idx) => {")
+      html.add("        const itemEl = document.createElement('div');")
+      html.add("        itemEl.className = 'multi-audio-item';")
+      html.add("        itemEl.innerHTML = '<div class=\"multi-audio-info\">' +")
+      html.add("          '<input type=\"text\" class=\"audio-name-input\" value=\"' + item.name.replace(/\"/g, '&quot;') + '\" placeholder=\"Sound Name\" maxlength=\"31\">' +")
+      html.add("          '<span class=\"audio-badge\">16kHz Mono &bull; Compressed &bull; Normalized</span>' +")
+      html.add("          '<span class=\"audio-size-badge\">' + Math.round(item.buffer.byteLength / 1024) + ' KB</span>' +")
+      html.add("          '</div><button type=\"button\" class=\"btn-remove-audio\">Remove</button>';")
+      html.add("        const nameInp = itemEl.querySelector('.audio-name-input');")
+      html.add("        if (nameInp) {")
+      html.add("          nameInp.addEventListener('input', () => {")
+      html.add("            item.name = nameInp.value.trim() || ('Sound ' + (idx + 1));")
+      html.add("            updateMultiArchive_" & field.name & "();")
+      html.add("          });")
+      html.add("        }")
+      html.add("        const rmBtn = itemEl.querySelector('.btn-remove-audio');")
+      html.add("        if (rmBtn) {")
+      html.add("          rmBtn.addEventListener('click', () => {")
+      html.add("            multiAudioStore_" & field.name & ".splice(idx, 1);")
+      html.add("            renderAudioList_" & field.name & "();")
+      html.add("            updateMultiArchive_" & field.name & "();")
+      html.add("          });")
+      html.add("        }")
+      html.add("        listEl_" & field.name & ".appendChild(itemEl);")
+      html.add("      });")
+      html.add("    }")
+      html.add("")
+      html.add("    function updateMultiArchive_" & field.name & "() {")
+      html.add("      if (multiAudioStore_" & field.name & ".length === 0) {")
+      html.add("        uploadedParts.delete('" & field.name & "');")
+      html.add("        if (usageEl_" & field.name & ") usageEl_" & field.name & ".textContent = '0 KB / ' + Math.round(maxSizeBytes_" & field.name & " / 1024) + ' KB used';")
+      html.add("        if (errEl_" & field.name & ") errEl_" & field.name & ".style.display = 'none';")
+      html.add("        updateDynamicManifest();")
+      html.add("        checkInstallReadiness();")
+      html.add("        saveInstallerState();")
+      html.add("        return;")
+      html.add("      }")
+      html.add("      const packed = packCustomAudioArchive(multiAudioStore_" & field.name & ");")
+      html.add("      const packedKb = Math.round(packed.byteLength / 1024);")
+      html.add("      const maxKb = Math.round(maxSizeBytes_" & field.name & " / 1024);")
+      html.add("      if (usageEl_" & field.name & ") usageEl_" & field.name & ".textContent = packedKb + ' KB / ' + maxKb + ' KB used (' + multiAudioStore_" & field.name & ".length + ' sound' + (multiAudioStore_" & field.name & ".length > 1 ? 's' : '') + ')';")
+      html.add("      if (packed.byteLength > maxSizeBytes_" & field.name & ") {")
+      html.add("        if (errEl_" & field.name & ") {")
+      html.add("          errEl_" & field.name & ".textContent = 'Total archive size (' + packedKb + ' KB) exceeds partition capacity (' + maxKb + ' KB). Please remove or trim sounds.';")
+      html.add("          errEl_" & field.name & ".style.display = 'block';")
+      html.add("        }")
+      html.add("        uploadedParts.delete('" & field.name & "');")
+      html.add("      } else {")
+      html.add("        if (errEl_" & field.name & ") errEl_" & field.name & ".style.display = 'none';")
+      html.add("        const blob = new Blob([packed], { type: 'application/octet-stream' });")
+      html.add("        const blobUrl = URL.createObjectURL(blob);")
+      html.add("        uploadedParts.set('" & field.name & "', { url: blobUrl, offset: offset_" & field.name & ", name: '" & field.name & ".bin', size: packed.byteLength });")
+      html.add("      }")
+      html.add("      updateDynamicManifest();")
+      html.add("      checkInstallReadiness();")
+      html.add("      saveInstallerState();")
+      html.add("    }")
+      html.add("")
+      html.add("    if (addAudioInp_" & field.name & ") {")
+      html.add("      addAudioInp_" & field.name & ".addEventListener('change', async (e) => {")
+      html.add("        const files = Array.from(e.target.files);")
+      html.add("        if (!files.length) return;")
+      html.add("        for (const file of files) {")
+      html.add("          try {")
+      html.add("            if (usageEl_" & field.name & ") usageEl_" & field.name & ".textContent = 'Processing ' + file.name + '...';")
+      html.add("            const rawBuf = await file.arrayBuffer();")
+      html.add("            const wavBuf = await processCustomAudio(rawBuf, 16000);")
+      html.add("            const baseName = file.name.replace(/\\.[^/.]+$/, '').replace(/[_-]/g, ' ').slice(0, 31);")
+      html.add("            const soundName = baseName.replace(/\\b\\w/g, l => l.toUpperCase());")
+      html.add("            multiAudioStore_" & field.name & ".push({ name: soundName, buffer: wavBuf });")
+      html.add("          } catch (err) {")
+      html.add("            console.error('Audio processing error for file ' + file.name + ':', err);")
+      html.add("            alert('Failed to process audio file ' + file.name + ': ' + (err.message || err));")
+      html.add("          }")
+      html.add("        }")
+      html.add("        addAudioInp_" & field.name & ".value = '';")
+      html.add("        renderAudioList_" & field.name & "();")
+      html.add("        updateMultiArchive_" & field.name & "();")
       html.add("      });")
       html.add("    }")
 
