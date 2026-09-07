@@ -6,7 +6,7 @@
 
 **`nim-esphome`** lets you write ESPHome custom components and embedded logic in [Nim](https://nim-lang.org). Write clean, memory-safe code for ESP32 and ESP8266 devices that compiles directly into ESPHome's PlatformIO and ESP-IDF build pipelines.
 
-> 📚 **Complete Documentation & API Reference**: Browse the full static documentation site built with [Zensical](https://github.com/squidfunk/zensical) in [`docs/`](docs/index.md) or online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/).
+> **Complete Documentation & API Reference**: Browse the full static documentation site built with [Zensical](https://github.com/squidfunk/zensical) in [`docs/`](docs/index.md) or online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/).
 
 ---
 
@@ -52,12 +52,12 @@ ESPHome is great for declaratively configuring hardware, but complex embedded lo
 
 ## Key Features
 
-- ⚡ **Zero-Overhead Embedded Runtime**: Uses Nim's deterministic ARC memory management (`--mm:arc`), `-d:useMalloc`, `--exceptions:goto`, and `--panics:on`. No heavy tracing garbage collector or thread overhead.
-- 🔌 **First-Class External Component**: Plug-and-play via ESPHome's standard `external_components`. Automatically generates and compiles `.cpp` files during `esphome compile` and `esphome run`.
-- 🪵 **ESPHome Logging & Clock Bindings**: Native Nim wrappers for `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`, `ESP_LOGD`, `millis()`, and `delay()`.
-- 🔄 **Lifecycle Hooks**: Simple `esphomeSetup` and `esphomeLoop` templates integrated directly with ESPHome's main loop.
-- 🔗 **Exporting to C++ Lambdas**: Convenient `{.exportEsphome.}` pragma to expose C ABI functions callable directly from ESPHome YAML lambdas.
-- 🧪 **Hardware-Free Local Testing**: Write unit tests for your device logic in Nim and run them instantly on macOS or Linux using standard `nim c -r`.
+- **Zero-Overhead Embedded Runtime**: Uses Nim's deterministic ARC memory management (`--mm:arc`), `-d:useMalloc`, `--exceptions:goto`, and `--panics:on`. No heavy tracing garbage collector or thread overhead.
+- **First-Class External Component**: Plug-and-play via ESPHome's standard `external_components`. Automatically generates and compiles `.cpp` files during `esphome compile` and `esphome run`.
+- **ESPHome Logging & Clock Bindings**: Native Nim wrappers for `ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`, `ESP_LOGD`, `millis()`, and `delay()`.
+- **Lifecycle Hooks**: Simple `esphomeSetup` and `esphomeLoop` templates integrated directly with ESPHome's main loop.
+- **Exporting to C++ Lambdas**: Convenient `{.exportEsphome.}` pragma to expose C ABI functions callable directly from ESPHome YAML lambdas.
+- **Hardware-Free Local Testing**: Write unit tests for your device logic in Nim and run them instantly on macOS or Linux using standard `nim c -r`.
 
 ---
 
@@ -179,7 +179,7 @@ esphome run device.yaml
 
 The ESPHome build tool automatically invokes the Nim compiler, cross-compiling your Nim module into 32-bit C++ sources in PlatformIO's build directory and compiling it into the final firmware binary.
 
-> 📖 **Getting Started Guide**: See the complete [Getting Started Guide](docs/guides/getting-started.md) for step-by-step setup and local development tips.
+> **Getting Started Guide**: See the complete [Getting Started Guide](docs/guides/getting-started.md) for step-by-step setup and local development tips.
 
 ---
 
@@ -187,22 +187,22 @@ The ESPHome build tool automatically invokes the Nim compiler, cross-compiling y
 
 Comprehensive guides and API references are available in the [`docs/`](docs/index.md) directory and online at [**axiomantic.github.io/nim-esphome**](https://axiomantic.github.io/nim-esphome/):
 
-- 🚀 [**Getting Started**](docs/guides/getting-started.md): Installation, build pipeline, and first project.
-- ⚙️ [**YAML Configuration**](docs/guides/configuration.md): Complete schema options, flags, and architecture overrides.
-- 📦 [**Nimble Dependencies**](docs/guides/dependencies.md): Automated package downloads, Git repository URLs, and caching.
-- ⚡ [**Target Architectures & Cross-Compilation**](docs/guides/architectures.md): Multi-CPU alignment (Xtensa, RISC-V, ARM), pointer widths, and ARC memory.
-- 🎛️ [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, select, number, and button controls.
-- 📊 [**Lovelace Dashboard Surfaces DSL**](docs/guides/dashboard-dsl.md): Declaratively define and export Home Assistant Lovelace cards directly from firmware.
-- ⚡ [**Custom Actions & Services DSL**](docs/guides/actions-dsl.md): Type-safe Home Assistant actions and service handlers.
-- ⏱️ [**RTOS Task & Schedule DSL**](docs/guides/schedule-dsl.md): Cooperative, non-blocking periodic task scheduling and one-shot delays.
-- 🖥️ [**Composite Hardware Surfaces DSL**](docs/guides/surface-dsl.md): Unified domain models combining controls, telemetry, and matched dashboard cards.
-- 🔌 [**Hardware Buses (GPIO & I2C)**](docs/guides/hardware.md): Microcontroller pin modes and I2C peripheral register transfers.
-- 💾 [**Flash Preferences (NVS)**](docs/guides/storage.md): Non-volatile parameter storage across power cycles.
-- 📈 [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
-- 🔗 [**C++ Interoperability**](docs/guides/interop.md): Exporting Nim procs to YAML lambdas and calling C++ libraries.
-- 🎙️ [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world on-device state supervisor for ESPHome voice satellites.
-- 🌐 [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md): ESP-Web-Tools browser flashing, My Home Assistant import, and CI factory binary releases.
-- 📚 [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
+- [**Getting Started**](docs/guides/getting-started.md): Installation, build pipeline, and first project.
+- [**YAML Configuration**](docs/guides/configuration.md): Complete schema options, flags, and architecture overrides.
+- [**Nimble Dependencies**](docs/guides/dependencies.md): Automated package downloads, Git repository URLs, and caching.
+- [**Target Architectures & Cross-Compilation**](docs/guides/architectures.md): Multi-CPU alignment (Xtensa, RISC-V, ARM), pointer widths, and ARC memory.
+- [**Entities & Home Assistant**](docs/guides/entities.md): Numerical sensors, binary sensors, switches, select, number, and button controls.
+- [**Lovelace Dashboard Surfaces DSL**](docs/guides/dashboard-dsl.md): Declaratively define and export Home Assistant Lovelace cards directly from firmware.
+- [**Custom Actions & Services DSL**](docs/guides/actions-dsl.md): Type-safe Home Assistant actions and service handlers.
+- [**RTOS Task & Schedule DSL**](docs/guides/schedule-dsl.md): Cooperative, non-blocking periodic task scheduling and one-shot delays.
+- [**Composite Hardware Surfaces DSL**](docs/guides/surface-dsl.md): Unified domain models combining controls, telemetry, and matched dashboard cards.
+- [**Hardware Buses (GPIO & I2C)**](docs/guides/hardware.md): Microcontroller pin modes and I2C peripheral register transfers.
+- [**Flash Preferences (NVS)**](docs/guides/storage.md): Non-volatile parameter storage across power cycles.
+- [**Embedded DSP & Closed-Loop Control**](docs/guides/dsp-control.md): PID controllers, sliding statistics, and contact debouncers.
+- [**C++ Interoperability**](docs/guides/interop.md): Exporting Nim procs to YAML lambdas and calling C++ libraries.
+- [**Verified Voice Satellite Case Study**](docs/guides/esphome-satellite.md): Real-world on-device state supervisor for ESPHome voice satellites.
+- [**Project Templating & 1-Click Distribution**](docs/guides/distribution.md): ESP-Web-Tools browser flashing, My Home Assistant import, and CI factory binary releases.
+- [**Full API Reference**](docs/api/index.md): Complete reference for all public types, procedures, and macros.
 
 ---
 
@@ -265,7 +265,7 @@ nim:
 | `nim_path` | `string` | `"nim"` | Path to the `nim` compiler executable |
 | `target_cpu` | `string` | Auto | Target CPU architecture (`esp`, `riscv32`, `arm`). Auto-detected from board. |
 
-> 📖 **Full Guide**: See the [YAML Configuration Guide](docs/guides/configuration.md) for detailed descriptions, platform defaults, and optimization flags.
+> **Full Guide**: See the [YAML Configuration Guide](docs/guides/configuration.md) for detailed descriptions, platform defaults, and optimization flags.
 
 ---
 
@@ -286,7 +286,7 @@ During build generation:
 2. Packages and Git repositories are installed without polluting global environments or requiring host pre-installation.
 3. The component automatically configures `--nimblePath` and package module paths directly into the embedded Nim transpilation command.
 
-> 📖 **Full Guide**: See the [Automated Nimble Dependencies Guide](docs/guides/dependencies.md) for caching architecture and offline development.
+> **Full Guide**: See the [Automated Nimble Dependencies Guide](docs/guides/dependencies.md) for caching architecture and offline development.
 
 ---
 
@@ -304,7 +304,7 @@ ESPHome targets resource-constrained microcontrollers spanning multiple 32-bit C
 4. **Deterministic Memory**: Uses `--mm:arc` with `-d:useMalloc` to delegate all allocations to FreeRTOS's heap allocator without GC pause times.
 5. **Const C-Strings**: Provides `ConstCString` mapped to `const char*` to avoid `-Wwrite-strings` C++ compiler warnings on modern GCC/Clang.
 
-> 📖 **Full Guide**: See [Target Architectures & Cross-Compilation](docs/guides/architectures.md) for deep-dive technical details on embedded memory and code generation.
+> **Full Guide**: See [Target Architectures & Cross-Compilation](docs/guides/architectures.md) for deep-dive technical details on embedded memory and code generation.
 
 ---
 
@@ -326,7 +326,7 @@ let t: uint32 = millis()
 delay(100) # milliseconds
 ```
 
-> 📚 **API Reference**: See [`nim_esphome/api`](docs/api/api.md) for logging macros, microsecond clocks, watchdog feeding, and system reboot.
+> **API Reference**: See [`nim_esphome/api`](docs/api/api.md) for logging macros, microsecond clocks, watchdog feeding, and system reboot.
 
 ### First-Class Entity Bindings
 
@@ -349,7 +349,7 @@ statusMsg.publishState("Running")
 
 When compiled for embedded firmware, `publishState` looks up registered entities dynamically in the ESPHome `Application` registry and executes `publish_state(...)`. In local unit tests on host machines, a mock registry is maintained for headless verification.
 
-> 📖 **Full Guide & API**: See [Entities & Home Assistant Guide](docs/guides/entities.md) and [`nim_esphome/entities`](docs/api/entities.md).
+> **Full Guide & API**: See [Entities & Home Assistant Guide](docs/guides/entities.md) and [`nim_esphome/entities`](docs/api/entities.md).
 
 ### Domain-Specific Languages (DSLs) for Home Assistant Surfaces
 
@@ -372,7 +372,7 @@ esphomeControls:
     persist = true
     onChange(vol): setVolume(vol)
 ```
-> 📖 See [Entities & Controls Guide](docs/guides/entities.md) and [`nim_esphome/dsl/entities`](docs/api/dsl.md#home-assistant-controls-dsl).
+>  See [Entities & Controls Guide](docs/guides/entities.md) and [`nim_esphome/dsl/entities`](docs/api/dsl.md#home-assistant-controls-dsl).
 
 #### 2. Lovelace Dashboard Surface DSL (`haDashboard` / `haCard`)
 Generate production-ready Home Assistant dashboard cards and multi-view configurations directly from firmware code:
@@ -385,7 +385,7 @@ let satelliteCard = haCard(ctEntities, "Voice Satellite", "mdi:microphone"):
 
 echo satelliteCard.toYaml()
 ```
-> 📖 See [Lovelace Dashboard Surfaces Guide](docs/guides/dashboard-dsl.md) and [`nim_esphome/dsl/dashboard`](docs/api/dsl.md#lovelace-dashboard-surface-dsl).
+>  See [Lovelace Dashboard Surfaces Guide](docs/guides/dashboard-dsl.md) and [`nim_esphome/dsl/dashboard`](docs/api/dsl.md#lovelace-dashboard-surface-dsl).
 
 #### 3. Custom Actions & Services DSL (`haService` / `haAction`)
 Expose type-safe actions callable from Home Assistant automations and scripts:
@@ -398,7 +398,7 @@ haService("play_tone"):
   onExecute(ctx):
     playTone(ctx.getInt("frequency"), ctx.getInt("duration_ms"))
 ```
-> 📖 See [Custom Actions & Services Guide](docs/guides/actions-dsl.md) and [`nim_esphome/dsl/actions`](docs/api/dsl.md#custom-actions--service-calls-dsl).
+>  See [Custom Actions & Services Guide](docs/guides/actions-dsl.md) and [`nim_esphome/dsl/actions`](docs/api/dsl.md#custom-actions--service-calls-dsl).
 
 #### 4. RTOS Task & Schedule DSL (`haSchedule`)
 Cooperative, non-blocking periodic task scheduling and one-shot delays inside ESPHome's main loop without thread overhead:
@@ -412,7 +412,7 @@ haSchedule:
   after 30.seconds:
     finalizeCalibration()
 ```
-> 📖 See [RTOS Task & Schedule Guide](docs/guides/schedule-dsl.md) and [`nim_esphome/dsl/schedule`](docs/api/dsl.md#rtos-background-task--schedule-dsl).
+>  See [RTOS Task & Schedule Guide](docs/guides/schedule-dsl.md) and [`nim_esphome/dsl/schedule`](docs/api/dsl.md#rtos-background-task--schedule-dsl).
 
 #### 5. Composite Hardware Surfaces DSL (`haSurface`)
 Unify hardware metadata, controls, telemetry sensors, and matched dashboard cards into a single cohesive domain model:
@@ -429,7 +429,7 @@ let satellite = haSurface("voice_satellite"):
 echo satellite.generateLovelaceYaml()
 echo satellite.generateEsphomeYaml()
 ```
-> 📖 See [Composite Hardware Surfaces Guide](docs/guides/surface-dsl.md) and [`nim_esphome/dsl/surface`](docs/api/dsl.md#composite-hardware-device-dsl).
+>  See [Composite Hardware Surfaces Guide](docs/guides/surface-dsl.md) and [`nim_esphome/dsl/surface`](docs/api/dsl.md#composite-hardware-device-dsl).
 
 #### 6. Web Installer & Dynamic Flashing DSL (`esphomeInstaller`)
 Generate interactive ESP-Web-Tools web installers with customizable form fields (file uploads, dropdown selects, text, checkboxes), dynamic WebSerial manifest construction, and verified collision-free flash partition calculations:
@@ -450,7 +450,7 @@ let satelliteInstaller = esphomeInstaller("voice-satellite"):
 writeFile("partitions.csv", satelliteInstaller.generatePartitionsCsv(flashSizeMb = 4))
 writeFile("web/index.html", satelliteInstaller.generateHtml())
 ```
-> 📖 See [Web Installer & Dynamic Flashing Guide](docs/guides/installer-dsl.md) and [`nim_esphome/dsl/installer`](docs/guides/installer-dsl.md).
+>  See [Web Installer & Dynamic Flashing Guide](docs/guides/installer-dsl.md) and [`nim_esphome/dsl/installer`](docs/guides/installer-dsl.md).
 
 ### Hardware Bus & Peripheral Abstractions (GPIO & I2C)
 
@@ -489,7 +489,7 @@ let chipId: uint8 = accelerometer.readByte(0x75)
 let rawData: seq[uint8] = accelerometer.readRegister(0x3B, 6)
 ```
 
-> 📖 **Full Guide & API**: See [Hardware Buses Guide](docs/guides/hardware.md), [`nim_esphome/gpio`](docs/api/gpio.md), and [`nim_esphome/i2c`](docs/api/i2c.md).
+> **Full Guide & API**: See [Hardware Buses Guide](docs/guides/hardware.md), [`nim_esphome/gpio`](docs/api/gpio.md), and [`nim_esphome/i2c`](docs/api/i2c.md).
 
 ### Flash Preferences / Non-Volatile Storage (NVS)
 
@@ -509,7 +509,7 @@ var wifiSsid = loadPreference("wifi_ssid", "DefaultSSID")
 discard savePreference("wifi_ssid", "HomeIoT")
 ```
 
-> 📖 **Full Guide & API**: See [Flash Preferences Guide](docs/guides/storage.md) and [`nim_esphome/preferences`](docs/api/preferences.md).
+> **Full Guide & API**: See [Flash Preferences Guide](docs/guides/storage.md) and [`nim_esphome/preferences`](docs/api/preferences.md).
 
 ### Embedded Control & DSP Utilities
 
@@ -556,7 +556,7 @@ if buttonDebouncer.update(digitalRead(4) == Low, millis()):
     info("Button", "Clean button press event!")
 ```
 
-> 📖 **Full Guide & API**: See [Embedded DSP & Control Guide](docs/guides/dsp-control.md) and [`nim_esphome/dsp`](docs/api/dsp.md).
+> **Full Guide & API**: See [Embedded DSP & Control Guide](docs/guides/dsp-control.md) and [`nim_esphome/dsp`](docs/api/dsp.md).
 
 ### Calling Nim Procs from ESPHome C++
 
@@ -579,7 +579,7 @@ button:
           setSensitivity(42);
 ```
 
-> 📖 **Full Guide & API**: See [C++ Interoperability Guide](docs/guides/interop.md) and [`nim_esphome` Core](docs/api/core.md).
+> **Full Guide & API**: See [C++ Interoperability Guide](docs/guides/interop.md) and [`nim_esphome` Core](docs/api/core.md).
 
 ---
 
@@ -593,7 +593,7 @@ A 14-state voice satellite firmware state machine for [ESPHome](https://esphome.
 - **Solution**: Implements a complete 14-state verified typestate FSM directly on-device using `nim-esphome` and [`nim-typestates`](https://github.com/elijahr/nim-typestates). Illegal state transitions (such as triggering wake words during OTA flashing, hardware privacy mute, or pipeline errors) are statically rejected at compile time.
 - **Supported Hardware**: Seeed Studio ReSpeaker XVF3800, Home Assistant Voice PE, ESP32-S3-BOX-3, and any standard ESP32 voice satellite.
 
-> 📖 **Case Study**: Read the complete [Verified Voice Satellite Case Study](docs/guides/esphome-satellite.md) for architectural details and state machine diagrams.
+> **Case Study**: Read the complete [Verified Voice Satellite Case Study](docs/guides/esphome-satellite.md) for architectural details and state machine diagrams.
 
 
 #### Quick Integration
@@ -623,7 +623,7 @@ packages:
 2. **Modular Remote Packages & Adoption**: Provide standalone device packages (`packages: github://...`) with `dashboard_import:` metadata for adoption into local ESPHome Dashboards.
 3. **Automated Factory Binary Builds in CI**: GitHub Actions workflows merge bootloaders, partition tables, and firmware into flashable `firmware-factory.bin` bundles attached to releases.
 
-> 📖 **Full Guide**: Read [**Project Templating & Distribution**](docs/guides/distribution.md) for the complete directory layout, ESP-Web-Tools HTML templates, and CI packaging scripts.
+> **Full Guide**: Read [**Project Templating & Distribution**](docs/guides/distribution.md) for the complete directory layout, ESP-Web-Tools HTML templates, and CI packaging scripts.
 
 ---
 

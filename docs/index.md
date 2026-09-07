@@ -12,9 +12,9 @@ ESPHome is an exceptional declarative platform for IoT hardware configuration. H
 
 Writing C++ in YAML lambdas presents serious drawbacks:
 
-- ❌ **Fragile YAML lambdas**: Multi-line C++ strings embedded in YAML without IDE assistance, refactoring tools, or proper syntax highlighting.
-- ❌ **Difficult host testing**: Verifying logic requires repeatedly compiling PlatformIO firmware and flashing physical microcontrollers.
-- ❌ **C++ verbosity & memory hazards**: Pointer arithmetic and unmanaged state introduce subtle memory corruptions.
+- **Fragile YAML lambdas**: Multi-line C++ strings embedded in YAML without IDE assistance, refactoring tools, or proper syntax highlighting.
+- **Difficult host testing**: Verifying logic requires repeatedly compiling PlatformIO firmware and flashing physical microcontrollers.
+- **C++ verbosity & memory hazards**: Pointer arithmetic and unmanaged state introduce subtle memory corruptions.
 
 **`nim-esphome` solves this:**
 
@@ -26,10 +26,10 @@ flowchart LR
     D --> E["Firmware Binary<br/>(ESP32, RISC-V, RP2040)"]
 ```
 
-- ⚡ **Zero-Overhead Embedded C++ Transpilation**: Nim compiles to clean, standard C++ without an interpreter or heavy runtime.
-- 🧠 **ARC Deterministic Memory**: Memory is managed deterministically via ARC (`--mm:arc`) and FreeRTOS heap (`-d:useMalloc`) with zero GC pause times.
-- 🧪 **Hardware-Free Host Unit Testing**: Run automated test suites instantly on macOS and Linux (`nim c -r`) without needing physical hardware attached.
-- 🛠️ **Declarative Home Assistant DSLs**: Build Lovelace dashboards, custom actions/services, non-blocking background schedules, and web installers directly in Nim.
+- **Zero-Overhead Embedded C++ Transpilation**: Nim compiles to clean, standard C++ without an interpreter or heavy runtime.
+- **ARC Deterministic Memory**: Memory is managed deterministically via ARC (`--mm:arc`) and FreeRTOS heap (`-d:useMalloc`) with zero GC pause times.
+- **Hardware-Free Host Unit Testing**: Run automated test suites instantly on macOS and Linux (`nim c -r`) without needing physical hardware attached.
+- **Declarative Home Assistant DSLs**: Build Lovelace dashboards, custom actions/services, non-blocking background schedules, and web installers directly in Nim.
 
 ---
 
@@ -37,7 +37,7 @@ flowchart LR
 
 Explore the comprehensive guides and API references:
 
-### 📖 Guides & Tutorials
+###  Guides & Tutorials
 - [**Getting Started**](guides/getting-started.md): Install prerequisites, set up the external component, and build your first blink firmware.
 - [**YAML Configuration**](guides/configuration.md): Complete reference for all `nim:` schema options, compiler flags, and target CPU overrides.
 - [**Nimble Dependencies**](guides/dependencies.md): Automatically install and link packages from Nimble and Git repositories.
@@ -50,7 +50,7 @@ Explore the comprehensive guides and API references:
 - [**Verified Voice Satellite (Case Study)**](guides/esphome-satellite.md): Explore `esphome-satellite`, a real-world on-device state supervisor for ESPHome voice satellites.
 - [**Project Templating & Distribution**](guides/distribution.md): Set up ESP-Web-Tools browser flashing, modular ESPHome remote packages, and automated CI factory binary releases.
 
-### 📚 API Reference
+###  API Reference
 - [**API Reference Index**](api/index.md): Module catalog and architecture overview.
 - [**nim_esphome**](api/core.md): Core lifecycle templates (`esphomeSetup`, `esphomeLoop`) and `exportEsphome` macro.
 - [**nim_esphome/api**](api/api.md): ESPHome runtime bindings (logging, timing, watchdog, heap, reboot).

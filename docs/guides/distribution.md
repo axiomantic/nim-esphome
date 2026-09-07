@@ -91,7 +91,7 @@ Define the target chip family, binary locations, and Home Assistant auto-discove
 }
 ```
 
-> 💡 Setting `"home_assistant_domain": "esphome"` prompts the user immediately after Wi-Fi configuration with a 1-click link to adopt the device into their local Home Assistant instance.
+>  Setting `"home_assistant_domain": "esphome"` prompts the user immediately after Wi-Fi configuration with a 1-click link to adopt the device into their local Home Assistant instance.
 
 ---
 

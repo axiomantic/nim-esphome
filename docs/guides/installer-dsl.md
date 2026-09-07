@@ -176,7 +176,7 @@ When building installers for ESP32-S3 boards with native USB (e.g. Seeed ReSpeak
 - The board **must be power-cycled** (unplug and replug the USB-C cable) or have its hardware **RST** button tapped once after flashing.
 - If a user attempts to click **Configure Wi-Fi** while still in the bootloader, the browser receives 0 serial bytes and displays:
   ```
-  ⚠️ An error occurred. Improv Wi-Fi Serial not detected
+  An error occurred. Improv Wi-Fi Serial not detected
   ```
 - Once power-cycled, ESPHome performs a cold boot, initializes native USB, and starts `improv_serial` as well as its fallback AP (`Satellite Fallback Hotspot`). Clicking **Configure Wi-Fi** immediately detects Improv Serial and presents the Wi-Fi credentials prompt.
 
