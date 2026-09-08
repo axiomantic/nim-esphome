@@ -420,6 +420,7 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "restoreInstallerState" in html
     check "restoreCachedFiles" in html
     check "cachedFileStore" in html
+    check "syncDynamicManifestVersion" in html
 
   test "esphomeInstaller with multi-slot wake words and chime sounds":
     let slotInstaller = esphomeInstaller("slot-satellite"):
