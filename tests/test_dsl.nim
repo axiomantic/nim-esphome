@@ -594,3 +594,32 @@ suite "nim-esphome DSL and Satellite Voice Architecture":
     check "0x510000" in html
     check "0x490000" in html
 
+  test "esphomeInstaller discrete multi-part flashing skips NVS partition":
+    let multiPartInstaller = esphomeInstaller("nvs-safe-satellite"):
+      installer.title = "NVS Safe Flasher"
+      installer.version = "1.0.0"
+      installer.chipFamily = "ESP32-S3"
+      installer.addBasePart("bootloader.bin", 0x0'u32)
+      installer.addBasePart("partitions.bin", 0x8000'u32)
+      installer.addBasePart("ota_data_initial.bin", 0xE000'u32)
+      installer.addBasePart("firmware-ota.bin", 0x10000'u32)
+
+    let manifestJson = parseJson(multiPartInstaller.generateManifest())
+    check manifestJson["builds"][0]["parts"].len == 4
+    check manifestJson["builds"][0]["parts"][0]["offset"].getInt() == 0
+    check manifestJson["builds"][0]["parts"][1]["offset"].getInt() == 32768
+    check manifestJson["builds"][0]["parts"][2]["offset"].getInt() == 57344
+    check manifestJson["builds"][0]["parts"][3]["offset"].getInt() == 65536
+
+    # Verify NVS (0x9000 = 36864 to 0xE000 = 57344) is not in any part
+    for part in manifestJson["builds"][0]["parts"]:
+      let off = part["offset"].getInt()
+      check off < 36864 or off >= 57344
+
+    let html = multiPartInstaller.generateHtml()
+    check "bootloader.bin" in html
+    check "partitions.bin" in html
+    check "ota_data_initial.bin" in html
+    check "firmware-ota.bin" in html
+    check "Updating an existing device?" in html
+

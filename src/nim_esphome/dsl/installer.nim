@@ -103,6 +103,11 @@ type
     dependsOnField*: string
     dependsOnValue*: string
 
+  InstallerPart* = object
+    ## Definition of a discrete flash partition part (path and byte offset).
+    path*: string
+    offset*: uint32
+
   InstallerTarget* = object
     ## Definition of a specific hardware board / chip variant target.
     name*: string
@@ -110,6 +115,7 @@ type
     chipFamily*: string
     description*: string
     nativeUsb*: bool
+    parts*: seq[InstallerPart]
 
   InstallerDefinition* = ref object
     ## Complete definition of an ESP-Web-Tools web installer.
@@ -121,6 +127,7 @@ type
     homeAssistantDomain*: string
     fundingUrl*: string
     factoryBinPath*: string
+    baseParts*: seq[InstallerPart]
     nativeUsb*: bool
     enableEraseButton*: bool
     enableImprovWifi*: bool
@@ -236,22 +243,28 @@ proc addCustomAudioField*(
     dependsOnValue = dependsOnValue
   )
 
+proc addBasePart*(installer: InstallerDefinition, path: string, offset: uint32) =
+  ## Adds a discrete firmware part (e.g. bootloader at 0x0, partitions at 0x8000, etc.)
+  installer.baseParts.add(InstallerPart(path: path, offset: offset))
+
 proc addTarget*(
     installer: InstallerDefinition,
     name: string,
     binPath: string,
     chipFamily: string = "ESP32-S3",
     description: string = "",
-    nativeUsb: bool = false
+    nativeUsb: bool = false,
+    parts: seq[InstallerPart] = @[]
 ) =
-  ## Registers a hardware board target with its corresponding factory binary.
+  ## Registers a hardware board target with its corresponding binary or parts.
   let isNative = if nativeUsb: true elif chipFamily == "ESP32-S3": true else: false
   installer.targets.add(InstallerTarget(
     name: name,
     binPath: binPath,
     chipFamily: chipFamily,
     description: description,
-    nativeUsb: isNative
+    nativeUsb: isNative,
+    parts: parts
   ))
 
 
@@ -577,10 +590,17 @@ proc generateManifest*(installer: InstallerDefinition): string =
   var buildObj = newJObject()
   buildObj["chipFamily"] = %installer.chipFamily
   var parts = newJArray()
-  var basePart = newJObject()
-  basePart["path"] = %installer.factoryBinPath
-  basePart["offset"] = %0
-  parts.add(basePart)
+  if installer.baseParts.len > 0:
+    for p in installer.baseParts:
+      var partObj = newJObject()
+      partObj["path"] = %p.path
+      partObj["offset"] = %(int(p.offset))
+      parts.add(partObj)
+  else:
+    var basePart = newJObject()
+    basePart["path"] = %installer.factoryBinPath
+    basePart["offset"] = %0
+    parts.add(basePart)
   buildObj["parts"] = parts
 
   var builds = newJArray()
@@ -984,6 +1004,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
     html.add("          <span>Erase Device</span>")
     html.add("        </button>")
   html.add("      </div>")
+  html.add("      <div class=\"install-nvs-tip\" style=\"margin-top: 10px; font-size: 13px; color: #94a3b8; text-align: center; line-height: 1.4;\">Updating an existing device? Leave <strong>Erase device</strong> unchecked in the install popup to preserve your Wi-Fi settings, volume preferences, wake words, and sound themes.</div>")
   html.add("      <div id=\"eraseStatus\" class=\"erase-status\" style=\"display: none;\"></div>")
   html.add("    </div>")
   html.add("")
@@ -1108,12 +1129,31 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      book: '<svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"></path><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"></path></svg>',")
   html.add("      external: '<svg class=\"icon\" viewBox=\"0 0 24 24\" width=\"12\" height=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg>'")
   html.add("    };")
+  var initialParts = newJArray()
+  if installer.targets.len > 0 and installer.targets[0].parts.len > 0:
+    for p in installer.targets[0].parts:
+      var po = newJObject()
+      po["path"] = %p.path
+      po["offset"] = %(int(p.offset))
+      initialParts.add(po)
+  elif installer.baseParts.len > 0:
+    for p in installer.baseParts:
+      var po = newJObject()
+      po["path"] = %p.path
+      po["offset"] = %(int(p.offset))
+      initialParts.add(po)
+  else:
+    var po = newJObject()
+    po["path"] = %initialBin
+    po["offset"] = %0
+    initialParts.add(po)
+
   html.add("    const BASE_MANIFEST = {")
   html.add("      name: " & escapeJson(installer.name) & ",")
   html.add("      version: " & escapeJson(installer.version) & ",")
   html.add("      home_assistant_domain: " & escapeJson(installer.homeAssistantDomain) & ",")
   html.add("      new_install_prompt_erase: true,")
-  html.add("      builds: [{ chipFamily: " & escapeJson(initialChip) & ", parts: [{ path: " & escapeJson(initialBin) & ", offset: 0 }] }]")
+  html.add("      builds: [{ chipFamily: " & escapeJson(initialChip) & ", parts: " & $initialParts & " }]")
   html.add("    };")
   if installer.targets.len > 0:
     var targetObj = newJObject()
@@ -1123,6 +1163,14 @@ proc generateHtml*(installer: InstallerDefinition): string =
       to["chip"] = %t.chipFamily
       to["desc"] = %t.description
       to["nativeUsb"] = %t.nativeUsb
+      if t.parts.len > 0:
+        var tp = newJArray()
+        for p in t.parts:
+          var tpo = newJObject()
+          tpo["path"] = %p.path
+          tpo["offset"] = %(int(p.offset))
+          tp.add(tpo)
+        to["parts"] = tp
       targetObj[t.name] = to
     html.add("    const TARGET_MAP = " & $targetObj & ";")
     html.add("    const targetSelect = document.getElementById('field_hardware_target');")
@@ -1556,7 +1604,11 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      if (targetSelect && typeof TARGET_MAP !== 'undefined') {")
   html.add("        const info = TARGET_MAP[targetSelect.value];")
   html.add("        if (info) {")
-  html.add("          manifest.builds[0].parts[0].path = info.bin;")
+  html.add("          if (info.parts && info.parts.length > 0) {")
+  html.add("            manifest.builds[0].parts = JSON.parse(JSON.stringify(info.parts));")
+  html.add("          } else if (info.bin) {")
+  html.add("            manifest.builds[0].parts[0].path = info.bin;")
+  html.add("          }")
   html.add("          if (info.chip) manifest.builds[0].chipFamily = info.chip;")
   html.add("        }")
   html.add("      }")
@@ -2563,11 +2615,19 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("        const resp = await fetch('manifest.json?_=' + Date.now());")
   html.add("        if (resp.ok) {")
   html.add("          const remoteManifest = await resp.json();")
-  html.add("          if (remoteManifest && remoteManifest.version && remoteManifest.version !== BASE_MANIFEST.version) {")
-  html.add("            BASE_MANIFEST.version = remoteManifest.version;")
-  html.add("            const fwEl = document.getElementById('devInfoFirmware');")
-  html.add("            if (fwEl) fwEl.textContent = (BASE_MANIFEST.name || " & escapeJson(installer.name) & ") + ' v' + remoteManifest.version;")
-  html.add("            updateDynamicManifest();")
+  html.add("          if (remoteManifest) {")
+  html.add("            let changed = false;")
+  html.add("            if (remoteManifest.version && remoteManifest.version !== BASE_MANIFEST.version) {")
+  html.add("              BASE_MANIFEST.version = remoteManifest.version;")
+  html.add("              const fwEl = document.getElementById('devInfoFirmware');")
+  html.add("              if (fwEl) fwEl.textContent = (BASE_MANIFEST.name || " & escapeJson(installer.name) & ") + ' v' + remoteManifest.version;")
+  html.add("              changed = true;")
+  html.add("            }")
+  html.add("            if (remoteManifest.builds && remoteManifest.builds[0] && remoteManifest.builds[0].parts && remoteManifest.builds[0].parts.length > 0) {")
+  html.add("              BASE_MANIFEST.builds[0].parts = remoteManifest.builds[0].parts;")
+  html.add("              changed = true;")
+  html.add("            }")
+  html.add("            if (changed) updateDynamicManifest();")
   html.add("          }")
   html.add("        }")
   html.add("      } catch (e) {")
