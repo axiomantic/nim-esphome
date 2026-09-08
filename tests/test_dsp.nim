@@ -1,4 +1,5 @@
 import std/unittest
+import std/math
 import nim_esphome
 
 suite "nim-esphome embedded DSP and control utilities":
@@ -77,3 +78,23 @@ suite "nim-esphome embedded DSP and control utilities":
     discard deb.update(true, 80'u32)
     check deb.state == true
     check deb.rose == true
+
+  test "audio compressor dynamic range compression and boost":
+    var comp = newAudioCompressor(sampleRate = 16000'f32, thresholdDb = -14.0'f32, makeupGainDb = 5.0'f32)
+    var quiet: array[64, int16]
+    for i in 0 ..< quiet.len:
+      quiet[i] = int16(1600.0 * sin(2.0 * PI * 1000.0 * float(i) / 16000.0))
+    comp.process(quiet[0].addr, quiet.len)
+    
+    var maxVal: int16 = 0
+    for s in quiet:
+      if abs(s) > maxVal: maxVal = abs(s)
+    check float32(maxVal) > 1600.0'f32 * 1.5'f32
+
+  test "soft clip limiter saturation":
+    check softClip(0.0'f32) == 0'i16
+    check softClip(1000.0'f32) > 950'i16
+    check softClip(100000.0'f32) <= 32767'i16
+    check softClip(100000.0'f32) > 30000'i16
+    check softClip(-100000.0'f32) >= -32767'i16
+    check softClip(-100000.0'f32) < -30000'i16

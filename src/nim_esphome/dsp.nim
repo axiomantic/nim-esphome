@@ -8,6 +8,7 @@
 ## - `Debouncer`: Time-based edge-detecting debouncer for mechanical contacts.
 
 import std/algorithm
+import std/math
 
 type
   PIDController* = object
@@ -310,5 +311,82 @@ proc fell*(d: Debouncer): bool =
   ## :param d: Target `Debouncer`.
   ## :returns: `true` if falling edge occurred on last update.
   d.justFell
+
+type
+  AudioCompressor* = object
+    ## Real-time dynamic range compressor, vocal loudness booster, and limiter
+    ## designed for embedded audio output and speech synthesis.
+    sampleRate*: float32
+    thresholdDb*: float32
+    thresholdLinear*: float32
+    ratio*: float32
+    attackCoeff*: float32
+    releaseCoeff*: float32
+    makeupGainDb*: float32
+    makeupGain*: float32
+    envelope*: float32
+
+proc newAudioCompressor*(
+    sampleRate: float32 = 16000.0'f32,
+    thresholdDb: float32 = -14.0'f32,
+    ratio: float32 = 3.0'f32,
+    attackMs: float32 = 4.0'f32,
+    releaseMs: float32 = 75.0'f32,
+    makeupGainDb: float32 = 5.0'f32
+): AudioCompressor =
+  ## Initializes a new real-time `AudioCompressor` with peak follower envelope detection,
+  ## dynamic compression curve, and makeup vocal boost.
+  result.sampleRate = sampleRate
+  result.thresholdDb = thresholdDb
+  result.thresholdLinear = pow(10.0'f32, thresholdDb / 20.0'f32)
+  result.ratio = ratio
+  result.attackCoeff = exp(-1.0'f32 / (sampleRate * (attackMs / 1000.0'f32)))
+  result.releaseCoeff = exp(-1.0'f32 / (sampleRate * (releaseMs / 1000.0'f32)))
+  result.makeupGainDb = makeupGainDb
+  result.makeupGain = pow(10.0'f32, makeupGainDb / 20.0'f32)
+  result.envelope = 0.0'f32
+
+proc softClip*(x: float32, limit: float32 = 32767.0'f32): int16 {.inline.} =
+  ## Rational soft-saturation curve: strictly bounded within [-limit, limit].
+  ## Linear for small amplitudes, smoothly saturating at high levels with zero clipping buzz.
+  let normalized = x / limit
+  let saturated = normalized / sqrt(1.0'f32 + normalized * normalized)
+  let scaled = saturated * limit
+  if scaled >= 32767.0'f32:
+    return 32767'i16
+  elif scaled <= -32767.0'f32:
+    return -32767'i16
+  else:
+    return int16(scaled)
+
+proc process*(comp: var AudioCompressor, samples: ptr int16, count: int) =
+  ## Processes 16-bit PCM samples in-place with zero heap allocations.
+  if samples == nil or count <= 0:
+    return
+
+  let arr = cast[ptr UncheckedArray[int16]](samples)
+  for i in 0 ..< count:
+    let s = float32(arr[i])
+    let absX = abs(s) / 32768.0'f32
+
+    # Envelope peak follower
+    if absX > comp.envelope:
+      comp.envelope = comp.attackCoeff * comp.envelope + (1.0'f32 - comp.attackCoeff) * absX
+    else:
+      comp.envelope = comp.releaseCoeff * comp.envelope + (1.0'f32 - comp.releaseCoeff) * absX
+
+    # Compute gain reduction
+    var gainReduction: float32 = 1.0'f32
+    if comp.envelope > comp.thresholdLinear and comp.envelope > 1e-6'f32:
+      let envDb = 20.0'f32 * log10(comp.envelope)
+      let compressedDb = comp.thresholdDb + (envDb - comp.thresholdDb) / comp.ratio
+      gainReduction = pow(10.0'f32, (compressedDb - envDb) / 20.0'f32)
+
+    # Apply compression gain reduction and makeup vocal boost
+    let processed = s * gainReduction * comp.makeupGain
+
+    # Soft-knee limiting to eliminate digital clipping
+    arr[i] = softClip(processed)
+
 
 
