@@ -129,6 +129,7 @@ type
     factoryBinPath*: string
     baseParts*: seq[InstallerPart]
     nativeUsb*: bool
+    newInstallPromptErase*: bool
     enableEraseButton*: bool
     enableImprovWifi*: bool
     enableSuccessModal*: bool
@@ -585,7 +586,7 @@ proc generateManifest*(installer: InstallerDefinition): string =
   root["home_assistant_domain"] = %installer.homeAssistantDomain
   if installer.fundingUrl.len > 0:
     root["funding_url"] = %installer.fundingUrl
-  root["new_install_prompt_erase"] = %true
+  root["new_install_prompt_erase"] = %installer.newInstallPromptErase
 
   var buildObj = newJObject()
   buildObj["chipFamily"] = %installer.chipFamily
@@ -1152,7 +1153,7 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("      name: " & escapeJson(installer.name) & ",")
   html.add("      version: " & escapeJson(installer.version) & ",")
   html.add("      home_assistant_domain: " & escapeJson(installer.homeAssistantDomain) & ",")
-  html.add("      new_install_prompt_erase: true,")
+  html.add("      new_install_prompt_erase: " & (if installer.newInstallPromptErase: "true" else: "false") & ",")
   html.add("      builds: [{ chipFamily: " & escapeJson(initialChip) & ", parts: " & $initialParts & " }]")
   html.add("    };")
   if installer.targets.len > 0:
