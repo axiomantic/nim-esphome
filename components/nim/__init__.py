@@ -132,6 +132,13 @@ async def to_code(config):
 
     # Output directory inside the PlatformIO src tree
     out_dir = CORE.relative_build_path("src", "nim_gen")
+    if os.path.exists(out_dir):
+        for old_f in os.listdir(out_dir):
+            if old_f.endswith((".cpp", ".h", ".json")):
+                try:
+                    os.remove(os.path.join(out_dir, old_f))
+                except OSError:
+                    pass
     os.makedirs(out_dir, exist_ok=True)
 
     # Copy nimbase.h into the generated src directory
