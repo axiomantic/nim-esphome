@@ -467,7 +467,8 @@ proc addCustomWakeWordSlotsField*(
     slotOffsets: seq[uint32] = @[0x510000'u32, 0x550000'u32, 0x590000'u32],
     slotPartitions: seq[string] = @["wake_model", "wake_model_2", "wake_model_3"],
     maxSize: int = 262144, # 256 KB per slot
-    description: string = "Upload up to 3 custom microWakeWord .tflite models to flash into dedicated partitions."
+    description: string = "Upload up to 3 custom microWakeWord .tflite models to flash into dedicated partitions.",
+    calloutHtml: string = ""
 ) =
   ## Registers dedicated slots for uploading custom microWakeWord models.
   installer.fields.add(InstallerField(
@@ -479,7 +480,8 @@ proc addCustomWakeWordSlotsField*(
     slotOffsets: slotOffsets,
     slotPartitions: slotPartitions,
     maxSize: maxSize,
-    description: description
+    description: description,
+    calloutHtml: calloutHtml
   ))
   for i in 0 ..< maxSlots:
     let partName = if i < slotPartitions.len: slotPartitions[i] else: "wake_model_" & $(i + 1)
@@ -714,6 +716,8 @@ proc renderFieldBody(html: var seq[string], field: InstallerField, installer: In
   of ifkCustomWakeWordSlots:
     html.add("        <div class=\"custom-wake-slots\" id=\"customWakeSlots_" & field.name & "\">")
     html.add("          <div class=\"ha-selection-note\"><strong>Dedicated Wake Word Partitions:</strong> Flashed into dedicated slots (up to " & $field.maxSlots & " models).<br><strong>Note:</strong> Uploading and flashing custom wake words stores them in device flash memory, but does not set the active wake word. After flashing, open Home Assistant, go to your satellite's device controls page, and choose your wake word from the <em>Active Wake Word</em> dropdown.</div>")
+    if field.calloutHtml.len > 0:
+      html.add("          <div class=\"ha-selection-note\" style=\"border-left-color: #8b5cf6; background: rgba(139, 92, 246, 0.08);\">" & field.calloutHtml & "</div>")
     html.add("          <div class=\"wake-slots-grid\" style=\"display: flex; flex-direction: column; gap: 12px;\">")
     for i in 0 ..< field.maxSlots:
       let partName = if i < field.slotPartitions.len: field.slotPartitions[i] else: "wake_model_" & $(i + 1)
@@ -847,6 +851,8 @@ proc generateHtml*(installer: InstallerDefinition): string =
   html.add("    .ha-selection-note strong { color: #60a5fa; }")
   html.add("    .ha-selection-note em { color: #f8fafc; font-style: normal; font-weight: 600; }")
   html.add("    .ha-selection-note code { background: #1e293b; color: #38bdf8; padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }")
+  html.add("    .ha-selection-note a, .hint a { color: #38bdf8; text-decoration: underline; text-underline-offset: 2px; }")
+  html.add("    .ha-selection-note a:hover, .hint a:hover { color: #7dd3fc; }")
   html.add("    .install-warning-notice { width: 100%; box-sizing: border-box; margin-bottom: 8px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 10px 14px; border-radius: 4px; font-size: 0.82rem; color: #fca5a5; display: none; text-align: left; }")
   html.add("    button.install-btn:disabled, button.install-btn.disabled-btn { background: #334155 !important; color: #64748b !important; cursor: not-allowed !important; box-shadow: none !important; opacity: 0.6; }")
   html.add("    .actions { margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; }")
