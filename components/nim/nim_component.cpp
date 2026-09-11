@@ -306,6 +306,11 @@ extern "C" {
     NimPrefProxy proxy(pref);
     return proxy.raw_load(static_cast<uint8_t *>(data), len);
   }
+
+  bool nim_esp_sync_preferences(void) {
+    if (esphome::global_preferences == nullptr) return false;
+    return esphome::global_preferences->sync();
+  }
 }
 
 namespace esphome {

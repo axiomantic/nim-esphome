@@ -18,6 +18,12 @@ proc fnv1a*(s: string): uint32 =
 when defined(esphome):
   proc nim_esp_save_preference(key: uint32, data: pointer, len: csize_t): bool {.importc, cdecl.}
   proc nim_esp_load_preference(key: uint32, data: pointer, len: csize_t): bool {.importc, cdecl.}
+  proc nim_esp_sync_preferences(): bool {.importc, cdecl.}
+
+  proc syncPreferences*(): bool =
+    ## Forces an immediate flush of in-memory preferences to non-volatile flash storage (NVS).
+    ## Ensures all pending settings are committed to flash before reboots or OTA updates.
+    nim_esp_sync_preferences()
 
   proc savePreference*[T](key: uint32, val: T): bool =
     ## Persists a binary copy of value `val` of type `T` into flash storage under `key`.
@@ -158,3 +164,7 @@ else:
 
   proc loadPreference*(key: string, defaultVal: string, maxLen: int = 128): string =
     loadPreference(fnv1a(key), defaultVal, maxLen)
+
+  proc syncPreferences*(): bool =
+    ## Host mock implementation of syncPreferences. Always returns true.
+    true

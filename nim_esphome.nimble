@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.4.0"
+version       = "0.5.0"
 author        = "Elijah Rust"
 description   = "Write ESPHome custom components and logic in Nim"
 license       = "MIT"
@@ -17,6 +17,7 @@ task test, "Run native host unit tests":
   exec "nim c -r --path:src tests/test_preferences.nim"
   exec "nim c -r --path:src tests/test_dsp.nim"
   exec "nim c -r --path:src tests/test_dsl.nim"
+  exec "nim c -r --path:src tests/test_freertos_ota.nim"
   exec "nim c -r --path:src tests/test_examples.nim"
 
 task check_cpp, "Verify embedded C++ generation for ESP32 target":
