@@ -1241,6 +1241,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#syncPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        syncPreferences
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#savePreference" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1421,6 +1432,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syncPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        syncPreferences
       </span>
     </span>
   </a>
@@ -1554,6 +1576,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#syncPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        syncPreferences
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#savePreference" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1734,6 +1767,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         loadPreference
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syncPreferences" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        syncPreferences
       </span>
     </span>
   </a>
@@ -2543,6 +2587,57 @@ and state machines across reboots without filesystem overhead.</p>
   
 
   
+    <h3 id="syncPreferences" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">syncPreferences</span>
+      
+    <a href="#syncPreferences" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">syncPreferences</span><span class="p">():</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Forces an immediate flush of in-memory preferences to non-volatile flash storage (NVS).</p>
+<p>Ensures all pending settings are committed to flash before reboots or OTA updates.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:23</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
     <h3 id="savePreference" class="doc doc-heading">
       
       <span class="doc doc-object-name doc-proc-name">savePreference</span>
@@ -2598,7 +2693,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:22</code>
+          <code>src/nim_esphome/preferences.nim:28</code>
         
       </div>
     
@@ -2667,7 +2762,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:31</code>
+          <code>src/nim_esphome/preferences.nim:37</code>
         
       </div>
     
@@ -2737,7 +2832,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:39</code>
+          <code>src/nim_esphome/preferences.nim:45</code>
         
       </div>
     
@@ -2806,7 +2901,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:52</code>
+          <code>src/nim_esphome/preferences.nim:58</code>
         
       </div>
     
@@ -2881,7 +2976,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:60</code>
+          <code>src/nim_esphome/preferences.nim:66</code>
         
       </div>
     
@@ -2956,7 +3051,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:74</code>
+          <code>src/nim_esphome/preferences.nim:80</code>
         
       </div>
     
@@ -3032,7 +3127,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:83</code>
+          <code>src/nim_esphome/preferences.nim:89</code>
         
       </div>
     
@@ -3107,7 +3202,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:103</code>
+          <code>src/nim_esphome/preferences.nim:109</code>
         
       </div>
     
@@ -3141,7 +3236,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:109</code>
+          <code>src/nim_esphome/preferences.nim:115</code>
         
       </div>
     
@@ -3206,7 +3301,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:111</code>
+          <code>src/nim_esphome/preferences.nim:117</code>
         
       </div>
     
@@ -3271,7 +3366,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:119</code>
+          <code>src/nim_esphome/preferences.nim:125</code>
         
       </div>
     
@@ -3336,7 +3431,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:122</code>
+          <code>src/nim_esphome/preferences.nim:128</code>
         
       </div>
     
@@ -3401,7 +3496,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:131</code>
+          <code>src/nim_esphome/preferences.nim:137</code>
         
       </div>
     
@@ -3472,7 +3567,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:134</code>
+          <code>src/nim_esphome/preferences.nim:140</code>
         
       </div>
     
@@ -3543,7 +3638,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:143</code>
+          <code>src/nim_esphome/preferences.nim:149</code>
         
       </div>
     
@@ -3614,7 +3709,7 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:146</code>
+          <code>src/nim_esphome/preferences.nim:152</code>
         
       </div>
     
@@ -3685,7 +3780,57 @@ and state machines across reboots without filesystem overhead.</p>
       <div class="doc-source">
         <span class="doc-source-label">Source:</span>
         
-          <code>src/nim_esphome/preferences.nim:159</code>
+          <code>src/nim_esphome/preferences.nim:165</code>
+        
+      </div>
+    
+  </div>
+</div>
+      
+    
+      
+      
+        <div class="doc doc-object doc-proc">
+  
+
+  
+    <h3 id="syncPreferences" class="doc doc-heading">
+      
+      <span class="doc doc-object-name doc-proc-name">syncPreferences</span>
+      
+    <a href="#syncPreferences" class="headerlink" title="Permanent link">&para;</a></h3>
+  
+
+  
+    <div class="doc-signature highlight">
+      <pre><code class="language-nim highlight"><span class="k">proc</span><span class="w"> </span><span class="nf">syncPreferences</span><span class="p">():</span><span class="w"> </span><span class="nb">bool</span>
+</code></pre>
+    </div>
+  
+
+  <div class="doc doc-contents first">
+    
+      <div class="doc-description">
+        <p>Host mock implementation of syncPreferences. Always returns true.</p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-section doc-section-returns">
+        <h4>Returns</h4>
+        <p><code>bool</code></p>
+      </div>
+    
+
+    
+
+    
+      <div class="doc-source">
+        <span class="doc-source-label">Source:</span>
+        
+          <code>src/nim_esphome/preferences.nim:168</code>
         
       </div>
     
