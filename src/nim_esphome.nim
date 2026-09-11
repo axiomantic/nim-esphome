@@ -20,8 +20,6 @@ import nim_esphome/i2c
 import nim_esphome/preferences
 import nim_esphome/dsp
 import nim_esphome/dsl
-import nim_esphome/freertos
-import nim_esphome/ota
 
 export api
 export entities
@@ -30,8 +28,6 @@ export i2c
 export preferences
 export dsp
 export dsl
-export freertos
-export ota
 
 template esphomeSetup*(body: untyped) =
   ## Registers initialization logic invoked once during ESPHome's setup phase.

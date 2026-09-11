@@ -1,5 +1,7 @@
 import unittest
 import nim_esphome
+import nim_esphome/freertos
+import nim_esphome/ota
 
 suite "FreeRTOS & OTA Subsystems Suite":
   test "FreeRTOS task suspension and resumption mock":
