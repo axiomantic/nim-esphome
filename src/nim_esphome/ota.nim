@@ -14,6 +14,7 @@ proc isValidOtaUrl*(url: string): bool =
   true
 
 when defined(esp32) or defined(freertos):
+  import freertos
   type
     esp_err_t = cint
     esp_ota_handle_t = uint32
@@ -46,6 +47,7 @@ when defined(esp32) or defined(freertos):
   proc esp_http_client_fetch_headers(client: esp_http_client_handle_t): cint {.importc: "esp_http_client_fetch_headers", header: "<esp_http_client.h>", cdecl.}
   proc esp_http_client_get_status_code(client: esp_http_client_handle_t): cint {.importc: "esp_http_client_get_status_code", header: "<esp_http_client.h>", cdecl.}
   proc esp_http_client_read(client: esp_http_client_handle_t, buffer: pointer, len: cint): cint {.importc: "esp_http_client_read", header: "<esp_http_client.h>", cdecl.}
+  proc esp_http_client_is_complete_data_received(client: esp_http_client_handle_t): bool {.importc: "esp_http_client_is_complete_data_received", header: "<esp_http_client.h>", cdecl.}
   proc esp_http_client_close(client: esp_http_client_handle_t): esp_err_t {.importc: "esp_http_client_close", header: "<esp_http_client.h>", cdecl.}
   proc esp_http_client_cleanup(client: esp_http_client_handle_t): esp_err_t {.importc: "esp_http_client_cleanup", header: "<esp_http_client.h>", cdecl.}
   proc esp_crt_bundle_attach(conf: pointer): esp_err_t {.importc: "esp_crt_bundle_attach", header: "<esp_crt_bundle.h>", cdecl.}
@@ -106,12 +108,16 @@ when defined(esp32) or defined(freertos):
     var writeFailed = false
 
     while true:
+      vTaskDelay(1)
       let readBytes = esp_http_client_read(client, addr buffer[0], cint(buffer.len))
       if readBytes < 0:
         error("OTA", "HTTP read failed during OTA streaming!")
         writeFailed = true
         break
       elif readBytes == 0:
+        if not esp_http_client_is_complete_data_received(client):
+          error("OTA", "HTTP connection closed prematurely before full binary received")
+          writeFailed = true
         break
 
       err = esp_ota_write(otaHandle, addr buffer[0], csize_t(readBytes))

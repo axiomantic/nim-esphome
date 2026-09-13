@@ -10,9 +10,10 @@ when defined(esp32) or defined(freertos):
   type
     TaskHandle* = pointer
 
-  proc xTaskGetHandle(pcNameToQuery: cstring): TaskHandle {.importc: "xTaskGetHandle", header: "<freertos/FreeRTOS.h>", cdecl.}
+  proc xTaskGetHandle(pcNameToQuery: cstring): TaskHandle {.importc: "xTaskGetHandle", header: "<freertos/task.h>", cdecl.}
   proc vTaskSuspend(xTaskToSuspend: TaskHandle) {.importc: "vTaskSuspend", header: "<freertos/task.h>", cdecl.}
   proc vTaskResume(xTaskToResume: TaskHandle) {.importc: "vTaskResume", header: "<freertos/task.h>", cdecl.}
+  proc vTaskDelay*(xTicksToDelay: uint32) {.importc: "vTaskDelay", header: "<freertos/task.h>", cdecl.}
 
   proc getTaskHandle*(name: string): TaskHandle =
     ## Queries FreeRTOS for the handle corresponding to task `name`.
@@ -59,3 +60,6 @@ else:
     if idx >= 0:
       mockSuspendedTasks.delete(idx)
     true
+
+  proc vTaskDelay*(xTicksToDelay: uint32) =
+    discard
