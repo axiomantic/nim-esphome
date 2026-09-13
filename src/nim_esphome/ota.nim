@@ -153,10 +153,15 @@ when defined(esp32) or defined(freertos):
     return true
 
 else:
+  var mockOtaSimulatePrematureEof* = false
+
   proc flashOtaPartition*(url: string): bool =
     ## Host simulation of OTA partition flashing.
     if not isValidOtaUrl(url):
       error("OTA", "Invalid OTA URL: " & url)
+      return false
+    if mockOtaSimulatePrematureEof:
+      error("OTA", "HTTP connection closed prematurely before full binary received")
       return false
     info("OTA", "Host simulated: successfully flashed OTA from " & url)
     discard syncPreferences()

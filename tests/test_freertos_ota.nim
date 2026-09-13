@@ -10,6 +10,10 @@ suite "FreeRTOS & OTA Subsystems Suite":
     check resumeTask("mww") == true
     check "mww" notin mockSuspendedTasks
 
+  test "FreeRTOS vTaskDelay yield safety":
+    vTaskDelay(1)
+    vTaskDelay(0)
+
   test "OTA URL validation rules":
     check isValidOtaUrl("https://example.com/firmware.bin") == true
     check isValidOtaUrl("http://192.168.1.50/firmware.bin") == true
@@ -20,6 +24,11 @@ suite "FreeRTOS & OTA Subsystems Suite":
   test "Host simulated OTA partition flash":
     check flashOtaPartition("https://example.com/firmware.bin") == true
     check flashOtaPartition("invalid-url") == false
+
+  test "Premature EOF in OTA stream flags write failure":
+    mockOtaSimulatePrematureEof = true
+    check flashOtaPartition("https://example.com/firmware.bin") == false
+    mockOtaSimulatePrematureEof = false
 
   test "Preferences sync":
     check syncPreferences() == true
