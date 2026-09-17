@@ -1,8 +1,9 @@
 name: CI
+# Note: Push-triggered CI runs on self-hosted Forgejo Actions (.forgejo/workflows/ci.yml).
+# GitHub Actions is retained for PRs and manual dispatch only.
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   pull_request:
     branches: [ main ]
 
