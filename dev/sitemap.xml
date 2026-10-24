@@ -4,61 +4,19 @@
         <loc>https://axiomantic.github.io/nim-esphome/dev/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/getting-started/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/configuration/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dependencies/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/architectures/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/entities/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dashboard-dsl/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/actions-dsl/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/schedule-dsl/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/surface-dsl/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/hardware/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/storage/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dsp-control/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/interop/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/esphome-satellite/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/distribution/</loc>
-      </url>
-      <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/installer-dsl/</loc>
-      </url>
-      <url>
         <loc>https://axiomantic.github.io/nim-esphome/dev/api/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/api/api/</loc>
       </url>
       <url>
         <loc>https://axiomantic.github.io/nim-esphome/dev/api/core/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/api/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsp/</loc>
       </url>
       <url>
         <loc>https://axiomantic.github.io/nim-esphome/dev/api/entities/</loc>
@@ -73,9 +31,51 @@
         <loc>https://axiomantic.github.io/nim-esphome/dev/api/preferences/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsp/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/actions-dsl/</loc>
       </url>
       <url>
-        <loc>https://axiomantic.github.io/nim-esphome/dev/api/dsl/</loc>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/architectures/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/configuration/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dashboard-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dependencies/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/distribution/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/dsp-control/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/entities/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/esphome-satellite/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/getting-started/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/hardware/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/installer-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/interop/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/schedule-dsl/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/storage/</loc>
+      </url>
+      <url>
+        <loc>https://axiomantic.github.io/nim-esphome/dev/guides/surface-dsl/</loc>
       </url>
 </urlset>
