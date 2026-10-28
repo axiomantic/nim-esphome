@@ -1,0 +1,26 @@
+nimcache/
+*.exe
+*.out
+*.dll
+*.so
+*.dylib
+nimblecache/
+.nimble/
+htmldocs/
+site/
+.DS_Store
+.idea/
+.vscode/
+*.swp
+justfile.local
+
+
+
+
+
+
+# Foreign C/C++ artifacts
+*.o
+*.a
+build/
+

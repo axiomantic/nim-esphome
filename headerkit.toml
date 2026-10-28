@@ -1,0 +1,14 @@
+# HeaderKit Configuration for nim_esphome
+
+[general]
+target_language = "nim"
+package_name = "nim_esphome"
+layout = "package"
+
+[compiler]
+include_dirs = ["include"]
+defines = []
+flags = ["-Wall"]
+
+[output]
+output_dir = "src"
