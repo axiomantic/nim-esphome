@@ -9,6 +9,7 @@ nimcache/
 !components/**/*.cpp
 *.json
 !examples/**/*.json
+!.github/**/*.json
 tests/test_*
 !tests/test_*.nim
 
