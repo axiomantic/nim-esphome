@@ -632,17 +632,11 @@ packages:
 You can write native tests using Nim's standard `unittest` library and run them locally:
 
 ```bash
-# Run standalone test suite (unit tests, embedded transpilation, Python tests)
-./scripts/ci/test.sh
-
-# Or run the full build script (including docs verification if zensical is installed)
+# Run the test and build verification script
 ./scripts/build.sh
 ```
 
-### Dual-CI Infrastructure
-- **Self-Hosted Forgejo Actions (`.forgejo/workflows/ci.yml`)**: Continuous integration runs automatically on every push and pull request on self-hosted infrastructure (`git.axiomantic.dev`) across Nim 2.2.10 and 2.2.8.
-- **GitHub Actions (`.github/workflows/ci.yml`)**: Retained as a manual mirror / pull request wrapper for external contributions.
-- **Shared Test Scripts**: The core test execution logic is standardized in [`scripts/ci/test.sh`](scripts/ci/test.sh), ensuring local development and CI runs share identical validation behavior.
+Continuous integration runs automatically on every push and pull request via GitHub Actions (`.github/workflows/ci.yml`), validating Nim unit tests, multi-target embedded C++ code generation (`esp`, `riscv32`, `arm`), and Python component tests across Nim versions.
 
 ---
 

@@ -1,11 +1,11 @@
 name: CI
-# Note: Push-triggered CI runs on self-hosted Forgejo Actions (.forgejo/workflows/ci.yml).
-# GitHub Actions is retained for PRs and manual dispatch only.
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   secrets-scan:
@@ -24,8 +24,12 @@ jobs:
           gitleaks detect --verbose --redact
 
   test:
-    name: Test on Linux (Nim 2.2 & latest)
+    name: Test on Linux (Nim ${{ matrix.nim_version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nim_version: ["2.2.10", "2.2.0"]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -33,11 +37,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Install Nim (latest)
+      - name: Install Nim (${{ matrix.nim_version }})
         uses: asdf-vm/actions/install@v4
         with:
           tool_versions: |
-            nim 2.2.10
+            nim ${{ matrix.nim_version }}
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -49,14 +53,23 @@ jobs:
           pip install -r docs-requirements.txt
           pip install esphome
 
-      - name: Test on Nim latest (2.2.10)
+      - name: Run Nim unit tests
         run: |
-          asdf set nim 2.2.10
-          chmod +x scripts/build.sh
-          ./scripts/build.sh
+          set -euo pipefail
+          for t in tests/test_basic.nim tests/test_entities.nim tests/test_peripherals.nim tests/test_preferences.nim tests/test_dsp.nim tests/test_dsl.nim tests/test_examples.nim tests/test_freertos_ota.nim; do
+            if [ -f "$t" ]; then
+              echo "--- Running $t ---"
+              nim c -r --path:src "$t"
+              rm -f "${t%.nim}"
+            fi
+          done
 
-      - name: Test on Nim 2.2.0
+      - name: Test embedded C++ code generation (Xtensa, RISC-V, ARM)
         run: |
-          asdf install nim 2.2.0
-          asdf set nim 2.2.0
-          ./scripts/build.sh
+          set -euo pipefail
+          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:esp --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim
+          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:riscv32 --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim
+          nim cpp --compileOnly --noMain:on --mm:arc -d:danger -d:useMalloc -d:esphome --cpu:arm --os:any --exceptions:goto --panics:on --path:src examples/blink/blink.nim
+
+      - name: Run Python component tests
+        run: python -m unittest discover -s tests -p "test_*.py"
