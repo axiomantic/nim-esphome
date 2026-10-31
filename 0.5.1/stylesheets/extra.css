@@ -1,0 +1,38 @@
+/* Typography adjustments for compact, clean technical documentation */
+
+:root {
+  --md-text-font-size: 0.8rem;
+  --md-code-font-size: 0.75rem;
+}
+
+/* Compact heading scaling */
+.md-typeset h1 {
+  font-size: 1.75em;
+  margin-bottom: 0.8em;
+}
+
+.md-typeset h2 {
+  font-size: 1.35em;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+.md-typeset h3 {
+  font-size: 1.15em;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+}
+
+/* Ensure code blocks and tables have clean, compact typography */
+.md-typeset code {
+  font-size: 0.82em;
+}
+
+.md-typeset pre > code {
+  font-size: 0.82em;
+  line-height: 1.45;
+}
+
+.md-typeset table:not([class]) {
+  font-size: 0.78rem;
+}
