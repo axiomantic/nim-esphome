@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-31
+
+### Changed
+- Refactored `esphomeInstaller` action buttons into a hierarchical layout with non-breaking labels.
+- Onboarded repository to Polyform v0.2.2 template and added `renimble` automated dependency updater workflow.
+
+### Fixed
+- Modularized `freertos` and `ota` imports to prevent forced C++ compilation units when unused.
+- Canonicalized `freertos/task.h` header include, added task yielding in the OTA streaming loop, and validated premature EOF in OTA flashing.
+- Added anti-green-mirage unit tests for `vTaskDelay` and premature OTA EOF handling.
+
+## [0.5.0] - 2026-09-11
+
+### Added
+- Immediate preference synchronization (`sync`), FreeRTOS task coordination bindings (`freertos`), and OTA partition flashing (`ota`).
+
 ## [0.4.0] - 2026-09-06
 
 ### Added
